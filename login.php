@@ -1,0 +1,146 @@
+<?php
+  session_start();
+  require_once 'database.php';
+
+  // Establish database connection
+  if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
+
+  // Check if the user is already logged in
+  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    // Redirect to the homepage if the user is logged in
+    header("Location: index.php");
+    exit();
+  }
+  
+  if (isset($_POST['submit'])) {
+    $cUser = $_POST['cUser'];
+    $cPass = $_POST['cPass'];
+
+    // Prepare the SQL statement
+    $stmt = $conn->prepare("SELECT * FROM customer WHERE cUser = ? AND cPass = ?");
+    
+    // Bind parameters
+    $stmt->bind_param("ss", $cUser, $cPass);
+    
+    // Execute the statement
+    $stmt->execute();
+    
+    // Get the result
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+      $_SESSION['logged_in'] = true;
+      $_SESSION['cUser'] = $cUser;
+      header("Location: profile.php");
+      exit();
+    } else {
+      $error_message = "Invalid Username or Password";
+    }
+    
+    // Close statement and connection
+    $stmt->close();
+    mysqli_close($conn);
+  }
+?>
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <title>Login Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="stylee.css">
+  <link rel="stylesheet" href="form.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li>
+            <li><a href="javascript:void(0);" onclick="goBack(event);" class="nav-btn"> Back</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-container login-form">
+    <div class="login-container">
+      <h2>User Login</h2>
+      <form method="post" action="login.php" id="login-form" class="form">
+        <div class="form-group">
+          <input type="text" id="cUser" name="cUser" required>
+          <label for="cUser"><i class="glyphicon glyphicon-user"></i> Username</label>
+        </div>
+        <div class="form-group">
+          <input type="password" id="cPass" name="cPass" required>
+          <label for="cPass"><i class="glyphicon glyphicon-lock"></i> Password</label>
+        </div>
+        <button type="submit" name="submit" class="submitBtn btn btn-default btn-primary">Login</button>
+      </form>
+
+      <div>
+        <br><a href="forgot.php">Forgot Password?</a>
+      </div>
+      <div>
+        Don't have an account? <a href="register.php">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Error Message -->
+  <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="errorModalLabel">Login Error</h4>
+        </div>
+        <div class="modal-body">
+          <?php echo $error_message; ?>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="container-fluid text-center">
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <h5>Open-source Apache Licensed</h5>
+        </li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    $(document).ready(function() {
+      <?php if (!empty($error_message)) { ?>
+        $('#errorModal').modal('show');
+      <?php } ?>
+    });
+  </script>
+  <script src="scripts.js"></script>
+</body>
+</html>
