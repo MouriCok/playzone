@@ -43,8 +43,8 @@
    cd playzone
    ```
 3. **Configure the database:**
-   - Import the provided SQL file (`database.sql`) into your MySQL database.
-   - Update the database connection details in `config.php`.
+   - Import the provided SQL file (`customer.sql`, `bookings.sql`, `timeframe.sql`) into your MySQL database.
+   - Update the database connection details in `database.php`.
 
 4. **Run the application on your local server (e.g., XAMPP, WAMP):**
    - Start Apache and MySQL.
@@ -73,7 +73,7 @@
 - **Advanced Analytics:** Implement detailed analytics and reporting features for facility management.
 
 ## Contributing
-Contributions are welcome! If you'd like to contribute, please fork the repository and submit a pull request. Your help with bug fixes, new features, or improvements is highly appreciated!
+Contributions are not welcome right now because this is just a Project to get my Degree in Computer Science.
 
 ## Contact
 For any questions or feedback, feel free to reach out:
