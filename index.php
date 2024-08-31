@@ -124,7 +124,7 @@
                   rent high-quality sports equipment for any game,<br>
                   and enjoy fast and secure payments with QR code technology.<br>
                   Join community events, leagues, and activities.</span><br><br>
-                  <button class="redirect-button" onclick="window.open('https://github.com/MouriCok/street-wagon.git', '_blank')">
+                  <button class="redirect-button" onclick="window.open('https://github.com/MouriCok/playzone.git', '_blank')">
                     <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="" class="icon">
                       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                       <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
