@@ -1,7 +1,7 @@
   .login-container {
     box-shadow: var(--hover-shadows);
-    --hover-shadows: inset -20px -20px 30px #07A0C3, inset 20px 20px 30px #8FEBFF, 16px 16px 33px #07A0C3, -16px -16px 33px #8FEBFF;
-    background-color: transparent transparent;
+    --hover-shadows: 16px 16px 33px #07A0C3, -16px -16px 33px #8FEBFF;
+    background-color: #F8F9FA;
     border: none;
     border-radius: 15px;
     padding: 20px;

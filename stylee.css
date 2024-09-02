@@ -1,5 +1,14 @@
+@import url(https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@600&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap);
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css);
+@import url(https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css);
+
 /* Start of Header/Navbar */
-/* General Navbar Styling */
 header, .navbar {
   margin-bottom: 0;
   border-radius: 0;
@@ -71,7 +80,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Optional: Modify navbar height and link spacing for a slimmer look */
 .navbar {
   padding: 10px 0;
 }
@@ -177,6 +185,12 @@ a {
 /* End of Basic Attributes */
 
 /* Start of Text */
+  h2 {
+    font-family: 'League Spartan', sans-serif;
+    margin-bottom: 20px;
+    color: #FA9A54;
+    text-shadow: 1px 2px 2px #626262;
+  }
   h3 {
     font-family: 'Anton', sans-serif;
   }
@@ -491,98 +505,4 @@ a {
 
 .name {
   font-weight: 600;
-}
-
-/* Logout Confirmation Modal */
-.modal {
-  padding-top: 10%;
-  border: none;
-  border-radius: 10px;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0);
-  backdrop-filter: blur(5px);
-  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.199);
-}
-.modal-content {
-  background-color: rgba(143, 235, 255, 0.4);
-  border: none;
-  width: 300px;
-  height: fit-content;
-  overflow: hidden;
-  box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.25), 2px 2px 5px rgba(0, 0, 0, 0.199);
-}
-.modal-header {
-  border: none;
-  padding: 16px 16px 0px 16px;
-  margin: 0px;
-  font-family: 'Istok Web', sans-serif;
-  text-transform: uppercase;
-  text-align: center;
-  align-items: center;
-  font-weight: 900;
-  color: #102a7e;
-  font-size: 18px;
-  display: flex;
-  flex-direction: column;
-}
-.logout-svg {
-  padding-bottom: 1rem;
-}
-.modal-body {
-  text-align: center;
-  border: none;
-  padding: 16px 16px 0px 16px;
-  margin: 0%;
-  font-family: 'Istok Web', sans-serif;
-  text-transform: uppercase;
-  text-align: center;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-}
-.modal-footer {
-  border: none;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 24px 16px 24px 16px;
-  margin: 0%;
-  font-family: 'Roboto', sans-serif;
-  text-align: center;
-  gap: 30px;
-}
-.CBtn {
-  width: 80px;
-  height: 30px;
-  background-color: #ffffff;
-  transition-duration: .2s;
-  color: rgb(46, 46, 46);
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  border-radius: 5px;
-}
-.CBtn:hover {
-  background-color: rgb(176, 176, 176);
-  border-radius: 20px;
-  transition-duration: .5s;
-}
-.LBtn {
-  width: 80px;
-  height: 30px;
-  background-color: rgba(255, 65, 65, 0.75);
-  transition-duration: .2s;
-  border: none;
-  color: rgb(241, 241, 241);
-  cursor: pointer;
-  font-weight: 600;
-  border-radius: 5px;
-}
-.LBtn:hover {
-  background-color: #7f281e;
-  color: #fff;
-  border-radius: 20px;
-  transition-duration: .5s;
 }

@@ -1,0 +1,406 @@
+@import url(https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Space+Mono&display=swap);
+
+
+/* Prevent body shifting when modal is open */
+body.modal-open {
+    overflow-y: scroll;
+}
+
+/* Login Confirmation Modal */
+#loginModal {
+    transition: all 0.5s;
+    padding-top: 5%;
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(5px);
+    box-shadow: var(--hover-shadows);
+    --hover-shadows: inset 8px 8px 33px rgba(255, 255, 255, 0.3), inset -8px -8px 33px rgba(0, 0, 0, 0.6);
+}
+.form {
+    --background: #8FEBFF;
+    --input-focus: #2d8cf0;
+    --font-color: #323232;
+    --font-color-sub: #07A0C3;
+    --bg-color: #fff;
+    --main-color: #323232;
+    padding: 20px;
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    box-shadow: 4px 4px var(--main-color);
+  }
+  
+  .form > p {
+    font-family: var(--font-DelaGothicOne);
+    color: var(--font-color);
+    font-weight: 700;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form > p > span {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color-sub);
+    font-weight: 600;
+    font-size: 17px;
+  }
+  
+  .form > .signupLink > p {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color);
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .form > .signupLink > p > a {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color-sub);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .form > div > a > span {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color-sub);
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0;
+    padding-left: 100px;
+  }
+  
+  .separator {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .separator > div {
+    width: 100px;
+    height: 3px;
+    border-radius: 5px;
+    background-color: var(--font-color-sub);
+  }
+  
+  .separator > span {
+    color: var(--font-color);
+    font-family: var(--font-SpaceMono);
+    font-weight: 600;
+  }
+  
+  .oauthButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+      /* margin: 50px auto 0 auto; */
+    padding: auto 15px 15px auto;
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--font-color);
+    transition: all 250ms;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .oauthButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: #212121;
+    z-index: -1;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    transition: all 250ms;
+  }
+  
+  .oauthButton:hover {
+    color: #e8e8e8;
+  }
+  
+  .oauthButton:hover::before {
+    width: 100%;
+  }
+  
+  .form > input {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--font-color);
+    padding: 5px 15px;
+    outline: none;
+  }
+  
+  .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+/* Forgot Modal */
+#forgotModal {
+    transition: all 0.5s;
+    padding-top: 10%;
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(5px);
+    box-shadow: var(--hover-shadows);
+    --hover-shadows: inset 8px 8px 33px rgba(255, 255, 255, 0.3), inset -8px -8px 33px rgba(0, 0, 0, 0.6);
+}
+
+.form > a {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color);
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0 auto;
+  }
+
+/* Signup Modal */
+#signupModalContent {
+    width: fit-content;
+    margin: 0 auto;
+}
+.reg_form {
+    --background: #8FEBFF;
+    --input-focus: #2d8cf0;
+    --font-color: #323232;
+    --font-color-sub: #07A0C3;
+    --bg-color: #fff;
+    --main-color: #323232;
+    padding: 20px;
+    width: 400px;
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    box-shadow: 4px 4px var(--main-color);
+}
+  
+  #signupModal {
+    transition: all 0.5s;
+    padding-top: 5%;
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(5px);
+    box-shadow: var(--hover-shadows);
+    --hover-shadows: inset 8px 8px 33px rgba(255, 255, 255, 0.3), inset -8px -8px 33px rgba(0, 0, 0, 0.6);
+}
+
+.reg_form > p {
+    font-family: var(--font-DelaGothicOne);
+    color: var(--font-color);
+    font-weight: 700;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .reg_form > p > span {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color-sub);
+    font-weight: 600;
+    font-size: 17px;
+  }
+
+.reg_form > .loginLink > p {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color);
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .reg_form > .loginLink > p > a {
+    font-family: var(--font-SpaceMono);
+    color: var(--font-color-sub);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .authButton-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.authButton {
+    width: 48%; /* Adjust width to fit two buttons side by side */
+    height: 40px;
+    gap: 5px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--font-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 250ms;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.authButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: #212121;
+    z-index: -1;
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    transition: all 250ms;
+}
+
+.authButton:hover {
+    color: #e8e8e8;
+}
+
+.authButton:hover::before {
+    width: 100%;
+}
+
+.signupInput-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.signupInput {
+    width: 48%; /* Adjust width to fit two inputs side by side */
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--font-color);
+    padding: 5px 15px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+/* Logout Confirmation Modal */
+#logoutModal {
+    padding-top: 10%;
+    border: none;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(5px);
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.199), inset -2px -2px 5px rgba(255, 255, 255, 0.199);
+  }
+  #logoutModalContent {
+    background-color: rgba(143, 235, 255, 0.4);
+    border: none;
+    width: 300px;
+    height: fit-content;
+    overflow: hidden;
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.25), 2px 2px 5px rgba(0, 0, 0, 0.199);
+  }
+  #logoutModalLabel {
+    border: none;
+    padding: 16px 16px 0px 16px;
+    margin: 0px;
+    font-family: 'Istok Web', sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    align-items: center;
+    font-weight: 900;
+    color: #102a7e;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+  }
+  .logout-svg {
+    padding-bottom: 1rem;
+  }
+  #logoutModalBody {
+    text-align: center;
+    border: none;
+    padding: 16px 16px 0px 16px;
+    margin: 0%;
+    font-family: 'Istok Web', sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  #logoutModalFooter {
+    border: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 16px 24px 16px;
+    margin: 0%;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    gap: 30px;
+  }
+  .CBtn {
+    width: 80px;
+    height: 30px;
+    background-color: #ffffff;
+    transition-duration: .2s;
+    color: rgb(46, 46, 46);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 5px;
+  }
+  .CBtn:hover {
+    background-color: rgb(176, 176, 176);
+    border-radius: 20px;
+    transition-duration: .5s;
+  }
+  .LBtn {
+    width: 80px;
+    height: 30px;
+    background-color: rgba(255, 65, 65, 0.75);
+    transition-duration: .2s;
+    border: none;
+    color: rgb(241, 241, 241);
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 5px;
+  }
+  .LBtn:hover {
+    background-color: #7f281e;
+    color: #fff;
+    border-radius: 20px;
+    transition-duration: .5s;
+  }

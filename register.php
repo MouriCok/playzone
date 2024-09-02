@@ -38,38 +38,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="stylee.css">
   <link rel="stylesheet" href="form.css">
-  <script>
-    function goBack(event) {
-      event.preventDefault();
-      window.history.back();
-    }
-  </script>
 </head>
 <body>
   <header>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar">
       <div class="container-fluid">
         <div class="navbar-header">
-        <img src="PZ_tp.svg" width="50" height="50" alt="Logo">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
-            <li><a href="javascript:void(0);" onclick="goBack(event);"> Back</a></li>
-            <li><a href="index.php">Home</a></li>
+            <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li>
+            <li><a href="javascript:void(0);" onclick="goBack(event);" class="nav-btn"> Back</a></li>
+            <li><a href="index.php" class="nav-btn">Home</a></li>
           </ul>
         </div>
       </div>
@@ -207,15 +196,17 @@
     </div>
     <!-- End register form -->
   </div>
-</body>
 
-<footer class="container-fluid text-center">
-  <div class="collapse navbar-collapse" id="myNavbar">
-    <ul class="nav navbar-nav navbar-right">
-      <li>
-        <h5 >Open-source Apache Licensed</h5>
-      </li>
-    </ul>
-  </div>
-</footer>
+  <footer class="container-fluid text-center">
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <h5 >Open-source Apache Licensed</h5>
+        </li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
 </html>

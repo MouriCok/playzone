@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Send reset link to the user's email
         $to = $cEmail;
         $subject = "Password Reset";
-        $message = "Click the following link to reset your password: <a href='http://localhost/sport_booking/reset.php?token=$resetToken'>Reset Password</a>";
+        $message = "Click the following link to reset your password: <a href='http://localhost/playzone/reset.php?token=$resetToken'>Reset Password</a>";
 
         // Using PHPMailer for sending email
         $mail = new PHPMailer(true);
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->SMTPSecure = 'tls';             // Enable TLS encryption, `ssl` also accepted
             $mail->Port = 587;                     // TCP port to connect to
 
-            $mail->setFrom('mbukhoury.mb@gmail.com', 'BIT Customer Service');
+            $mail->setFrom('mbukhoury.mb@gmail.com', 'PlayZone Customer Service');
             $mail->addAddress($to);
 
             $mail->isHTML(true);
@@ -80,27 +80,11 @@ mysqli_close($conn);
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="stylee.css">
+  <link rel="stylesheet" href="form.css">
   <style>
-    .page-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 86vh;
-    }
-    h2 {
-      font-family: 'League Spartan', sans-serif;
-      margin-bottom: 20px;
-      color: #FA9A54;
-      text-shadow: 1px 2px 2px #626262;
-    }
     .forget-pwd > a{
         color: #dc3545;
         font-weight: 500;
@@ -169,27 +153,23 @@ mysqli_close($conn);
       color: #82c87e;
     }
   </style>
-  <script>
-    function goBack(event) {
-      event.preventDefault();
-      window.history.back();
-    }
-  </script>
 </head>
 <body>
   <header>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar">
       <div class="container-fluid">
         <div class="navbar-header">
-        <img src="PZ_tp.svg" width="50" height="50" alt="Logo">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
-            <li><a href="javascript:void(0);" onclick="goBack(event);"> Back</a></li>
-            <li><a href="index.php">Home</a></li>
+            <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li>
+            <li><a href="javascript:void(0);" onclick="goBack(event);" class="nav-btn"> Back</a></li>
+            <li><a href="index.php" class="nav-btn">Home</a></li>
           </ul>
         </div>
       </div>
@@ -239,5 +219,7 @@ mysqli_close($conn);
       </ul>
     </div>
   </footer>
+
+  <script src="scripts.js"></script>
 	</body>
 </html>

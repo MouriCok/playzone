@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$conn = mysqli_connect("localhost", "root", "", "sport_booking");
+require_once 'database.php';
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -37,30 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-            <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-            <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-            <link href="https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-            <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <link rel="stylesheet" href="stylee.css">
-            <link rel="stylesheet" href="formm.css">
-            <style>
-                .page-container {
-                    margin: 58px;
-                    padding: 15px;
-                    min-height: 65vh;
-                }
-                .login-container {
-                    padding: 20px;
-                    width: 420px;
-                    margin-top: 97px;
-                    margin-bottom: 95px;
-                }
-            </style>
+            <link rel="stylesheet" href="form.css">
             <script>
                 function showAlert(message, redirectUrl) {
                     console.log("showAlert called with message: " + message);
@@ -70,13 +50,22 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             </script>
         </head>
         <body>
-            <nav class="navbar navbar-inverse">
+            <header>
+                <nav class="navbar">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <img src="logo1.png" width="100" height="50">  
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                    </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li>
+                    </ul>
                     </div>
                 </div>
-            </nav>
+                </nav>
+            </header>
 
             <?php
             $cPassErr = $rPassErr = "";
@@ -151,12 +140,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     </form>
                 </div>
             </div>
+            
             <footer class="container-fluid text-center">
+                <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <h5 style="color: #fff; margin: 18px;">&copy; 2022-2023 BIT Sports. All rights reserved.</h5>
+                    <h5>Open-source Apache Licensed</h5>
                     </li>
                 </ul>
+                </div>
             </footer>
         </body>
         </html>

@@ -55,17 +55,13 @@ if ($result) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="stylee.css">
+  <link rel="stylesheet" href="form.css">
+  <link rel="stylesheet" href="modal.css">
   <link rel="stylesheet" href="button.css">
   <style>
     html, body {
@@ -400,8 +396,8 @@ if ($result) {
   <!-- Logout Confirmation Modal -->
   <div id="logoutModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
+      <div class="modal-content" id="logoutModalContent">
+        <div class="modal-header" id="logoutModalHeader">
           <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="" class="logout-svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -419,10 +415,10 @@ if ($result) {
             14.3111 5.36735 14.6146C5.26531 14.7158 5.06122 14.8169 4.85714 14.8169Z" fill="#030D45"></path> </g></svg>
           <span class="modal-title" id="logoutModalLabel">Confirm Logout</span>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="logoutModalBody">
           Are you sure you want to log out?
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" id="logoutModalFooter">
           <button type="button" class="CBtn" data-dismiss="modal">Cancel</button>
           <button type="button" class="LBtn" onclick="location.href='?logout=true'">Logout</button>
         </div>
