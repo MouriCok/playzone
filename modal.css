@@ -67,13 +67,18 @@ body.modal-open {
     font-size: 14px;
   }
 
-  .form > div > a > span {
+  .forgotLink {
+    padding-left: 100px;
+  }
+
+  .forgotLink > a > span {
     font-family: var(--font-SpaceMono);
     color: var(--font-color-sub);
+    display: flex;
+    flex-direction: row;
     font-weight: 600;
     font-size: 14px;
     margin: 0;
-    padding-left: 100px;
   }
   
   .separator {
@@ -330,7 +335,7 @@ body.modal-open {
     overflow: hidden;
     box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.25), 2px 2px 5px rgba(0, 0, 0, 0.199);
   }
-  #logoutModalLabel {
+  #logoutModalHeader {
     border: none;
     padding: 16px 16px 0px 16px;
     margin: 0px;
@@ -344,8 +349,19 @@ body.modal-open {
     display: flex;
     flex-direction: column;
   }
-  .logout-svg {
-    padding-bottom: 1rem;
+  #logoutModalLabel {
+    border: none;
+    padding: 16px 16px 0px 16px;
+    margin: 0px;
+    font-family: 'Istok Web', sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    align-items: center;
+    font-weight: 900;
+    color: #102a7e;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
   }
   #logoutModalBody {
     text-align: center;

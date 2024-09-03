@@ -1,4 +1,3 @@
-/* From Uiverse.io by vinodjangid07 */ 
 .Btn {
     display: flex;
     align-items: center;
@@ -66,3 +65,73 @@
   .Btn:active {
     transform: translate(2px ,2px);
   }
+
+  /* ----------------------------------------------------------------------- */
+
+  /* Container for the profile picture */
+.profile-pic-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto;
+}
+
+/* Style for the profile picture */
+.profile-pic {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.change_icon svg {
+  width: 32px;
+  height: fit-content;
+  padding: 0;
+  margin: 0 auto;
+}
+
+/* Overlay for the change button */
+.change-btn-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Hover effect to make the button visible */
+.profile-pic-container:hover .change-btn-overlay {
+  opacity: 1;
+}
+
+.change_text {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+}
+
+/* Style for the change button */
+.change-btn-overlay .btn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 50%;
+  font-size: 14px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Optional: Additional button hover effect */
+.change-btn-overlay .btn:hover {
+  background-color: rgba(0, 96, 199, 0.5);
+}

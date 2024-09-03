@@ -7,7 +7,7 @@ require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 require 'PHPMailer/src/Exception.php';
 
-$conn = mysqli_connect("localhost", "root", "", "sport_booking");
+require_once 'database.php';
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());

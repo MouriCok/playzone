@@ -7,22 +7,21 @@
     die("Connection failed: " . mysqli_connect_error());
   }
 
-  // Check if the user is already logged in
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    // Redirect to the homepage if the user is logged in
-    header("Location: index.php");
+  // Check if the admin is already logged in
+  if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
+    header("Location: admin_profile.php");
     exit();
   }
   
   if (isset($_POST['submit'])) {
-    $cUser = $_POST['cUser'];
-    $cPass = $_POST['cPass'];
+    $aUser = $_POST['aUser'];
+    $aPass = $_POST['aPass'];
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("SELECT * FROM customer WHERE cUser = ? AND cPass = ?");
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE aUser = ? AND aPass = ?");
     
     // Bind parameters
-    $stmt->bind_param("ss", $cUser, $cPass);
+    $stmt->bind_param("ss", $aUser, $aPass);
     
     // Execute the statement
     $stmt->execute();
@@ -31,9 +30,9 @@
     $result = $stmt->get_result();
     
     if ($result->num_rows > 0) {
-      $_SESSION['logged_in'] = true;
-      $_SESSION['cUser'] = $cUser;
-      header("Location: profile.php");
+      $_SESSION['loggedIn'] = true;
+      $_SESSION['aUser'] = $aUser;
+      header("Location: admin_profile.php");
       exit();
     } else {
       $error_message = "Invalid Username or Password";
@@ -48,7 +47,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <title>Login Page</title>
+  <title>Admin Login</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
@@ -79,15 +78,15 @@
 
   <div class="page-container login-form">
     <div class="login-container">
-      <h2>User Login</h2>
-      <form method="post" action="login.php" id="login-form" class="form">
+      <h2>Admin Login</h2>
+      <form method="post" action="admin.php" id="login-form" class="form">
         <div class="form-group">
-          <input type="text" id="cUser" name="cUser" required>
-          <label for="cUser"><i class="glyphicon glyphicon-user"></i> Username</label>
+          <input type="text" id="aUser" name="aUser" required>
+          <label for="aUser"><i class="glyphicon glyphicon-user"></i> Username</label>
         </div>
         <div class="form-group">
-          <input type="password" id="cPass" name="cPass" required>
-          <label for="cPass"><i class="glyphicon glyphicon-lock"></i> Password</label>
+          <input type="password" id="aPass" name="aPass" required>
+          <label for="aPass"><i class="glyphicon glyphicon-lock"></i> Password</label>
         </div>
         <button type="submit" name="submit" class="submitBtn btn btn-default btn-primary">Login</button>
       </form>

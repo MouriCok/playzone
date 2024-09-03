@@ -45,69 +45,156 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: profile.php");
                 exit();
             } else {
-                $error_message = "Invalid Username or Password";
+                $error_message  = '<div class="modal-header">
+                                    <h4 class="modal-title" id="errorModalLabel">Login Error</h4>
+                                  </div>
+                                  <div class="modal-body" style="color: red; background-color: rgba(255, 77, 77, 0.3);">
+                                    <span>Invalid Username or Password</span>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+                                  </div>';
             }
 
             // Close statement
             $stmt->close();
         } else {
-            $error_message = "Please fill in both fields.";
+            $error_message  = '<div class="modal-header">
+                                <h4 class="modal-title" id="errorModalLabel">Login Error</h4>
+                              </div>
+                              <div class="modal-body" style="color: red; background-color: rgba(255, 77, 77, 0.3);">
+                                <span>Please fill in both fields.</span>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+                              </div>';
         }
     }
 }
 
 $status = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $cEmail = $_POST["cEmail"];
+// Password reset logic
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['btnForget'])) {
+  $cEmail = $_POST["cEmail"] ?? '';
 
-    $sql = "SELECT * FROM customer WHERE cEmail='$cEmail'";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
+  if (!empty($cEmail)) {
+      $sql = "SELECT * FROM customer WHERE cEmail='$cEmail'";
+      $result = mysqli_query($conn, $sql);
+      $row = mysqli_fetch_assoc($result);
 
-    if ($result->num_rows > 0) {
-        // User is registered, generate and send reset link
-        $resetToken = bin2hex(random_bytes(16)); // Generate a unique token
+      if ($result->num_rows > 0) {
+          // User is registered, generate and send reset link
+          $resetToken = bin2hex(random_bytes(16)); // Generate a unique token
 
-        // Store the reset token and expiry time in the database
-        $updateSql = "UPDATE customer SET reset_token='$resetToken', reset_expiry=DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE cEmail='$cEmail'";
-        mysqli_query($conn, $updateSql);
+          // Store the reset token and expiry time in the database
+          $updateSql = "UPDATE customer SET reset_token='$resetToken', reset_expiry=DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE cEmail='$cEmail'";
+          mysqli_query($conn, $updateSql);
 
-        // Send reset link to the user's email
-        $to = $cEmail;
-        $subject = "Password Reset";
-        $message = "Click the following link to reset your password: <a href='http://localhost/playzone/reset.php?token=$resetToken'>Reset Password</a>";
+          // Send reset link to the user's email
+          $to = $cEmail;
+          $subject = "Password Reset";
+          $message = "Click the following link to reset your password: <a href='http://localhost/playzone/reset.php?token=$resetToken'>Reset Password</a>";
 
-        // Using PHPMailer for sending email
-        $mail = new PHPMailer(true);
+          // Using PHPMailer for sending email
+          $mail = new PHPMailer(true);
 
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';// Replace with your SMTP server
-            $mail->SMTPAuth = true;
-            $mail->Username = 'mbukhoury.mb@gmail.com';// Replace with your SMTP username
-            $mail->Password = 'heip jymz uria kpxt';// Replace with your App Password
-            $mail->SMTPSecure = 'tls';// Enable TLS encryption, `ssl` also accepted
-            $mail->Port = 587;// TCP port to connect to
+          try {
+              $mail->isSMTP();
+              $mail->Host = 'smtp.gmail.com';// Replace with your SMTP server
+              $mail->SMTPAuth = true;
+              $mail->Username = 'mbukhoury.mb@gmail.com';// Replace with your SMTP username
+              $mail->Password = 'heip jymz uria kpxt';// Replace with your App Password
+              $mail->SMTPSecure = 'tls';// Enable TLS encryption, `ssl` also accepted
+              $mail->Port = 587;// TCP port to connect to
 
-            $mail->setFrom('mbukhoury.mb@gmail.com', 'PlayZone Customer Service');
-            $mail->addAddress($to);
+              $mail->setFrom('mbukhoury.mb@gmail.com', 'PlayZone Customer Service');
+              $mail->addAddress($to);
 
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body = $message;
+              $mail->isHTML(true);
+              $mail->Subject = $subject;
+              $mail->Body = $message;
 
-            $mail->send();
+              $mail->send();
 
-            // Set the success status
-            $status = "Password reset link sent successfully!";
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        }
-    } else {
-        // User account not registered, display an alert
-        echo "<script>alert('Invalid Email or account not registered.');</script>";
-    }
+              // Set the success status
+              $status = '<div class="modal-header">
+                        <h4 class="modal-title" id="successModalLabel">Status Message</h4>
+                      </div>
+                      <div class="modal-body" style="color: green; background-color: rgba(77, 255, 77, 0.3);">
+                        <span>Password reset link sent successfully!</span>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+                      </div>';
+          } catch (Exception $e) {
+              $status = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+          }
+      } else {
+          // User account not registered, display an alert
+          $status = '<div class="modal-header">
+                      <h4 class="modal-title" id="successModalLabel">Status Message</h4>
+                    </div>
+                    <div class="modal-body" style="color: red; background-color: rgba(255, 77, 77, 0.3);">
+                      <span>Invalid Email or account not registered.</span>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+                    </div>';
+      }
+  } else {
+      // If cEmail is empty, display an alert
+      $status = '<div class="modal-header">
+                  <h4 class="modal-title" id="successModalLabel">Status Message</h4>
+                </div>
+                <div class="modal-body" style="color: red; background-color: rgba(255, 77, 77, 0.3);">
+                  <span>Please enter your registered email.</span>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+                </div>';
+  }
+}
+
+$notify = '';
+
+if(isset($_POST['submitBtn'])){
+  $cName = $_POST['cName'];
+  $cUser = $_POST['cUser'];
+  $cEmail = $_POST['cEmail'];
+  $cPhone = $_POST['cPhone'];
+  $cPass = $_POST['cPass'];
+  $ConPass = $_POST['ConPass'];
+  $sql = "INSERT INTO customer (cName, cUser, cEmail, cPhone, cPass)
+  VALUES ('$cName', '$cUser', '$cEmail', '$cPhone', '$cPass')";
+  if (!empty($cName) && !empty($cUser) && !empty($cEmail) && !empty($cPhone) && !empty($cPass) && !empty($ConPass)
+    && preg_match("/^[a-zA-Z-' ]*$/", $cName) && preg_match("/^[a-zA-Z0-9]+$/", $cUser) && filter_var($cEmail, FILTER_VALIDATE_EMAIL)
+    && preg_match("/^[0-9]+$/", $cPhone) && preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $cPass) 
+    && preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $ConPass)) {
+      if (mysqli_query($conn, $sql)) {
+        $notify = '<div class="modal-header">
+                    <h4 class="modal-title" id="notifyModalLabel">Status Message</h4>
+                  </div>
+                  <div class="modal-body" style="color: green; background-color: rgba(77, 255, 77, 0.3);">
+                    <span>Registration successful! You may now login.</span>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+                  </div>';
+      } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+      }
+  } else {
+    $notify = '<div class="modal-header">
+                <h4 class="modal-title" id="notifyModalLabel">Status Message</h4>
+              </div>
+              <div class="modal-body" style="color: red; background-color: rgba(255, 77, 77, 0.3);">
+                <span>Please fill in all the fields correctly.</span>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
+              </div>';
+  }
 }
 
 // Close connection
@@ -505,10 +592,14 @@ mysqli_close($conn);
               <input type="email" class="signupInput" placeholder="Email" id="cEmail" name="cEmail" required>
               </div>
               <div class="signupInput-group">
-              <input type="password" class="signupInput" placeholder="Password" id="cPass" name="cPass" required>
-              <input type="password" class="signupInput" placeholder="Confirm Password" id="cpass" name="cpass" required>
+              <input type="text" class="signupInput" placeholder="Full Name" id="cName" name="cName" required>
+              <input type="text" class="signupInput" placeholder="Phone" id="cPhone" name="cPhone" required>
               </div>
-              <button type="submit" name="submit" class="submitBtn oauthButton">
+              <div class="signupInput-group">
+              <input type="password" class="signupInput" placeholder="Password" id="cPass" name="cPass" required>
+              <input type="password" class="signupInput" placeholder="Confirm Password" id="ConPass" name="ConPass" required>
+              </div>
+              <button type="submit" name="submitBtn" class="submitBtn oauthButton">
                 Register
                 <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 17 5-5-5-5"></path><path d="m13 17 5-5-5-5"></path></svg>
@@ -559,56 +650,64 @@ mysqli_close($conn);
   <div class="modal fade modal-fix" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="errorModalLabel">Login Error</h4>
-        </div>
-        <div class="modal-body">
-          <?php echo $error_message; ?>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
-        </div>
+        <?php echo $error_message; ?>
       </div>
     </div>
   </div>
-  <!-- Modal for $success -->
+  <!-- Modal for $status -->
   <div class="modal fade modal-fix" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="successModalLabel">Link sent</h4>
-        </div>
-        <div class="modal-body">
-          <?php echo $status; ?>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="window.history.back()">OK</button>
-        </div>
+        <?php echo $status; ?>
+      </div>
+    </div>
+  </div>
+  <!-- Modal for $notify -->
+  <div class="modal fade modal-fix" id="notifyModal" tabindex="-1" role="dialog" aria-labelledby="notifyModalLabel">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+      <div class="modal-content">
+        <?php echo $notify; ?>
       </div>
     </div>
   </div>
   <script>
+    document.getElementById("login-form").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.querySelector('button[type="submit"]').click();
+      }
+    });
+
+    $(document).on('hidden.bs.modal', function () {
+      if ($('.modal.show').length) {
+          $('body').addClass('modal-open');
+      } else {
+          $('body').css('padding-right', '0');
+      }
+    });
+
+    $('#forgotModal').on('show.bs.modal', function () {
+        $('body').css('padding-right', '0');
+    });
+
     $(document).ready(function() {
       <?php if (!empty($error_message)) { ?>
         $('#errorModal').modal('show');
       <?php } ?>
     });
-  </script>
-  <script>
+
     $(document).ready(function() {
       <?php if (!empty($status)) { ?>
         $('#successModal').modal('show');
       <?php } ?>
     });
+
+    $(document).ready(function() {
+      <?php if (!empty($notify)) { ?>
+        $('#notifyModal').modal('show');
+      <?php } ?>
+    });
   </script>
-  <script>
-  document.getElementById("login-form").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      document.querySelector('button[type="submit"]').click();
-    }
-  });
-</script>
   
   <script>
   const scrollContainers = document.querySelectorAll('.horizontal-scroll');
@@ -643,19 +742,6 @@ mysqli_close($conn);
       scrollContainer.scrollLeft = scrollLeft - walk;
     });
   });
-</script>
-<script>
-  $(document).on('hidden.bs.modal', function () {
-    if ($('.modal.show').length) {
-        $('body').addClass('modal-open');
-    } else {
-        $('body').css('padding-right', '0');
-    }
-});
-
-$('#forgotModal').on('show.bs.modal', function () {
-    $('body').css('padding-right', '0');
-});
 </script>
 
   <script src="scripts.js"></script>
