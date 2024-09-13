@@ -149,7 +149,7 @@ if ($result) {
                 <!-- <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li> -->
                 <li><a href="index.php" class="nav-btn">Home</a></li>
                 <li><a href="bookings.php" class="nav-btn">Booking</a></li>
-                <li><a href="menu.php" class="nav-btn">Booking List</a></li>
+                <li><a href="booking_list.php" class="nav-btn">Booking List</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                     <?php
@@ -389,25 +389,23 @@ if ($result) {
                             echo "<tr>";
                             echo "<th>Full Name</th>";
                             echo "<td>" . $custRow['cName'] . "</td>";
+                            echo "<td><button class='btn fa fa-edit edit-btn' onclick='editFullName(" . $custRow['cId'] . ")'></button></td>";
                             echo "</tr>";
                             echo "<tr>";
                             echo "<th>Username</th>";
                             echo "<td>" . $custRow['cUser'] . "</td>";
+                            echo "<td></td>"; //<button class='btn fa fa-edit edit-btn' onclick='editUsername(" . $custRow['cId'] . ")'></button>
                             echo "</tr>";
                             echo "<tr>";
                             echo "<th>Email</th>";
                             echo "<td>" . $custRow['cEmail'] . "</td>";
+                            echo "<td><button class='btn fa fa-edit edit-btn' onclick='editEmail(" . $custRow['cId'] . ")'></button></td>";
                             echo "</tr>";
                             echo "<tr>";
                             echo "<th>Phone</th>";
                             echo "<td>" . $custRow['cPhone'] . "</td>";
-                            echo "</tr>";
-                            echo "<tr>";
-                            echo "<th>";
-                            echo "<button class='btn btn-primary btn-sm' onclick='editProfile(" . $custRow['cId'] . ")'>Edit</button> ";
-                            echo "</th>";
-                            echo "<td></td>";
-                            echo "</tr>";                  
+                            echo "<td><button class='btn fa fa-edit edit-btn' onclick='editPhone(" . $custRow['cId'] . ")'></button></td>";
+                            echo "</tr>";              
                           }
                         } else {
                             echo "<tr><td colspan='3'>No database found.</td></tr>";
@@ -470,50 +468,130 @@ if ($result) {
 </footer>
 
   <script>
-                      function editProfile(cId) {
-                        var editName = prompt("Enter new Full Name:");
-                        var editEmail = prompt("Enter new Email");
-                        var editPhone = prompt("Enter new Phone Number:");
+      // edit full name
+      function editFullName(cId) {
+        var editName = prompt("New Full Name:");
+        if (editName !== null && editName.trim() !== "") {
+          submitFNameForm(cId, editName);
+        } else {
+          alert("Full Name cannot be empty.");
+        }
+      }
+      function submitFNameForm(cId, editName) {
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = "edit_profile.php";
 
-                        if (editName !== null && editEmail !== null && editPhone !== null) {
-                          submitEditForm(cId, editName, editEmail, editPhone);
-                        }
-                      }
+        var inputId = document.createElement("input");
+        inputId.type = "hidden";
+        inputId.name = "cId";
+        inputId.value = cId;
 
-                      function submitEditForm(cId, editName, editEmail, editPhone) {
-                        var form = document.createElement("form");
-                        form.method = "post";
-                        form.action = "edit_profile.php";
+        var inputName = document.createElement("input");
+        inputName.type = "hidden";
+        inputName.name = "cName";
+        inputName.value = editName;
 
-                        var inputId = document.createElement("input");
-                        inputId.type = "hidden";
-                        inputId.name = "cId";
-                        inputId.value = cId;
+        form.appendChild(inputId);
+        form.appendChild(inputName);
 
-                        var inputName = document.createElement("input");
-                        inputName.type = "hidden";
-                        inputName.name = "name";
-                        inputName.value = editName;
+        document.body.appendChild(form);
+        form.submit();
+      }
 
-                        var inputEmail = document.createElement("input");
-                        inputEmail.type = "hidden";
-                        inputEmail.name = "email";
-                        inputEmail.value = editEmail;
+      // edit username
+      // function editUsername(cId) {
+      //   var editUsername = prompt("New Username:");
+      //   if (editUsername !== null && editUsername.trim() !== "") {
+      //     submitUsernameForm(cId, editUsername);
+      //   } else {
+      //     alert("Username cannot be empty.");
+      //   }
+      // }
+      // function submitUsernameForm(cId, editUsername) {
+      //   var form = document.createElement("form");
+      //   form.method = "post";
+      //   form.action = "edit_profile.php";
 
-                        var inputPhone = document.createElement("input");
-                        inputPhone.type = "hidden";
-                        inputPhone.name = "phone";
-                        inputPhone.value = editPhone;
+      //   var inputId = document.createElement("input");
+      //   inputId.type = "hidden";
+      //   inputId.name = "cId";
+      //   inputId.value = cId;
 
-                        form.appendChild(inputId);
-                        form.appendChild(inputName);
-                        form.appendChild(inputEmail);
-                        form.appendChild(inputPhone);
+      //   var inputUsername = document.createElement("input");
+      //   inputUsername.type = "hidden";
+      //   inputUsername.name = "cUser";
+      //   inputUsername.value = editUsername;
 
-                        document.body.appendChild(form);
-                        
-                        form.submit();
-                      }
-                    </script>
+      //   form.appendChild(inputId);
+      //   form.appendChild(inputUsername);
+
+      //   document.body.appendChild(form);
+      //   form.submit();
+      // }
+
+      // edit email
+      function editEmail(cId) {
+        var editEmail = prompt("New Email:");
+        if (editEmail !== null && editEmail.trim() !== "") {
+          submitEmailForm(cId, editEmail);
+        } else {
+          alert("Email cannot be empty.");
+        }
+      }
+      function submitEmailForm(cId, editEmail) {
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = "edit_profile.php";
+
+        var inputId = document.createElement("input");
+        inputId.type = "hidden";
+        inputId.name = "cId";
+        inputId.value = cId;
+
+        var inputEmail = document.createElement("input");
+        inputEmail.type = "hidden";
+        inputEmail.name = "cEmail";
+        inputEmail.value = editEmail;
+
+        form.appendChild(inputId);
+        form.appendChild(inputEmail);
+
+        document.body.appendChild(form);
+        form.submit();
+      }
+
+      // edit phone
+      function editPhone(cId) {
+        var editPhone = prompt("New Phone:");
+        if (editPhone !== null && editPhone.trim() !== "") {
+          submitPhoneForm(cId, editPhone);
+        } else {
+          alert("Phone number cannot be empty.");
+        }
+      }
+      function submitPhoneForm(cId, editPhone) {
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = "edit_profile.php";
+
+        var inputId = document.createElement("input");
+        inputId.type = "hidden";
+        inputId.name = "cId";
+        inputId.value = cId;
+
+        var inputPhone = document.createElement("input");
+        inputPhone.type = "hidden";
+        inputPhone.name = "cPhone";
+        inputPhone.value = editPhone;
+
+        form.appendChild(inputId);
+        form.appendChild(inputPhone);
+
+        document.body.appendChild(form);
+        form.submit();
+      }
+  </script>
+  <script src="scripts.js"></script>
 </body>
 </html>

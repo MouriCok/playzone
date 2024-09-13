@@ -69,19 +69,12 @@ mysqli_close($conn);
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <title>Helps</title>
+  <title>List of Bookings</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="stylee.css">
   <link rel="stylesheet" href="form.css">
   <style>
@@ -100,48 +93,26 @@ mysqli_close($conn);
   </script>
 </head>
 <body>
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-      <img src="SW_icon_tp.png" width="40" height="40">  
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
+<header>
+    <nav class="navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li>
+            <li><a href="javascript:void(0);" onclick="goBack(event);" class="nav-btn"> Back</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-          <li><a href="javascript:void(0);" onclick="goBack(event);"> BACK</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
-  <div class="page-container">
-    <div class="login-container">
-      <h2>ADD MENU</h2>
-        <form method="post" action="menu.php" class="form booking">
-          <div class="reserve">
-            <div class="column-1">
-              <div class="form-group">
-                <input type="text" id="foodtruckId" name="foodtruckId" required>
-                <label for="foodtruckId">Food Truck ID</label>
-              </div>
-              <div class="form-group">
-                <input type="text" id="name" name="name" required>
-                <label for="name">Menu Name</label>
-              </div>
-              <div class="form-group">
-                <input type="text" id="price" name="price"required>
-                <label for="price">Menu Price</label>
-              </div>
-            </div>
-          </div>
-          
-          <button type="submit" name="submit" class="submitBtn btn btn-default">ADD NEW MENU</button>
-        </form>
-    </div>
-  </div>
+  
 
   <footer class="container-fluid text-center">
   <div class="collapse navbar-collapse" id="myNavbar">

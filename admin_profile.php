@@ -145,7 +145,7 @@ if ($result) {
             <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
                 <li><a href="index.php" class="nav-btn">Home</a></li>
-                <li><a href="menu.php" class="nav-btn">Booking List</a></li>
+                <li><a href="booking_list.php" class="nav-btn">Booking List</a></li>
               </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php

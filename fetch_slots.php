@@ -1,84 +1,85 @@
 <?php
-    require_once 'database.php';
+require_once 'database.php';
 
-    // Retrieve form data
+if (isset($_POST['courtType'])) {
     $courtType = $_POST['courtType'];
-    $selected_date = date('Y-m-d', strtotime($_POST['datestart']));
 
-    // Get the day of the week
-    $day_of_week = date('l', strtotime($selected_date));
+    // Get current day of the week (e.g., Monday, Tuesday)
+    $current_day = date('l'); // Full name of the day, compatible with ENUM in `premises_hours`
 
-    // Fetch open and close times for the selected day
-    $sql = "SELECT open_time, close_time FROM premises_hours WHERE day_of_week = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $day_of_week);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $hours = $result->fetch_assoc();
+    // Fetch the premises' open and close times for the current day
+    $sql_hours = "SELECT open_time, close_time FROM premises_hours WHERE day_of_week = ?";
+    $stmt_hours = $conn->prepare($sql_hours);
+    $stmt_hours->bind_param("s", $current_day);
+    $stmt_hours->execute();
+    $result_hours = $stmt_hours->get_result();
+    $premises_hours = $result_hours->fetch_assoc();
 
-    if (!$hours) {
-    // Handle closed premises (e.g., Sunday)
-    echo "<p>Sorry, the premises are closed on $day_of_week. Please choose another date.</p>";
-    exit;
+    if (!$premises_hours) {
+        echo json_encode(['error' => "The premises are closed on $current_day."]);
+        exit;
     }
 
-    $open_time = $hours['open_time'];
-    $close_time = $hours['close_time'];
+    // Get the current time
+    $current_time = new DateTime();
+    $open_time = new DateTime($premises_hours['open_time']);
+    $close_time = new DateTime($premises_hours['close_time']);
 
-    // Fetch existing bookings for the selected court on the selected date
-    $sql = "SELECT datestart, dateend FROM bookings WHERE courtType = ? AND DATE(datestart) = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $courtType, $selected_date);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Calculate available slots
-    $available_slots = [];
-
-    $open_datetime = new DateTime("$selected_date $open_time");
-    $close_datetime = new DateTime("$selected_date $close_time");
-
-    $booked_slots = [];
-    while ($row = $result->fetch_assoc()) {
-        $booked_slots[] = [
-            'start' => new DateTime($row['datestart']),
-            'end' => new DateTime($row['dateend'])
-        ];
+    // Check if the current time is within opening hours
+    if ($current_time < $open_time || $current_time > $close_time) {
+        echo json_encode(['error' => "The premises are closed right now. Open hours today are from " . $open_time->format('H:i') . " to " . $close_time->format('H:i')]);
+        exit;
     }
 
-    $current_time = $open_datetime;
-    $slot_duration = new DateInterval('PT1H'); // 1-hour slots
-
-    while ($current_time < $close_datetime) {
-        $next_time = clone $current_time;
-        $next_time->add($slot_duration);
-
-        $is_available = true;
-        foreach ($booked_slots as $slot) {
-            if ($current_time < $slot['end'] && $next_time > $slot['start']) {
-                $is_available = false;
-                break;
-            }
-        }
-
-        if ($is_available) {
-            $available_slots[] = $current_time->format('H:i') . " - " . $next_time->format('H:i');
-        }
-
-        $current_time = $next_time;
+    // Set the time slot for the next 2 hours
+    $start_time = $current_time->format('H:i');
+    $end_time = $current_time->modify('+2 hours')->format('H:i');
+    
+    // If the timeslot exceeds closing time, adjust the end time to the closing time
+    if ($current_time > $close_time) {
+        $end_time = $close_time->format('H:i');
     }
 
-    // Display available slots
-    if (!empty($available_slots)) {
-        echo "<h3>Available Slots:</h3>";
-        echo "<ul>";
-        foreach ($available_slots as $slot) {
-            echo "<li>$slot</li>";
-        }
-        echo "</ul>";
+    // Fetch the total courts for the specified court type
+    $sql_total = "SELECT total_courts FROM court_count WHERE courtType = ?";
+    $stmt_total = $conn->prepare($sql_total);
+    $stmt_total->bind_param("s", $courtType);
+    $stmt_total->execute();
+    $result_total = $stmt_total->get_result();
+    $total_courts_data = $result_total->fetch_assoc();
+
+    if ($total_courts_data) {
+        $total_courts = $total_courts_data['total_courts'];
+
+        // Count available courts from `court_availability` that are available within the next 2 hours
+        $sql_availability = "
+            SELECT COUNT(*) as available_courts 
+            FROM court_availability 
+            WHERE courtType = ? 
+            AND availableFrom <= NOW() 
+            AND availableTo >= NOW()";
+        $stmt_avail = $conn->prepare($sql_availability);
+        $stmt_avail->bind_param("s", $courtType);
+        $stmt_avail->execute();
+        $result_avail = $stmt_avail->get_result();
+        $avail_data = $result_avail->fetch_assoc();
+
+        $available_courts = $avail_data ? $avail_data['available_courts'] : 0;
+
+        // Return the JSON response
+        $updated_time = date('d/m/Y H:i');
+        echo json_encode([
+            'timeslot' => "$start_time - $end_time",
+            'total_courts' => $total_courts,
+            'available_courts' => $available_courts,
+            'updated_time' => $updated_time
+        ]);
     } else {
-        echo "<p>No available slots for $courtType on $selected_date. Please choose another date or time.</p>";
+        echo json_encode(['error' => "No data for court type: $courtType"]);
     }
+} else {
+    echo json_encode(['error' => 'Invalid request. No courtType specified.']);
+}
 
-    mysqli_close($conn);
+mysqli_close($conn);
 ?>

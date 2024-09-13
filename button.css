@@ -1,3 +1,16 @@
+.edit-btn {
+  background-color: #8FEBFF;
+  max-width: fit-content;
+  max-height: fit-content;
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+}
+
+.edit-btn:hover {
+  background-color: #07a0c3;
+  transform: scale(0.9);
+}
+
 .Btn {
     display: flex;
     align-items: center;
@@ -63,7 +76,7 @@
   }
   /* button click effect*/
   .Btn:active {
-    transform: translate(2px ,2px);
+    box-shadow: 2px 2px 3px rgba(255, 255, 255, 0.199), inset 2px 2px 5px rgba(0, 0, 0, 0.199);
   }
 
   /* ----------------------------------------------------------------------- */

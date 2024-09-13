@@ -29,7 +29,7 @@ header, .navbar {
 }
 
 /* Prevent text selection */
-a {
+li, a {
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
@@ -37,7 +37,7 @@ a {
 }
 
 /* Prevent dragging */
-a {
+li, a {
   -webkit-touch-callout: none; /* Prevents the callout on touch devices */
   -webkit-user-drag: none; /* Prevents image and link dragging */
 }
@@ -93,12 +93,7 @@ a {
   box-shadow: inset -2px -2px 3px rgba(0, 0, 0, 0.199), inset 2px 2px 5px rgba(255, 255, 255, 0.199);
   transition: all 0.3s ease-in-out;
 }
-.dropdown:hover, .login:hover {
-  transform: scale(0.97);
-  transition: all 0.3s ease-in-out;
-}
 .dropdown:active, .login:active {
-  transform: scale(0.97);
   box-shadow: 2px 2px 3px rgba(255, 255, 255, 0.199), inset 2px 2px 5px rgba(0, 0, 0, 0.199);
 }
 .d-m {

@@ -233,7 +233,7 @@ mysqli_close($conn);
                     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
                       echo '<li><a href="index.php" class="nav-btn">PlayZone</a></li>
                         <li><a href="bookings.php" class="nav-btn">Booking</a></li>
-                        <li><a href="menu.php" class="nav-btn">Booking List</a></li>';
+                        <li><a href="booking_list.php" class="nav-btn">Booking List</a></li>';
                     } else {
                       echo '<li><a href="index.php" class="nav-btn">PlayZone</a></li>
                       <li><a href="contact.php" class="nav-btn">Contact</a></li>';
@@ -387,46 +387,60 @@ mysqli_close($conn);
 <div class="container scroll-card">
   <span class="p4">Explore Our Facilities</span>
   <div class="row horizontal-scroll">
-    <div class="card">
+    <div class="card" data-court-type="Basketball">
       <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Basketball" class="img-card"></div>
       <div class="category"> Basketball </div>
-      <div class="heading"> TIMESLOT : 08:00 PM - 10:00 PM<br>TOTAL COURTS : 2 (1 indoor, 1 outdoor)<br>AVAILABLE : 2 left
-        <div class="author"> Updated on <span class="name">DD/MM/YY</span>, HH:MM</div>
+      <div class="heading">
+        TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
+        <div class="author"> Updated on <span class="name">Loading...</span></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Basketball" class="img-card"></div>
-      <div class="category"> Basketball </div>
-      <div class="heading"> TIMESLOT : 08:00 PM - 10:00 PM<br>TOTAL COURTS : 2 (1 indoor, 1 outdoor)<br>AVAILABLE : 2 left
-        <div class="author"> Updated on <span class="name">DD/MM/YY</span>, HH:MM</div>
+    <div class="card" data-court-type="Badminton">
+      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Badminton" class="img-card"></div>
+      <div class="category"> Badminton </div>
+      <div class="heading">
+        TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
+        <div class="author"> Updated on <span class="name">Loading...</span></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Basketball" class="img-card"></div>
-      <div class="category"> Basketball </div>
-      <div class="heading"> TIMESLOT : 08:00 PM - 10:00 PM<br>TOTAL COURTS : 2 (1 indoor, 1 outdoor)<br>AVAILABLE : 2 left
-        <div class="author"> Updated on <span class="name">DD/MM/YY</span>, HH:MM</div>
+    <div class="card" data-court-type="Volleyball">
+      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Volleyball" class="img-card"></div>
+      <div class="category"> Volleyball </div>
+      <div class="heading">
+        TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
+        <div class="author"> Updated on <span class="name">Loading...</span></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Basketball" class="img-card"></div>
-      <div class="category"> Basketball </div>
-      <div class="heading"> TIMESLOT : 08:00 PM - 10:00 PM<br>TOTAL COURTS : 2 (1 indoor, 1 outdoor)<br>AVAILABLE : 2 left
-        <div class="author"> Updated on <span class="name">DD/MM/YY</span>, HH:MM</div>
+    <div class="card" data-court-type="Tennis">
+      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Tennis" class="img-card"></div>
+      <div class="category"> Tennis </div>
+      <div class="heading">
+        TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
+        <div class="author"> Updated on <span class="name">Loading...</span></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Basketball" class="img-card"></div>
-      <div class="category"> Basketball </div>
-      <div class="heading"> TIMESLOT : 08:00 PM - 10:00 PM<br>TOTAL COURTS : 2 (1 indoor, 1 outdoor)<br>AVAILABLE : 2 left
-        <div class="author"> Updated on <span class="name">DD/MM/YY</span>, HH:MM</div>
+    <div class="card" data-court-type="Futsal">
+      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Futsal" class="img-card"></div>
+      <div class="category"> Futsal </div>
+      <div class="heading">
+        TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
+        <div class="author"> Updated on <span class="name">Loading...</span></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Basketball" class="img-card"></div>
-      <div class="category"> Basketball </div>
-      <div class="heading"> TIMESLOT : 08:00 PM - 10:00 PM<br>TOTAL COURTS : 2 (1 indoor, 1 outdoor)<br>AVAILABLE : 2 left
-        <div class="author"> Updated on <span class="name">DD/MM/YY</span>, HH:MM</div>
+    <div class="card" data-court-type="Bowling">
+      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Bowling" class="img-card"></div>
+      <div class="category"> Bowling </div>
+      <div class="heading">
+        TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
+        <div class="author"> Updated on <span class="name">Loading...</span></div>
+      </div>
+    </div>
+    <div class="card" data-court-type="PSXbox">
+      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="PSXbox" class="img-card"></div>
+      <div class="category"> PS/Xbox </div>
+      <div class="heading">
+        TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
+        <div class="author"> Updated on <span class="name">Loading...</span></div>
       </div>
     </div>
   </div>
@@ -670,6 +684,59 @@ mysqli_close($conn);
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Fetch available slots and update the horizontal card slider
+      fetchAvailableSlots();
+
+      // Function to fetch the current timeslot and available courts for each card
+      function fetchAvailableSlots() {
+        // Select all cards with a data-court-type attribute
+        const cards = document.querySelectorAll('.card[data-court-type]');
+
+        // Loop through each card and fetch data for the respective court type
+        cards.forEach(function(card) {
+          const courtType = card.getAttribute('data-court-type');
+
+          // Make an AJAX call to fetch the available slots for the court type
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', 'fetch_slots.php', true);
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              try {
+                const response = JSON.parse(xhr.responseText);
+
+                if (response.error) {
+                  console.error(response.error);
+                  card.querySelector('.heading').innerHTML = "Error: " + response.error;
+                } else {
+                  updateCard(card, response.timeslot, response.total_courts, response.available_courts, response.updated_time);
+                }
+              } catch (e) {
+                console.error("Error parsing response as JSON: ", e);
+                card.querySelector('.heading').innerHTML = "Error fetching slots.";
+              }
+            }
+          };
+          xhr.send('courtType=' + encodeURIComponent(courtType));
+        });
+      }
+
+      // Function to update the card content with the fetched data
+      function updateCard(card, timeslot, total_courts, available_courts, updated_time) {
+        const heading = card.querySelector('.heading');
+        heading.innerHTML = `
+          TIMESLOT: ${timeslot}<br>
+          TOTAL COURTS: ${total_courts}<br>
+          AVAILABLE: ${available_courts} left
+          <div class="author"> Updated on <span class="name">${updated_time}</span></div>
+        `;
+      }
+    });
+  </script>
+
   <script>
     document.getElementById("login-form").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {

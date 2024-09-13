@@ -2,26 +2,42 @@
 require_once 'database.php';
 
 // Check if the request contains the necessary parameters
-if (isset($_POST['id'], $_POST['name'], $_POST['email'], $_POST['phone'])) {
-    // Sanitize the input to prevent SQL injection
-    $playerId = mysqli_real_escape_string($conn, $_POST['id']);
-    $editName = mysqli_real_escape_string($conn, $_POST['name']);
-    $editEmail = mysqli_real_escape_string($conn, $_POST['email']);
-    $editPhone = mysqli_real_escape_string($conn, $_POST['phone']);
+if (isset($_POST['cId'])) {
+    $cId = mysqli_real_escape_string($conn, $_POST['cId']);
 
-    // Perform the update operation
-    $editQuery = "UPDATE user SET name = '$editName', email = '$editEmail', phone = '$editPhone' WHERE id = $playerId";
+    $editName = isset($_POST['cName']) && !empty(trim($_POST['cName'])) ? mysqli_real_escape_string($conn, $_POST['cName']) : null;
+    // $editUsername = isset($_POST['cUser']) && !empty(trim($_POST['cUser'])) ? mysqli_real_escape_string($conn, $_POST['cUser']) : null;
+    $editEmail = isset($_POST['cEmail']) && !empty(trim($_POST['cEmail'])) ? mysqli_real_escape_string($conn, $_POST['cEmail']) : null;
+    $editPhone = isset($_POST['cPhone']) && !empty(trim($_POST['cPhone'])) ? mysqli_real_escape_string($conn, $_POST['cPhone']) : null;
 
-    if (mysqli_query($conn, $editQuery)) {
-        // Redirect back to the profile page or any other page
-        header("Location: profile.php");
-        exit();
+    $updateFields = [];
+
+    // Build the update query dynamically based on which fields are provided
+    if ($editName !== null) {
+        $updateFields[] = "cName = '$editName'";
+    }
+    // if ($editUsername !== null) {
+    //     $updateFields[] = "cUser = '$editUsername'";
+    // }
+    if ($editEmail !== null) {
+        $updateFields[] = "cEmail = '$editEmail'";
+    }
+    if ($editPhone !== null) {
+        $updateFields[] = "cPhone = '$editPhone'";
+    }
+
+    if (!empty($updateFields)) {
+        $editQuery = "UPDATE customer SET " . implode(", ", $updateFields) . " WHERE cId = $cId";
+
+        if (mysqli_query($conn, $editQuery)) {
+            header ("location: profile.php");
+        } else {
+            echo "Error updating profile: " . mysqli_error($conn);
+        }
     } else {
-        // Error message, you can customize this response
-        echo "Error editing profile: " . mysqli_error($conn);
+        echo "No valid fields provided for update.";
     }
 } else {
-    // If required parameters are not provided in the request
     echo "Invalid request. Please provide all required parameters.";
 }
 
