@@ -396,7 +396,7 @@ mysqli_close($conn);
       </div>
     </div>
     <div class="card" data-court-type="Badminton">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Badminton" class="img-card"></div>
+      <div class="card-image"><img src="backgrounds/badminton.jpg" alt="Badminton" class="img-card"></div>
       <div class="category"> Badminton </div>
       <div class="heading">
         TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
@@ -404,7 +404,7 @@ mysqli_close($conn);
       </div>
     </div>
     <div class="card" data-court-type="Volleyball">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Volleyball" class="img-card"></div>
+      <div class="card-image"><img src="backgrounds/volleyball.jpg" alt="Volleyball" class="img-card"></div>
       <div class="category"> Volleyball </div>
       <div class="heading">
         TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
@@ -412,7 +412,7 @@ mysqli_close($conn);
       </div>
     </div>
     <div class="card" data-court-type="Tennis">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Tennis" class="img-card"></div>
+      <div class="card-image"><img src="backgrounds/tennis.jpg" alt="Tennis" class="img-card"></div>
       <div class="category"> Tennis </div>
       <div class="heading">
         TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
@@ -420,7 +420,7 @@ mysqli_close($conn);
       </div>
     </div>
     <div class="card" data-court-type="Futsal">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Futsal" class="img-card"></div>
+      <div class="card-image"><img src="backgrounds/futsal.jpg" alt="Futsal" class="img-card"></div>
       <div class="category"> Futsal </div>
       <div class="heading">
         TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
@@ -428,7 +428,7 @@ mysqli_close($conn);
       </div>
     </div>
     <div class="card" data-court-type="Bowling">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="Bowling" class="img-card"></div>
+      <div class="card-image"><img src="backgrounds/bowling.jpg" alt="Bowling" class="img-card"></div>
       <div class="category"> Bowling </div>
       <div class="heading">
         TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
@@ -436,7 +436,7 @@ mysqli_close($conn);
       </div>
     </div>
     <div class="card" data-court-type="PSXbox">
-      <div class="card-image"><img src="backgrounds/basketball.jpg" alt="PSXbox" class="img-card"></div>
+      <div class="card-image"><img src="backgrounds/psxbox.jpg" alt="PSXbox" class="img-card"></div>
       <div class="category"> PS/Xbox </div>
       <div class="heading">
         TIMESLOT : Loading...<br>TOTAL COURTS : Loading...<br>AVAILABLE : Loading...
@@ -687,53 +687,49 @@ mysqli_close($conn);
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Fetch available slots and update the horizontal card slider
-      fetchAvailableSlots();
+        // Initial fetch of available slots
+        fetchAvailableSlots();
 
-      // Function to fetch the current timeslot and available courts for each card
-      function fetchAvailableSlots() {
-        // Select all cards with a data-court-type attribute
-        const cards = document.querySelectorAll('.card[data-court-type]');
+        // Set an interval to refresh slots every 1 minute (60,000 ms)
+        setInterval(fetchAvailableSlots, 60000);
 
-        // Loop through each card and fetch data for the respective court type
-        cards.forEach(function(card) {
-          const courtType = card.getAttribute('data-court-type');
+        // Function to fetch the current timeslot and available courts for each card
+        function fetchAvailableSlots() {
+            // Select all cards with a data-court-type attribute
+            const cards = document.querySelectorAll('.card[data-court-type]');
 
-          // Make an AJAX call to fetch the available slots for the court type
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', 'fetch_slots.php', true);
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-              try {
-                const response = JSON.parse(xhr.responseText);
+            // Loop through each card and fetch data for the respective court type
+            cards.forEach(function(card) {
+                const courtType = card.getAttribute('data-court-type');
 
-                if (response.error) {
-                  console.error(response.error);
-                  card.querySelector('.heading').innerHTML = "Error: " + response.error;
-                } else {
-                  updateCard(card, response.timeslot, response.total_courts, response.available_courts, response.updated_time);
-                }
-              } catch (e) {
-                console.error("Error parsing response as JSON: ", e);
-                card.querySelector('.heading').innerHTML = "Error fetching slots.";
-              }
-            }
-          };
-          xhr.send('courtType=' + encodeURIComponent(courtType));
-        });
-      }
+                // Make an AJAX call to fetch the available slots for the court type
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'fetch_slots.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.error) {
+                            console.error(response.error);
+                        } else {
+                            updateCard(card, response.timeslot, response.total_courts, response.available_courts, response.updated_time);
+                        }
+                    }
+                };
+                xhr.send('courtType=' + courtType);
+            });
+        }
 
-      // Function to update the card content with the fetched data
-      function updateCard(card, timeslot, total_courts, available_courts, updated_time) {
-        const heading = card.querySelector('.heading');
-        heading.innerHTML = `
-          TIMESLOT: ${timeslot}<br>
-          TOTAL COURTS: ${total_courts}<br>
-          AVAILABLE: ${available_courts} left
-          <div class="author"> Updated on <span class="name">${updated_time}</span></div>
-        `;
-      }
+        // Function to update the card content with the fetched data
+        function updateCard(card, timeslot, total_courts, available_courts, updated_time) {
+            const heading = card.querySelector('.heading');
+            heading.innerHTML = `
+              TIMESLOT: ${timeslot}<br>
+              TOTAL COURTS: ${total_courts}<br>
+              AVAILABLE: ${available_courts} left
+              <div class="author"> Updated on <span class="name">${updated_time}</span></div>
+            `;
+        }
     });
   </script>
 

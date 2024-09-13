@@ -29,18 +29,6 @@ CREATE TABLE `bookings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Table structure for table `court_availability`
---
-
-CREATE TABLE `court_availability` (
-  `courtID` int(11) NOT NULL AUTO_INCREMENT,
-  `courtType` varchar(60) NOT NULL,
-  `availableFrom` datetime NOT NULL,
-  `availableTo` datetime NOT NULL,
-  PRIMARY KEY (`courtID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
 -- Table structure for table `court_count`
 --
 

@@ -6,9 +6,9 @@
       die("Connection failed: " . mysqli_connect_error());
   }
 
-  // Check if the user is logged in, if not then redirect to login page
+  // Check if the user is logged in, if not then redirect to home page
   if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("location: login.php");
+    header("location: index.php");
     exit;
   }
 
@@ -294,7 +294,7 @@
       
       if (courtType && datestart) {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'fetch_slots.php', true);
+        xhr.open('POST', 'fetchSlot_Booking.php', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
