@@ -149,7 +149,6 @@ if ($result) {
                 <!-- <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li> -->
                 <li><a href="index.php" class="nav-btn">Home</a></li>
                 <li><a href="bookings.php" class="nav-btn">Booking</a></li>
-                <li><a href="booking_list.php" class="nav-btn">Booking List</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                     <?php
@@ -182,7 +181,8 @@ if ($result) {
                                                 <span class="email" style="font-size: 12px; display: block;">' . $_SESSION['cEmail'] . '</span>
                                             </div>
                                         </li>
-                                        <li class="dropdown-item"><a href="profile.php">Settings</a></li>
+                                        <li class="dropdown-item"><a href="profile.php">Profile</a></li>
+                                        <li class="dropdown-item"><a href="settings.php">Settings</a></li>
                                         <li class="dropdown-item"><a href="contact.php">Contact</a></li>
                                     </ul>
                                 </li>';
@@ -373,7 +373,7 @@ if ($result) {
                 <table class="table table-striped">
                   <tbody>
                     <?php
-                      $conn = mysqli_connect("localhost", "root", "", "sport_booking");
+                      require_once 'database.php';
 
                       if (!$conn) {
                         die("Connection failed: " . mysqli_connect_error());
@@ -421,6 +421,86 @@ if ($result) {
         </div>
       </div>
     </div>
+    <!--Booked Facilities section-->
+    <div class="col-md-12">
+                      <div class="profile-card col-sm-12">
+                        <div class="h-100">
+                          <div class="card-body">
+                            <h5 class="card-title">Booked Facilities</h5>
+                            <table class="table table-striped">
+                              <thead>
+                                <tr>
+                                  <th>Booking ID</th>
+                                  <th>Court Type</th>
+                                  <th>Timeslot</th>
+                                  <th>Participant</th>
+                                  <th>Status</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php
+                                  require_once 'database.php';
+
+                                  if (!$conn) {
+                                    die("Connection failed: " . mysqli_connect_error());
+                                  }
+
+                                  $cEmail = $_SESSION['cEmail'];
+                                  $bookingQuery = "SELECT bID, courtType, datestart, dateend, people, payment_status FROM bookings WHERE cEmail = '$cEmail'";
+                                  $bookingResult = mysqli_query($conn, $bookingQuery);
+
+                                  if ($bookingResult) {
+                                      if (mysqli_num_rows($bookingResult) > 0) {
+                                          while ($bookingRow = mysqli_fetch_assoc($bookingResult)) {
+                                              echo "<tr>";
+                                              echo "<td>" . $bookingRow['bID'] . "</td>";
+                                              echo "<td>" . $bookingRow['courtType'] . "</td>";
+                                              echo "<td>" . $bookingRow['datestart'] . " - " . $bookingRow['dateend'] . "</td>";
+                                              echo "<td>" . $bookingRow['people'] . "</td>";
+                                              echo "<td>" . $bookingRow['payment_status'] . "</td>";
+                                              echo "<td>";
+                                              // echo "<button class='btn fa fa-edit edit-btn' onclick='updateBooking(" . $bookingRow['bID'] . ")'></button> ";
+                                              echo "<button class='btn fa fa-trash delete-btn' onclick='deleteBooking(" . $bookingRow['bID'] . ")'></button>";
+                                              echo "</td>";
+                                              echo "</tr>";
+                                          }
+                                      } else {
+                                          echo "<tr><td colspan='3'>No booked facilities found.</td></tr>";
+                                      }
+                                  } else {
+                                      die("Error in booking query: " . mysqli_error($conn));
+                                  }
+
+                                  mysqli_close($conn);
+                                ?>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <script>
+                      function deleteBooking(bID) {
+                      if (confirm("Are you sure you want to delete this booking? Your payment will not be refunded.")) {
+                        if (confirm("This action cannot be undone. Are you sure?")) {
+                          var form = document.createElement("form");
+                          form.method = "post";
+                          form.action = "delete_booking.php";
+
+                          var input = document.createElement("input");
+                          input.type = "hidden";
+                          input.name = "bID";
+                          input.value = bID;
+
+                          form.appendChild(input);
+                          document.body.appendChild(form);
+
+                          form.submit();
+                        }
+                      }
+                    }
+                    </script>
   </div>
 </div>
 

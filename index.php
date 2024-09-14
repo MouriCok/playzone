@@ -232,8 +232,7 @@ mysqli_close($conn);
                   <?php
                     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
                       echo '<li><a href="index.php" class="nav-btn">PlayZone</a></li>
-                        <li><a href="bookings.php" class="nav-btn">Booking</a></li>
-                        <li><a href="booking_list.php" class="nav-btn">Booking List</a></li>';
+                        <li><a href="bookings.php" class="nav-btn">Booking</a></li>';
                     } else {
                       echo '<li><a href="index.php" class="nav-btn">PlayZone</a></li>
                       <li><a href="contact.php" class="nav-btn">Contact</a></li>';
@@ -260,7 +259,8 @@ mysqli_close($conn);
                                                 <span class="email" style="font-size: 12px; display: block;">' . $_SESSION['cEmail'] . '</span>
                                             </div>
                                         </li>
-                                        <li class="dropdown-item"><a href="profile.php">Settings</a></li>
+                                        <li class="dropdown-item"><a href="profile.php">Profile</a></li>
+                                        <li class="dropdown-item"><a href="settings.php">Settings</a></li>
                                         <li class="dropdown-item"><a href="contact.php">Contact</a></li>
                                     </ul>
                                 </li>';

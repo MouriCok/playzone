@@ -11,6 +11,19 @@
   transform: scale(0.9);
 }
 
+.delete-btn {
+  background-color: #ff6767;
+  max-width: fit-content;
+  max-height: fit-content;
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+}
+
+.delete-btn:hover {
+  background-color: #FF2E15;
+  transform: scale(0.9);
+}
+
 .Btn {
     display: flex;
     align-items: center;

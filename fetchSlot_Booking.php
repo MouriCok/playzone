@@ -2,80 +2,77 @@
 require_once 'database.php';
 
 // Set the correct timezone
-date_default_timezone_set('Asia/Kuala_Lumpur'); 
+date_default_timezone_set('Asia/Kuala_Lumpur');
 
-if (isset($_POST['courtType'])) {
+if (isset($_POST['courtType']) && isset($_POST['date'])) {
     $courtType = $_POST['courtType'];
+    $selectedDate = new DateTime($_POST['date']);
+    $day_of_week = $selectedDate->format('l'); // Get the day of the week, e.g., 'Monday'
 
-    // Define the days to be displayed (Monday to Saturday)
-    $days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    // Fetch premises' open and close times for the selected day
+    $sql_hours = "SELECT open_time, close_time FROM premises_hours WHERE day_of_week = ?";
+    $stmt_hours = $conn->prepare($sql_hours);
+    $stmt_hours->bind_param("s", $day_of_week);
+    $stmt_hours->execute();
+    $result_hours = $stmt_hours->get_result();
+    $premises_hours = $result_hours->fetch_assoc();
 
-    // Fetch premises' open and close times for each day
-    $sql_hours = "SELECT day_of_week, open_time, close_time FROM premises_hours WHERE day_of_week IN ('" . implode("', '", $days_of_week) . "')";
-    $result_hours = $conn->query($sql_hours);
-    $premises_hours = [];
-    
-    while ($row = $result_hours->fetch_assoc()) {
-        $premises_hours[$row['day_of_week']] = [
-            'open_time' => new DateTime($row['open_time']),
-            'close_time' => new DateTime($row['close_time']),
-        ];
+    // If the selected day is closed (no opening/closing times)
+    if (!$premises_hours) {
+        echo json_encode(['error' => "The premises are closed on $day_of_week."]);
+        exit;
     }
+
+    $open_time = new DateTime($premises_hours['open_time']);
+    $close_time = new DateTime($premises_hours['close_time']);
+    $current_time = clone $open_time;
 
     // Prepare an array for the time slots
     $slots = [];
 
-    // Loop through each hour for each day
-    foreach ($days_of_week as $day) {
-        $open_time = $premises_hours[$day]['open_time'];
-        $close_time = $premises_hours[$day]['close_time'];
-        $current_time = clone $open_time;
+    // Loop through each hour between open and close time
+    while ($current_time < $close_time) {
+        $next_time = clone $current_time;
+        $next_time->modify('+1 hour');
 
-        while ($current_time < $close_time) {
-            $next_time = clone $current_time;
-            $next_time->modify('+2 hour');
+        // Filter bookings by the exact date and time
+        $sql_bookings = "SELECT COUNT(*) as booked_courts 
+                         FROM bookings 
+                         WHERE courtType = ? 
+                         AND (? BETWEEN datestart AND dateend)"; // Filter bookings for the selected date and time
+        $stmt_bookings = $conn->prepare($sql_bookings);
+        $start_time_str = $selectedDate->format('Y-m-d') . ' ' . $current_time->format('H:i:s'); // Use the selected date and time
+        $stmt_bookings->bind_param("ss", $courtType, $start_time_str);
+        $stmt_bookings->execute();
+        $result_bookings = $stmt_bookings->get_result();
+        $bookings_data = $result_bookings->fetch_assoc();
+        $booked_courts = $bookings_data['booked_courts'];
 
-            // Fetch court bookings for the selected time slot and court type
-            $sql_bookings = "SELECT COUNT(*) as booked_courts 
-                             FROM bookings 
-                             WHERE courtType = ? 
-                             AND DAYNAME(datestart) = ? 
-                             AND (datestart <= ? AND dateend > ?)";
-            $stmt = $conn->prepare($sql_bookings);
-            $start_time_str = $current_time->format('Y-m-d H:i:s');
-            $end_time_str = $next_time->format('Y-m-d H:i:s');
-            $stmt->bind_param("ssss", $courtType, $day, $start_time_str, $start_time_str);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $bookings_data = $result->fetch_assoc();
-            $booked_courts = $bookings_data['booked_courts'];
+        // Fetch total number of courts for the selected court type
+        $sql_total = "SELECT total_courts FROM court_count WHERE courtType = ?";
+        $stmt_total = $conn->prepare($sql_total);
+        $stmt_total->bind_param("s", $courtType);
+        $stmt_total->execute();
+        $result_total = $stmt_total->get_result();
+        $total_courts_data = $result_total->fetch_assoc();
+        $total_courts = $total_courts_data['total_courts'];
 
-            // Fetch total number of courts for the selected court type
-            $sql_total = "SELECT total_courts FROM court_count WHERE courtType = ?";
-            $stmt_total = $conn->prepare($sql_total);
-            $stmt_total->bind_param("s", $courtType);
-            $stmt_total->execute();
-            $result_total = $stmt_total->get_result();
-            $total_courts_data = $result_total->fetch_assoc();
-            $total_courts = $total_courts_data['total_courts'];
+        // Calculate available courts
+        $available_courts = $total_courts - $booked_courts;
 
-            // Calculate available courts
-            $available_courts = $total_courts - $booked_courts;
+        // Store the availability for the current time slot
+        $slots[] = [
+            'time' => $current_time->format('H:i') . ' - ' . $next_time->format('H:i'),
+            'status' => $available_courts > 0 ? 'Available' : 'Not Available'
+        ];
 
-            // Store the availability for the current time slot
-            $slots[] = [
-                'time' => $current_time->format('H:i') . ' - ' . $next_time->format('H:i'),
-                strtolower($day) => $available_courts > 0 ? 'Available' : 'Not Available'
-            ];
-
-            // Move to the next time slot
-            $current_time = $next_time;
-        }
+        // Move to the next time slot
+        $current_time = $next_time;
     }
 
     echo json_encode(['slots' => $slots]);
 } else {
-    echo json_encode(['error' => 'Invalid request. CourtType is missing.']);
+    echo json_encode(['error' => 'Invalid request. CourtType or Date is missing.']);
 }
 
 mysqli_close($conn);

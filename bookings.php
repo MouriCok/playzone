@@ -225,23 +225,18 @@ mysqli_close($conn);
 
     <div class="page-container">
         <div class="col-md-6">
-            <h3>Available Slots for Selected Court Type:</h3>
+            <h3>Available Slots for Selected Court Type and Date:</h3>
             <div id="available-slots">
                 <table class="calendar-table">
                     <thead>
                         <tr>
-                            <th>Time</th>
-                            <th>Monday</th>
-                            <th>Tuesday</th>
-                            <th>Wednesday</th>
-                            <th>Thursday</th>
-                            <th>Friday</th>
-                            <th>Saturday</th>
+                          <th>Time</th>
+                          <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td colspan="7">Please select a court type to view available slots</td>
+                        <td colspan="2">Please select a 'Court Type' and 'Date' to view available slots</td>
                       </tr>
                     </tbody>
                 </table>
@@ -311,49 +306,54 @@ mysqli_close($conn);
       </div>
     </footer>
 
-    <script>
-        document.getElementById('courtType').addEventListener('change', fetchAvailableSlots);
+  <script>
+    // Automatically set the min date and time for booking (prevent past dates)
+    const dateInput = document.getElementById('datestart');
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 16);  // Get date in format YYYY-MM-DDTHH:mm
+    dateInput.setAttribute('min', formattedDate);  // Set min attribute to current date and time
 
-        function fetchAvailableSlots() {
-            const courtType = document.getElementById('courtType').value;
+    document.getElementById('courtType').addEventListener('change', fetchAvailableSlots);
+    document.getElementById('datestart').addEventListener('change', fetchAvailableSlots);
 
-            if (courtType) {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'fetchSlot_Booking.php', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        const response = JSON.parse(xhr.responseText);
-                        if (response.error) {
-                            console.error(response.error);
-                        } else {
-                            updateAvailableSlots(response.slots);
-                        }
+    function fetchAvailableSlots() {
+        const courtType = document.getElementById('courtType').value;
+        const date = document.getElementById('datestart').value;
+
+        if (courtType && date) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'fetchSlot_Booking.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.error) {
+                        // Show the error message if the premises are closed
+                        const tbody = document.querySelector('.calendar-table tbody');
+                        tbody.innerHTML = `<tr><td colspan="2">${response.error}</td></tr>`;
+                    } else {
+                        updateAvailableSlots(response.slots);
                     }
-                };
-                xhr.send('courtType=' + courtType);
-            }
+                }
+            };
+            xhr.send(`courtType=${courtType}&date=${date}`);
         }
+    }
 
-        function updateAvailableSlots(slots) {
-            const tbody = document.querySelector('.calendar-table tbody');
-            tbody.innerHTML = ''; // Clear current table
+    function updateAvailableSlots(slots) {
+        const tbody = document.querySelector('.calendar-table tbody');
+        tbody.innerHTML = ''; // Clear current table
 
-            slots.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${row.time}</td>
-                    <td>${row.monday}</td>
-                    <td>${row.tuesday}</td>
-                    <td>${row.wednesday}</td>
-                    <td>${row.thursday}</td>
-                    <td>${row.friday}</td>
-                    <td>${row.saturday}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-    </script>
+        slots.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.time}</td>
+                <td>${row.status}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+  </script>
   <script>
     document.getElementById('duration').addEventListener('input', calculatePrice);
 
