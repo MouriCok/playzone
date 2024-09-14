@@ -1,112 +1,108 @@
 <?php
-  session_start();
-  require_once 'database.php';
+session_start();
+require_once 'database.php';
 
-  if (!$conn) {
-      die("Connection failed: " . mysqli_connect_error());
-  }
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-  // Check if the user is logged in, if not then redirect to home page
-  if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+// Check if the user is logged in, if not then redirect to home page
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("location: index.php");
     exit;
-  }
+}
 
-  if (isset($_SESSION['cUser'])) {
-      $cUser = $_SESSION['cUser'];
+if (isset($_SESSION['cUser'])) {
+    $cUser = $_SESSION['cUser'];
 
-      // Query player data
-      $sql = "SELECT * FROM customer WHERE cUser='$cUser'";
-      $result = mysqli_query($conn, $sql);
+    // Query player data
+    $sql = "SELECT * FROM customer WHERE cUser='$cUser'";
+    $result = mysqli_query($conn, $sql);
 
-      if ($result && mysqli_num_rows($result) > 0) {
-          $row = mysqli_fetch_assoc($result);
-          $cName = $row['cName'];
-          $cEmail = $row['cEmail'];
-          $cPhone = $row['cPhone'];
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $cName = $row['cName'];
+        $cEmail = $row['cEmail'];
+        $cPhone = $row['cPhone'];
 
-          // Store in session variables
-          $_SESSION['cName'] = $cName;
-          $_SESSION['cEmail'] = $cEmail;
-          $_SESSION['cPhone'] = $cPhone;
-      } else {
-          // Handle the case when the query fails or no rows found
-          $cName = $cEmail = $cPhone = "";
-      }
-  } else {
-      // If not logged in, set default values or handle the case as needed
-      $cName = $cEmail = $cPhone = "";
-  }
+        // Store in session variables
+        $_SESSION['cName'] = $cName;
+        $_SESSION['cEmail'] = $cEmail;
+        $_SESSION['cPhone'] = $cPhone;
+    } else {
+        $cName = $cEmail = $cPhone = "";
+    }
+}
 
-  if (isset($_POST['submit'])) {
-      // Retrieve form data
-      $datestart = $_POST['datestart'];
-      $duration = $_POST['duration'];
-      $dateend = date('Y-m-d H:i:s', strtotime("+$duration hours", strtotime($datestart)));
-      $courtType = $_POST['courtType'];
-      $people = $_POST['people'];
-      $totalPrice = $_POST['totalPrice'];
+if (isset($_POST['submit'])) {
+  // Retrieve form data
+  $datestart = $_POST['datestart'];
+  $duration = $_POST['duration'];
+  $dateend = date('Y-m-d H:i:s', strtotime("+$duration hours", strtotime($datestart)));
+  $courtType = $_POST['courtType'];
+  $people = $_POST['people'];
+  $totalPrice = $_POST['totalPrice'];
 
-      // Store form data in session variables for use in process_payment.php
-      $_SESSION['datestart'] = $datestart;
-      $_SESSION['dateend'] = $dateend;
-      $_SESSION['courtType'] = $courtType;
-      $_SESSION['people'] = $people;
-      $_SESSION['totalPrice'] = $totalPrice;
+  // Store form data in session variables for use in process_payment.php
+  $_SESSION['datestart'] = $datestart;
+  $_SESSION['dateend'] = $dateend;
+  $_SESSION['courtType'] = $courtType;
+  $_SESSION['people'] = $people;
+  $_SESSION['totalPrice'] = $totalPrice;
 
-      // Get the total number of courts for the selected court type
-      $court_sql = "SELECT total_courts FROM court_count WHERE courtType = ?";
-      $stmt = $conn->prepare($court_sql);
-      $stmt->bind_param("s", $courtType);
+  // Get the total number of courts for the selected court type
+  $court_sql = "SELECT total_courts FROM court_count WHERE courtType = ?";
+  $stmt = $conn->prepare($court_sql);
+  $stmt->bind_param("s", $courtType);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result && $result->num_rows > 0) {
+      $court_data = $result->fetch_assoc();
+      $total_courts = $court_data['total_courts'];
+
+      // Check how many courts are booked during the selected time period
+      $availability_sql = "SELECT COUNT(*) as booked_courts FROM bookings 
+                          WHERE courtType = ? 
+                          AND (? < dateend AND ? > datestart)";
+      $stmt = $conn->prepare($availability_sql);
+      $stmt->bind_param("sss", $courtType, $datestart, $dateend);
       $stmt->execute();
       $result = $stmt->get_result();
+      $availability_data = $result->fetch_assoc();
+      $booked_courts = $availability_data['booked_courts'];
 
-      if ($result && $result->num_rows > 0) {
-          $court_data = $result->fetch_assoc();
-          $total_courts = $court_data['total_courts'];
+      if ($booked_courts < $total_courts) {
+          // Court is available, proceed with the booking
+          $insert_sql = "INSERT INTO bookings (cName, cEmail, cPhone, datestart, dateend, courtType, people, price, payment_status, transaction_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NULL)";
+          $stmt = $conn->prepare($insert_sql);
+          $stmt->bind_param("sssssssd", $cName, $cEmail, $cPhone, $datestart, $dateend, $courtType, $people, $totalPrice);
 
-          // Check how many courts are booked during the selected time period
-          $availability_sql = "SELECT COUNT(*) as booked_courts FROM bookings 
-                              WHERE courtType = ? 
-                              AND (? < dateend AND ? > datestart)";
-          $stmt = $conn->prepare($availability_sql);
-          $stmt->bind_param("sss", $courtType, $datestart, $dateend);
-          $stmt->execute();
-          $result = $stmt->get_result();
-          $availability_data = $result->fetch_assoc();
-          $booked_courts = $availability_data['booked_courts'];
-
-          if ($booked_courts < $total_courts) {
-              // Court is available, proceed with the booking
-              $insert_sql = "INSERT INTO bookings (cName, cEmail, cPhone, datestart, dateend, courtType, people, price, payment_status, transaction_id) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NULL)";
-              $stmt = $conn->prepare($insert_sql);
-              $stmt->bind_param("sssssssd", $cName, $cEmail, $cPhone, $datestart, $dateend, $courtType, $people, $totalPrice);
-
-              if ($stmt->execute()) {
-                  // Redirect to confirmation.php after successful booking and session data setup
-                  echo "<script>window.location.href = 'confirmation.php';</script>";
-                  exit(); // Ensure the script stops execution after the redirect
-              } else {
-                  echo "Error: " . $stmt->error;
-              }
+          if ($stmt->execute()) {
+              // Redirect to confirmation.php after successful booking and session data setup
+              echo "<script>window.location.href = 'confirmation.php';</script>";
+              exit(); // Ensure the script stops execution after the redirect
           } else {
-              // All courts are booked, show an error message
-              echo "<script>";
-              echo "alert('All courts of the selected type are fully booked during the chosen time period. Please choose another time or court.');";
-              echo "history.back();";
-              echo "</script>";
+              echo "Error: " . $stmt->error;
           }
       } else {
-          // Handle the case when no data is returned from court_count
+          // All courts are booked, show an error message
           echo "<script>";
-          echo "alert('Court type not found. Please select a valid court type.');";
+          echo "alert('All courts of the selected type are fully booked during the chosen time period. Please choose another time or court.');";
           echo "history.back();";
           echo "</script>";
       }
+  } else {
+      // Handle the case when no data is returned from court_count
+      echo "<script>";
+      echo "alert('Court type not found. Please select a valid court type.');";
+      echo "history.back();";
+      echo "</script>";
   }
+}
 
-  mysqli_close($conn);
+mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -191,120 +187,173 @@
     .phone-input {
       width: 75%; /* Adjust the width as needed */
     }
+    /* Calendar table styling */
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .calendar-table th, .calendar-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    .calendar-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <header>
+        <nav class="navbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li>
+                        <li><a href="javascript:void(0);" onclick="goBack(event);" class="nav-btn"> Back</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <div class="col-md-6">
+            <h3>Available Slots for Selected Court Type:</h3>
+            <div id="available-slots">
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colspan="7">Please select a court type to view available slots</td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav">
-            <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li>
-            <li><a href="javascript:void(0);" onclick="goBack(event);" class="nav-btn"> Back</a></li>
-          </ul>
+        <div class="login-container">
+            <h2>Bookings</h2>
+            <form method="post" action="bookings.php" class="form booking">
+              <div class="reserve">
+                <div class="column-1">
+                    <div class="form-group">
+                        <input type="text" id="cName" name="cName" required value="<?= $cName ?>">
+                        <label for="cName">Full Name</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="cEmail" name="cEmail" required value="<?= $cEmail ?>">
+                        <label for="cEmail">Email</label>
+                    </div>
+                    <div class="form-group phone-input-container">
+                        <input type="text" id="cPhone" name="cPhone" class="phone-input" required value="<?= $cPhone ?>">
+                        <label for="cPhone">Phone</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="people" name="people" min="1" required>
+                        <label for="people">Participants</label>
+                    </div>
+                </div>
+                <div class="column-1">
+                  <div class="form-group">
+                      Court Type:<br>
+                      <select class="court" id="courtType" name="courtType" required>
+                          <option value="Basketball">Basketball</option>
+                          <option value="Badminton">Badminton</option>
+                          <option value="Volleyball">Volleyball</option>
+                          <option value="Tennis">Tennis</option>
+                          <option value="Futsal" selected>Futsal</option>
+                          <option value="Bowling">Bowling</option>
+                          <option value="PSXbox">PS/Xbox</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                    Date:<br>
+                    <input class="datetime" type="datetime-local" id="datestart" name="datestart" required><br>
+                  </div>
+                  <div class="form-group">
+                    Duration (in hours):<br>
+                    <input type="number" id="duration" name="duration" min="1" max="12" required>
+                  </div>
+                  <div class="form-group">
+                    Total Price:<br>
+                    <input type="text" id="totalPrice" name="totalPrice" readonly>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" name="submit" class="submitBtn btn btn-default">Reserve</button>
+            </form>
         </div>
+    </div>
+
+    <footer class="container-fluid text-center">
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <h5 >Open-source Apache Licensed</h5>
+          </li>
+        </ul>
       </div>
-    </nav>
-  </header>
+    </footer>
 
-  <div class="page-container">
-    <div class="col-md-6">
-      <div id="available-slots"></div>
-    </div>
-    <div class="login-container">
-      <h2>Bookings</h2>
-      <form method="post" action="bookings.php" class="form booking">
-        <div class="reserve">
-          
-          <div class="column-1">
-            <div class="form-group">
-              <input type="text" id="cName" name="cName" required value="<?= $cName ?>">
-              <label for="cName">Full Name</label>
-            </div>
-            <div class="form-group">
-              <input type="email" id="cEmail" name="cEmail" required value="<?= $cEmail ?>">
-              <label for="cEmail">Email</label>
-            </div>
-            <div class="form-group phone-input-container">
-              <input type="text" id="cPhone" name="cPhone" class="phone-input" required value="<?= $cPhone ?>">
-              <label for="cPhone">Phone</label>
-            </div>
-            <div class="form-group">
-              <input type="number" id="people" name="people" min="1" required>
-              <label for="people">Participants</label>
-            </div>
-          </div>
+    <script>
+        document.getElementById('courtType').addEventListener('change', fetchAvailableSlots);
 
-          <div class="column-1">
-            <div class="form-group">
-              Court Type:<br>
-              <select class="court" id="courtType" name="courtType" required>
-                <option value="Basketball">Basketball</option>
-                <option value="Badminton">Badminton</option>
-                <option value="Volleyball">Volleyball</option>
-                <option value="Tennis">Tennis</option>
-                <option value="Futsal" selected>Futsal</option>
-                <option value="Bowling">Bowling</option>
-                <option value="PSXbox">PS/Xbox</option>
-              </select>
-            </div>
-            <div class="form-group">
-              Date:<br>
-              <input class="datetime" type="datetime-local" id="datestart" name="datestart" required><br>
-            </div>
-            <div class="form-group">
-              Duration (in hours):<br>
-              <input type="number" id="duration" name="duration" min="1" max="12" required>
-            </div>
-            <div class="form-group">
-              Total Price:<br>
-              <input type="text" id="totalPrice" name="totalPrice" readonly>
-            </div>
-          </div>
+        function fetchAvailableSlots() {
+            const courtType = document.getElementById('courtType').value;
 
-        </div>
-        <button type="submit" name="submit" class="submitBtn btn btn-default">Reserve</button>
-      </form>
-    </div>
-  </div>
+            if (courtType) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'fetchSlot_Booking.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.error) {
+                            console.error(response.error);
+                        } else {
+                            updateAvailableSlots(response.slots);
+                        }
+                    }
+                };
+                xhr.send('courtType=' + courtType);
+            }
+        }
 
-  <footer class="container-fluid text-center">
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <h5 >Open-source Apache Licensed</h5>
-        </li>
-      </ul>
-    </div>
-  </footer>
+        function updateAvailableSlots(slots) {
+            const tbody = document.querySelector('.calendar-table tbody');
+            tbody.innerHTML = ''; // Clear current table
 
-  <script>
-    document.getElementById('datestart').addEventListener('change', fetchAvailableSlots);
-    document.getElementById('courtType').addEventListener('change', fetchAvailableSlots);
-
-    function fetchAvailableSlots() {
-      const courtType = document.getElementById('courtType').value;
-      const datestart = document.getElementById('datestart').value;
-      
-      if (courtType && datestart) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'fetchSlot_Booking.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            document.getElementById('available-slots').innerHTML = xhr.responseText;
-          }
-        };
-        xhr.send('courtType=' + courtType + '&datestart=' + datestart);
-      }
-    }
-  </script>
+            slots.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.time}</td>
+                    <td>${row.monday}</td>
+                    <td>${row.tuesday}</td>
+                    <td>${row.wednesday}</td>
+                    <td>${row.thursday}</td>
+                    <td>${row.friday}</td>
+                    <td>${row.saturday}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
   <script>
     document.getElementById('duration').addEventListener('input', calculatePrice);
 
@@ -344,5 +393,5 @@
     }
   </script>
   <script src="scripts.js"></script>
-	</body>
+</body>
 </html>
