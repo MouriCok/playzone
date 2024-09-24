@@ -1,4 +1,6 @@
-![PlayZone Logo](./PZ_tp.svg)
+<div align="center">
+  <img src="./PZ_tp.svg" alt="PlayZone Logo" width="200">
+</div>
 # PlayZone: Sports Facility Booking System
 
 ## Project Overview
