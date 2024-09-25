@@ -22,6 +22,7 @@ CREATE TABLE `bookings` (
   `courtType` varchar(60) NOT NULL,
   `people` int(5) NOT NULL CHECK (`people` > 0),
   `price` DECIMAL(10, 2) NOT NULL,
+  `preferredCourt` VARCHAR(10),
   `payment_status` VARCHAR(20) NOT NULL DEFAULT 'Pending',
   `transaction_id` VARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (`bID`),

@@ -431,6 +431,7 @@ if ($result) {
                               <thead>
                                 <tr>
                                   <th>Booking ID</th>
+                                  <th>Category</th>
                                   <th>Court Type</th>
                                   <th>Timeslot</th>
                                   <th>Participant</th>
@@ -447,7 +448,7 @@ if ($result) {
                                   }
 
                                   $cEmail = $_SESSION['cEmail'];
-                                  $bookingQuery = "SELECT bID, courtType, datestart, dateend, people, payment_status FROM bookings WHERE cEmail = '$cEmail'";
+                                  $bookingQuery = "SELECT bID, courtType, preferredCourt, datestart, dateend, people, payment_status FROM bookings WHERE cEmail = '$cEmail'";
                                   $bookingResult = mysqli_query($conn, $bookingQuery);
 
                                   if ($bookingResult) {
@@ -456,6 +457,7 @@ if ($result) {
                                               echo "<tr>";
                                               echo "<td>" . $bookingRow['bID'] . "</td>";
                                               echo "<td>" . $bookingRow['courtType'] . "</td>";
+                                              echo "<td>" . $bookingRow['preferredCourt'] . "</td>";
                                               echo "<td>" . $bookingRow['datestart'] . " - " . $bookingRow['dateend'] . "</td>";
                                               echo "<td>" . $bookingRow['people'] . "</td>";
                                               echo "<td>" . $bookingRow['payment_status'] . "</td>";

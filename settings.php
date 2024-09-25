@@ -112,7 +112,7 @@ mysqli_close($conn);
     </nav>
   </header>
 
-  
+  <div class="page-container"></div>
 
   <footer class="container-fluid text-center">
   <div class="collapse navbar-collapse" id="myNavbar">

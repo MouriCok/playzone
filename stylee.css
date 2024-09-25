@@ -160,7 +160,7 @@ li, a {
     min-width: auto;
     min-height: 100vh;
     margin: 0;
-    /* background: #f8f9fa; #8FEBFF */
+    background: #8FEBFF;
     background-image: url('backgrounds/stacked-waves-haikei.svg');
     background-size: cover;
     background-position: center;
@@ -448,7 +448,7 @@ li, a {
 .card {
   flex: 0 0 auto;
   max-width: 306.4px;
-  max-height: 306.4px;
+  max-height: 326.4px;
   background: white;
   padding: .4em;
   border-radius: 6px;

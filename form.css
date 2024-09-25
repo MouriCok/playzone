@@ -4,15 +4,20 @@
     background-color: #F8F9FA;
     border: none;
     border-radius: 15px;
-    padding: 20px;
-    min-width: 450px;
+    padding-bottom: 20px;
+    padding-left: 20px; 
+    padding-right: 20px;
+    padding-top: 40px;
+    min-width: 650px;
     height: fit-content;
-    margin-top: 100px;
-    margin-bottom: 88px;
     overflow: hidden;
     text-align: center;
     display: flex;
     flex-direction: column;
+  }
+
+  .book_c1, .book_c2, .book_c3 {
+    margin-right: 20px;
   }
 
   .login-container h2 {
@@ -24,14 +29,12 @@
 
   .form-group {
     position: relative;
-    margin-bottom: 10px;
   }
 
-  .login-container input, .court {
+  .login-container input, .login-container select, .court {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    margin-right: 15px;
+    height: 45px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -40,7 +43,7 @@
   .login-container label {
     position: absolute;
     left: 10px;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%);
     color: #bcbcbc;
     font-size: 14px;
@@ -48,20 +51,42 @@
     transition: top 0.3s, font-size 0.3s;
   }
   .login-container input:focus + label,
-  .login-container input:valid + label {
-    top: 10px;
-    font-size: 12px;
+  .login-container input:valid + label,
+  .login-container select:focus + label,
+  .login-container select:valid + label,
+  .login-container #totalPrice:indeterminate + label {
+    position: absolute;
+    left: 10px;
+    top: 0%;
+    padding-bottom: 16px;
+    transform: translateY(-50%);
     color: #82c87e;
+    font-size: 16px;
+    pointer-events: none;
   }
 
   .login-container button {
-    background-color: #027f65;
     color: #fff;
     padding: 10px;
     border: none;
-    width: 50%;
     border-radius: 4px;
-    cursor: pointer;
+  }
+
+  .submitBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #82c87e;
+    width: 25%;
+    margin: 0 auto;
+  }
+  .checkBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #07A0C3;
+    width: 25%;
+    margin: 0 auto;
   }
 
   .login-container a {
