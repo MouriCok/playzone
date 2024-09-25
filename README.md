@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="./PZ_tp.svg" alt="PlayZone Logo" width="200">
+</div>
+
 # PlayZone: Sports Facility Booking System
 
 ## Project Overview
@@ -43,7 +47,7 @@
    cd playzone
    ```
 3. **Configure the database:**
-   - Import the provided SQL file (`customer.sql`, `bookings.sql`, `timeframe.sql`) into your MySQL database.
+   - Import the provided SQL file (`admin.sql`, `customer.sql`, `bookings.sql`, `timeframe.sql`) into your MySQL or phpMyAdmin database.
    - Update the database connection details in `database.php`.
 
 4. **Run the application on your local server (e.g., XAMPP, WAMP):**
