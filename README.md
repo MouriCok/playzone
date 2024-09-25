@@ -27,7 +27,7 @@
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** PHP, SQL (Database)
 - **Frameworks/Libraries:** Bootstrap for responsive design
-- **Payment Gateway:** PayPal API (or other payment services)
+- **Payment Gateway:** PayPal API, Stripe API, TouchNGo Merchant
 
 ### Android Application
 - **Programming Language:** Java/Kotlin
@@ -47,7 +47,7 @@
    cd playzone
    ```
 3. **Configure the database:**
-   - Import the provided SQL file (`admin.sql`, `customer.sql`, `bookings.sql`, `timeframe.sql`) into your MySQL or phpMyAdmin database.
+   - Import the provided SQL file (`admin.sql`, `bookings.sql`, `courts.sql`, `customer.sql`, `timeframe.sql`) into your MySQL or phpMyAdmin database.
    - Update the database connection details in `database.php`.
 
 4. **Run the application on your local server (e.g., XAMPP, WAMP):**
