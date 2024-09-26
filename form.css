@@ -51,10 +51,11 @@
     transition: top 0.3s, font-size 0.3s;
   }
   .login-container input:focus + label,
+  .login-container input:not(:placeholder-shown) + label,
   .login-container input:valid + label,
   .login-container select:focus + label,
-  .login-container select:valid + label,
-  .login-container #totalPrice:indeterminate + label {
+  .login-container select:not(:placeholder-shown) + label,
+  .login-container select:valid + label {
     position: absolute;
     left: 10px;
     top: 0%;

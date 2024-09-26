@@ -23,10 +23,12 @@ CREATE TABLE `bookings` (
   `people` int(5) NOT NULL CHECK (`people` > 0),
   `price` DECIMAL(10, 2) NOT NULL,
   `preferredCourt` VARCHAR(10),
+  `court_id` VARCHAR(10),  -- New addition
   `payment_status` VARCHAR(20) NOT NULL DEFAULT 'Pending',
   `transaction_id` VARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (`bID`),
-  CONSTRAINT chk_dates CHECK (`dateend` > `datestart`)
+  CONSTRAINT chk_dates CHECK (`dateend` > `datestart`),
+  FOREIGN KEY (`court_id`) REFERENCES `courts`(`court_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

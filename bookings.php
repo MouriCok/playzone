@@ -86,9 +86,7 @@
                   $insert_sql = "INSERT INTO bookings (cName, cEmail, cPhone, datestart, dateend, courtType, people, price, preferredCourt, payment_status, transaction_id) 
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NULL)";
                   $stmt = $conn->prepare($insert_sql);
-                  $preferredCourt = $_POST['preferredCourt'] ?? NULL;
-                  $type_string = $preferredCourt ? "ssssssds" : "ssssssdis";
-                  $stmt->bind_param($type_string, $cName, $cEmail, $cPhone, $datestart, $dateend, $courtType, $people, $totalPrice, $preferredCourt);
+                  $stmt->bind_param("sssssssds", $cName, $cEmail, $cPhone, $datestart, $dateend, $courtType, $people, $totalPrice, $preferredCourt);
 
                   if ($stmt->execute()) {
                       $_SESSION['booking_id'] = $stmt->insert_id;
@@ -275,68 +273,69 @@
     </div>
     <!-- Step 1: Booking Details -->
     <div class="login-container">
-    <div class="step <?= $currentStep === 'bookingDetails' ? 'active' : '' ?>" id="step-bookingDetails">
-            <form method="POST" id="booking-details-form" class="form booking" action="bookings.php">
-              <div class="reserve">
+      <div class="step <?= $currentStep === 'bookingDetails' ? 'active' : '' ?>" id="step-bookingDetails">
+        <form method="POST" id="booking-details-form" class="form booking" action="bookings.php">
+            <div class="reserve">
                 <div class="column-1 book_c1">
-                  <div class="form-group">
-                      <input type="text" name="cName" id="cName" value="<?= htmlspecialchars($cName) ?>" required>
-                      <label for="cName">Full Name</label>
-                  </div>
-                  <div class="form-group">
-                      <select name="courtType" id="courtType" required>
-                          <option value=""></option>
-                          <option value="Basketball" <?= $courtType === 'Basketball' ? 'selected' : '' ?>>Basketball</option>
-                          <option value="Badminton" <?= $courtType === 'Badminton' ? 'selected' : '' ?>>Badminton</option>
-                          <option value="Volleyball" <?= $courtType === 'Volleyball' ? 'selected' : '' ?>>Volleyball</option>
-                          <option value="Tennis" <?= $courtType === 'Tennis' ? 'selected' : '' ?>>Tennis</option>
-                          <option value="Futsal" <?= $courtType === 'Futsal' ? 'selected' : '' ?>>Futsal</option>
-                      </select>
-                      <label for="courtType">Select Court Category</label>
-                  </div>
+                    <div class="form-group">
+                        <input type="text" name="cName" id="cName" value="<?= htmlspecialchars($cName) ?>" required>
+                        <label for="cName">Full Name</label>
+                    </div>
+                    <div class="form-group">
+                        <select name="courtType" id="courtType" required>
+                            <option value=""></option>
+                            <option value="Basketball" <?= $courtType === 'Basketball' ? 'selected' : '' ?>>Basketball</option>
+                            <option value="Badminton" <?= $courtType === 'Badminton' ? 'selected' : '' ?>>Badminton</option>
+                            <option value="Volleyball" <?= $courtType === 'Volleyball' ? 'selected' : '' ?>>Volleyball</option>
+                            <option value="Tennis" <?= $courtType === 'Tennis' ? 'selected' : '' ?>>Tennis</option>
+                            <option value="Futsal" <?= $courtType === 'Futsal' ? 'selected' : '' ?>>Futsal</option>
+                        </select>
+                        <label for="courtType">Select Court Category</label>
+                    </div>
                 </div>
                 <div class="column-1 book_c2">
-                  <div class="form-group">
-                      <input type="email" name="cEmail" id="cEmail" value="<?= htmlspecialchars($cEmail) ?>" required>
-                      <label for="cEmail">Email</label>
-                  </div>
-                  <div class="form-group">
-                      <input type="datetime-local" class="datetime" name="datestart" id="datestart" value="<?= htmlspecialchars($datestart) ?>" required>
-                      <label for="datestart">Date & Time</label>
-                  </div>
+                    <div class="form-group">
+                        <input type="email" name="cEmail" id="cEmail" value="<?= htmlspecialchars($cEmail) ?>" required>
+                        <label for="cEmail">Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="datetime-local" class="datetime" name="datestart" id="datestart" value="<?= htmlspecialchars($datestart) ?>" required>
+                        <label for="datestart">Date & Time</label>
+                    </div>
                 </div>
                 <div class="column-1 book_c3">
-                  <div class="form-group">
-                      <input type="text" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
-                      <label for="cPhone">Phone</label>
-                  </div>
-                  <div class="form-group">
-                      <input type="number" name="duration" id="duration" value="<?= htmlspecialchars($duration) ?>" required min="1" max="12">
-                      <label for="duration">Duration (hours)</label>
-                  </div>
+                    <div class="form-group">
+                        <input type="text" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
+                        <label for="cPhone">Phone</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" name="duration" id="duration" value="<?= htmlspecialchars($duration) ?>" required min="1" max="12">
+                        <label for="duration">Duration (hours)</label>
+                    </div>
                 </div>
                 <div class="column-1 book_c4">
-                  <div class="form-group">
-                      <input type="number" name="people" id="people" value="<?= htmlspecialchars($people) ?>" required min="1">
-                      <label for="people">Number of Participants</label>
-                  </div>
-                  <div class="form-group">
-                      <input type="text" name="totalPrice" id="totalPrice" value="<?= htmlspecialchars($totalPrice) ?>" readonly>
-                      <label for="totalPrice">Total Price</label>
-                  </div>
+                    <div class="form-group">
+                        <input type="number" name="people" id="people" value="<?= htmlspecialchars($people) ?>" required min="1">
+                        <label for="people">Number of Participants</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="totalPrice" id="totalPrice" value="<?= htmlspecialchars($totalPrice) ?>" readonly>
+                        <label for="totalPrice">Total Price</label>
+                    </div>
                 </div>
-              </div>
-              <div class="reserve">
+            </div>
+            <div class="reserve">
                 <div class="form-group">
-                  <label for="preferredCourt">Select your preferred Court Number</label>
-                  <div id="available-court">Available court will be shown here</div></div>
-              </div>
-              <div class="reserve">
-                    <button type="button" class="checkBtn" id="check-availability">Check Availability</button>
-                    <button type="submit" class="submitBtn" name="step" value="bookingDetails" id="next-step">Next</button>
-              </div>
-            </form>
-        </div>
+                    <label for="preferredCourt">Select your preferred Court Number</label>
+                    <div id="available-court">Available court will be shown here</div>
+                </div>
+            </div>
+            <div class="reserve">
+                <button type="button" class="checkBtn" id="check-availability">Check Availability</button>
+                <button type="submit" class="submitBtn" name="step" value="bookingDetails" id="next-step" disabled>Next</button>
+            </div>
+        </form>
+      </div>
 
         <!-- Step 2: Confirmation -->
         <div class="step <?= $currentStep === 'confirmation' ? 'active' : '' ?>" id="step-confirmation">
@@ -390,6 +389,12 @@
     </footer>
 
   <script>
+    // Automatically set the min date and time for booking (prevent past dates)
+    const dateInput = document.getElementById('datestart');
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 16);
+    dateInput.setAttribute('min', formattedDate);
+
     document.getElementById('check-availability').addEventListener('click', function() {
       const courtType = document.getElementById('courtType').value;
       const datestart = document.getElementById('datestart').value;
@@ -399,7 +404,7 @@
       const timestart = startDateTime.toTimeString().slice(0, 5); // Extract time in HH:mm format
 
       if (!courtType || !datestart || !timestart || !duration) {
-        alert('Please fill out all fields.');
+        alert('Please fill out all fields required to check availability.');
         return;
       }
 
@@ -409,34 +414,36 @@
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       
       xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          const slotsDiv = document.getElementById('available-court');
-          
-          if (response.error) {
-            slotsDiv.innerHTML = `<p>${response.error}</p>`;
-          } else {
-            let slotsHtml = '<h4>Select Preferred Court:</h4>';
-            
-            response.slots.forEach(slot => {
-              slotsHtml += `
-                <label>
-                  <input type="radio" name="preferredCourt" value="${slot.court}" required> 
-                  Court ${slot.court} (${slot.status})
-                </label><br>`;
-            });
-            
-            slotsDiv.innerHTML = slotsHtml;
-            document.getElementById('next-step').disabled = false; // Enable next button
-          }
-        } else if (xhr.readyState === 4) {
-          // Handle server error
-          alert('Failed to fetch available courts.');
+        if (xhr.readyState === 4) {
+            // Check if the response is valid JSON
+            try {
+                const response = JSON.parse(xhr.responseText);
+                const slotsDiv = document.getElementById('available-court');
+                
+                if (response.error) {
+                    slotsDiv.innerHTML = `<p>${response.error}</p>`;
+                } else {
+                    let slotsHtml = '<h4>Select Preferred Court:</h4>';
+                    response.slots.forEach(slot => {
+                        slotsHtml += `
+                            <div>
+                                <input type="radio" name="preferredCourt" value="${slot.court}" required> 
+                                Court ${slot.court} (${slot.status})
+                            </div><br>`;
+                    });
+                    slotsDiv.innerHTML = slotsHtml;
+
+                    document.getElementById('next-step').disabled = false; // Enable next button
+                }
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+                console.log('Raw response:', xhr.responseText); // Log raw response for debugging
+                alert('An error occurred while checking availability. Please try again.');
+            }
         }
       };
-      
       // Send data to server
-      xhr.send(`courtType=${courtType}&datestart=${datestart}&timestart=${timestart}&duration=${duration}`);
+      xhr.send(`courtType=${courtType}&datestart=${datestart}&duration=${duration}`);
     });
   </script>
   <script>
