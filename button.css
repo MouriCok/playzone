@@ -24,7 +24,7 @@
   transform: scale(0.9);
 }
 
-.Btn {
+.logoutBtn {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -39,6 +39,22 @@
     transition-duration: .3s;
     box-shadow: inset -2px -2px 3px rgba(0, 0, 0, 0.199), inset 2px 2px 5px rgba(255, 255, 255, 0.299);
     background-color: rgba(255, 65, 65, 0.75);
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 16px;
+    width: 45px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: inset -2px -2px 3px rgba(0, 0, 0, 0.199), inset 2px 2px 5px rgba(255, 255, 255, 0.299);
   }
   
   /* plus sign */
@@ -69,26 +85,26 @@
     transition-duration: .3s;
   }
   /* hover effect on button width */
-  .Btn:hover {
+  .logoutBtn:hover {
     width: 120px;
     border-radius: 10px;
     transition-duration: .3s;
   }
   
-  .Btn:hover .sign {
+  .logoutBtn:hover .sign {
     width: 30%;
     transition-duration: .3s;
     padding-left: 20px;
   }
   /* hover effect button's text */
-  .Btn:hover .text {
+  .logoutBtn:hover .text {
     opacity: 1;
     width: 70%;
     transition-duration: .3s;
     padding-right: 10px;
   }
   /* button click effect*/
-  .Btn:active {
+  .logoutBtn:active {
     box-shadow: 2px 2px 3px rgba(255, 255, 255, 0.199), inset 2px 2px 5px rgba(0, 0, 0, 0.199);
   }
 
@@ -111,7 +127,7 @@
 }
 
 .change_icon svg {
-  width: 32px;
+  width: 40px;
   height: fit-content;
   padding: 0;
   margin: 0 auto;
@@ -138,26 +154,20 @@
   opacity: 1;
 }
 
-.change_text {
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  padding: 5px;
-}
-
 /* Style for the change button */
-.change-btn-overlay .btn {
+.change-btn-overlay .change-btn {
   background-color: transparent;
   color: white;
   border: none;
+  width: 100%;
+  height: 100%;
   padding: 5px 10px;
   border-radius: 50%;
-  font-size: 14px;
-  transition: background-color 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Optional: Additional button hover effect */
-.change-btn-overlay .btn:hover {
-  background-color: rgba(0, 96, 199, 0.5);
+.change-btn-overlay .change-btn:hover {
+  background-color: #07a1c379;
+  transform: scale(0.9);
 }

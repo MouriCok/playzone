@@ -3,7 +3,7 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
--- Database: `bookings`, `court_availability`
+-- Database: `bookings`, `booking_history`, `court_count`
 --
 
 -- --------------------------------------------------------
@@ -30,6 +30,23 @@ CREATE TABLE `bookings` (
   CONSTRAINT chk_dates CHECK (`dateend` > `datestart`),
   FOREIGN KEY (`court_id`) REFERENCES `courts`(`court_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `booking_history`
+--
+
+CREATE TABLE booking_history (
+  `historyID` INT AUTO_INCREMENT PRIMARY KEY,
+  `bID` INT NOT NULL,
+  `cEmail` VARCHAR(255) NOT NULL,
+  `courtType` VARCHAR(100),
+  `preferredCourt` VARCHAR(100),
+  `datestart` DATETIME,
+  `dateend` DATETIME,
+  `people` INT,
+  `payment_status` VARCHAR(50),
+  `moved_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 --
 -- Table structure for table `court_count`

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'database.php';
+require_once 'move_old_bookings.php';
 
 // Check if the user is logged in, if not then redirect to home page
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
@@ -86,7 +87,7 @@ if ($result) {
         background-color: #fff;
         border: 0 solid rgba(0,0,0,.125);
         border-radius: .45rem;
-        height: 100%;
+        height: max-content;
     }
     .card-body {
         height: 100%;
@@ -196,7 +197,7 @@ if ($result) {
 
                                 // If user is logged in, show logout button
                                 echo '
-                                <button class="Btn" data-toggle="modal" data-target="#logoutModal">
+                                <button class="logoutBtn" data-toggle="modal" data-target="#logoutModal">
                                   <div class="sign">
                                     <svg viewBox="0 0 512 512">
                                       <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 
@@ -252,7 +253,7 @@ if ($result) {
                         echo "<img src='default_avatar.png' alt='default_avatar' class='rounded-circle profile-pic'>";
                       }
                       echo '<div class="change-btn-overlay">
-                              <button type="button" class="btn" onclick="changeProfile(' . $custRow["cId"] . ')">
+                              <button type="button" class="change-btn" onclick="changeProfile(' . $custRow["cId"] . ')">
                               <div class="change_icon">
                                   <svg width="256px" height="256px" viewBox="0 0 512.00 512.00" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" 
                                   xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)" stroke="#000000"><g id="SVGRepo_bgCarrier" 
@@ -274,7 +275,6 @@ if ($result) {
                                   0,182.23-78.45,188.14-177.1l0.79,0.79c2.81,2.81,6.5,4.22,10.18,4.22 c3.69,0,7.37-1.41,10.18-4.22C469.91,262.57,469.91,253.45,464.28,247.82z">
                                   </path> </g> </g> </g> </g></svg>
                               </div>
-                              <div class="change_text">Change</div>
                               </button>
                             </div>';
                     }
@@ -539,6 +539,15 @@ if ($result) {
     </div>
   </div>
 
+  <!-- Modal for $notify -->
+  <div class="modal fade modal-fix" id="notifyModal" tabindex="-1" role="dialog" aria-labelledby="notifyModalLabel">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+      <div class="modal-content">
+        <?php echo $notify; ?>
+      </div>
+    </div>
+  </div>
+
   <footer class="container-fluid text-center">
   <div class="collapse navbar-collapse" id="myNavbar">
     <ul class="nav navbar-nav navbar-right">
@@ -673,6 +682,13 @@ if ($result) {
         document.body.appendChild(form);
         form.submit();
       }
+  </script>
+  <script>
+        $(document).ready(function() {
+      <?php if (!empty($notify)) { ?>
+        $('#notifyModal').modal('show');
+      <?php } ?>
+    });
   </script>
   <script src="scripts.js"></script>
 </body>

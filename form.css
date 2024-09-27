@@ -3,38 +3,28 @@
     --hover-shadows: 16px 16px 33px #07A0C3, -16px -16px 33px #8FEBFF;
     background-color: #F8F9FA;
     border: none;
-    border-radius: 15px;
+    border-radius: 10px;
     padding-bottom: 20px;
     padding-left: 20px; 
     padding-right: 20px;
     padding-top: 40px;
-    min-width: 650px;
+    min-width: 917px;
     height: fit-content;
     overflow: hidden;
     text-align: center;
     display: flex;
     flex-direction: column;
   }
-
-  .book_c1, .book_c2, .book_c3 {
-    margin-right: 20px;
-  }
-
   .login-container h2 {
     font-family: 'League Spartan', sans-serif;
     margin-bottom: 10px;
     color: #FA9A54;
     text-shadow: 1px 2px 2px #626262;
   }
-
-  .form-group {
-    position: relative;
-  }
-
-  .login-container input, .login-container select, .court {
+  .login-container input, .login-container select {
     width: 100%;
     height: 45px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -65,35 +55,140 @@
     font-size: 16px;
     pointer-events: none;
   }
-
   .login-container button {
     color: #fff;
     padding: 10px;
     border: none;
     border-radius: 4px;
   }
+  .login-container a {
+    color: #4caf50;
+    text-decoration: none;
+    margin-left: 5px;
+  }
+
+  .payment-container {
+    box-shadow: var(--hover-shadows);
+    --hover-shadows: 16px 16px 33px #07A0C3, -16px -16px 33px #8FEBFF;
+    background-color: #F8F9FA;
+    border: none;
+    border-radius: 10px;
+    padding-left: 20px; 
+    padding-right: 20px;
+    width: max-content;
+    height: fit-content;
+    overflow: hidden;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .book_c1, .book_c2, .book_c3 {
+    margin-right: 16px;
+  }
+  
+  .form-group label {
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+
+  .form-group2 input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .form-group {
+    position: relative;
+  }
+
+  .form-group2 {
+    position: relative;
+  }
+
+  .reserveBtn {
+    margin-top: 16px;
+  }
+
+  .reserve-details {
+    width: 100%;
+    height: max-content;
+  }
+
+  .details-group {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 44px;
+    padding: 5px;
+  }
+
+  #available-court {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .court-card {
+    flex: 1 1 calc(20% - 10px); /* 4 cards per row, accounting for gap */
+    background-color: #8FEBFF;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.75), 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    width: calc(20% - 10px);
+    height: fit-content;
+  }
+
+  #available-court > .court-card > span {
+    font-size: 14px;
+  }
+  
+  .court-card input[type="radio"] {
+    width: auto; /* This will reset the width */
+    height: auto; /* Reset the height to default */
+    margin: 0 auto; /* Add spacing between the radio and label */
+  }
+  
+  .court-card span {
+    flex: 1;
+  }
+
+  .preferredCourt {
+    padding-bottom: 16px;
+    color: #82c87e;
+    font-size: 16px;
+    font-weight: bold;
+    pointer-events: none;
+  }
 
   .submitBtn {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #82c87e;
+    /* background-color: #82c87e; */
     width: 25%;
     margin: 0 auto;
   }
-  .checkBtn {
+  .clearBtn {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #07A0C3;
+    background-color: #ff2c158b;
     width: 25%;
     margin: 0 auto;
-  }
-
-  .login-container a {
-    color: #4caf50;
-    text-decoration: none;
-    margin-left: 5px;
   }
 
   .page-container {

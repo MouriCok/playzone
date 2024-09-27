@@ -148,12 +148,12 @@ li, a {
 /* End of Header/Navbar */
 
 /* Start of Basic Attributes */
-  html, body, footer, button, a, input, select, option {
+  /* html, body, footer, button, a, input, select, option {
     cursor: url('badminton_cursor.png'), auto;
   }
   button:hover, a:hover, input:hover, select:hover, option:hover {
     cursor: url('racket_cursor.png'), auto;
-  }
+  } */
   body {
     display: flex;
     flex-direction: column;

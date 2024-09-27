@@ -274,7 +274,7 @@ mysqli_close($conn);
 
                                 // If user is logged in, show logout button
                                 echo '
-                                <button class="Btn" data-toggle="modal" data-target="#logoutModal">
+                                <button class="logoutBtn" data-toggle="modal" data-target="#logoutModal">
                                   <div class="sign">
                                     <svg viewBox="0 0 512 512">
                                       <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 
@@ -642,8 +642,8 @@ mysqli_close($conn);
         // Initial fetch of available slots
         fetchAvailableSlots();
 
-        // Set an interval to refresh slots every 1 minute (60,000 ms)
-        setInterval(fetchAvailableSlots, 60000);
+        // Set an interval to refresh slots every 10 minute (600,000 ms)
+        setInterval(fetchAvailableSlots, 600000);
 
         // Function to fetch the current timeslot and available courts for each card
         function fetchAvailableSlots() {

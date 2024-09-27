@@ -20,6 +20,7 @@
             echo "<p><strong>Email:</strong> " . $row['cEmail'] . "</p>";
             echo "<p><strong>Phone:</strong> " . $row['cPhone'] . "</p>";
             echo "<p><strong>Court Type:</strong> " . $row['courtType'] . "</p>";
+            echo "<p><strong>Preferred Court:</strong> " . $row['preferredCourt'] . "</p>";
             echo "<p><strong>Date & Time Start:</strong> " . $row['datestart'] . "</p>";
             echo "<p><strong>Date & Time End:</strong> " . $row['dateend'] . "</p>";
             echo "<p><strong>Participants:</strong> " . $row['people'] . "</p>";
