@@ -1,5 +1,6 @@
 <?php
   session_start();
+  date_default_timezone_set('Asia/Kuala_Lumpur');
   require_once 'database.php';
 
   if (!$conn) {
@@ -304,7 +305,7 @@
               </div>
               <div class="column-1 book_c3">
                   <div class="form-group">
-                      <input type="text" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
+                      <input type="tel" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
                       <label for="cPhone">Phone</label>
                   </div>
                   <div class="form-group2">
@@ -338,41 +339,52 @@
       </div>
 
         <!-- Step 2: Confirmation -->
+        <?php
+          // Convert datestart and dateend to DateTime objects
+          $startDateTime = new DateTime($datestart);
+          $endDateTime = new DateTime($dateend);
+
+          // Format them as 'HH:MM (DD Month YYYY)'
+          $formattedStart = $startDateTime->format('H:i (d F Y)');
+          $formattedEnd = $endDateTime->format('H:i (d F Y)');
+        ?>
+
         <div class="step <?= $currentStep === 'confirmation' ? 'active' : '' ?>" id="step-confirmation">
-        <div class="payment-container">
-            <h3>Confirmation</h3>
-            <p><strong>Full Name:</strong> <?= htmlspecialchars($cName) ?></p>
-            <p><strong>Email:</strong> <?= htmlspecialchars($cEmail) ?></p>
-            <p><strong>Phone:</strong> <?= htmlspecialchars($cPhone) ?></p>
-            <p><strong>Participants:</strong> <?= htmlspecialchars($people) ?></p>
-            <p><strong>Court Type:</strong> <?= htmlspecialchars($courtType) ?></p>
-            <p><strong>Preferred Court:</strong> <?= htmlspecialchars($preferredCourt) ?></p>
-            <p><strong>Duration:</strong> <?= htmlspecialchars($datestart) ?> - <?= htmlspecialchars($dateend) ?> (<?= htmlspecialchars($duration) ?> hours)</p>
-            <p><strong>Total Price:</strong> <?= htmlspecialchars($totalPrice) ?></p>
-            
-            <h3>Please confirm your booking and proceed to payment:</h3>
-            <div id="paypal-button-container"></div>
-            <script src="https://www.paypal.com/sdk/js?client-id=Adq9ccMWAeJEkGWPnUI_ZE_sDA1WB4POGfjjCfgoOJnGVvY9X143fMioow2H6bLsgr-dvXJNx4nLsLjX&currency=MYR"></script>
-            <script>
-              paypal.Buttons({
-                  createOrder: function(data, actions) {
-                      return actions.order.create({
-                          purchase_units: [{
-                              amount: {
-                                  value: '<?= $totalPrice ?>'
-                              }
-                          }]
-                      });
-                  },
-                  onApprove: function(data, actions) {
-                      return actions.order.capture().then(function(details) {
-                          alert('Transaction completed by ' + details.payer.name.given_name);
-                          window.location.href = 'process_payment.php';
-                      });
-                  }
-              }).render('#paypal-button-container');
-            </script>
-        </div>
+            <div class="payment-container">
+                <h3>Confirmation</h3>
+                <p><strong>Full Name:</strong> <?= htmlspecialchars($cName) ?></p>
+                <p><strong>Email:</strong> <?= htmlspecialchars($cEmail) ?></p>
+                <p><strong>Phone:</strong> <?= htmlspecialchars($cPhone) ?></p>
+                <p><strong>Participants:</strong> <?= htmlspecialchars($people) ?></p>
+                <p><strong>Court Type:</strong> <?= htmlspecialchars($courtType) ?></p>
+                <p><strong>Preferred Court:</strong> <?= htmlspecialchars($preferredCourt) ?></p>
+                <p><strong>Date & Time:</strong> <?= htmlspecialchars($formattedStart) ?> - <?= htmlspecialchars($formattedEnd) ?></p>
+                <p><strong>Duration:</strong> <?= htmlspecialchars($duration) ?> hours</p>
+                <p><strong>Total Price:</strong> <?= htmlspecialchars($totalPrice) ?></p>
+                
+                <h3>Please confirm your booking and proceed to payment:</h3>
+                <div id="paypal-button-container"></div>
+                <script src="https://www.paypal.com/sdk/js?client-id=Adq9ccMWAeJEkGWPnUI_ZE_sDA1WB4POGfjjCfgoOJnGVvY9X143fMioow2H6bLsgr-dvXJNx4nLsLjX&currency=MYR"></script>
+                <script>
+                  paypal.Buttons({
+                      createOrder: function(data, actions) {
+                          return actions.order.create({
+                              purchase_units: [{
+                                  amount: {
+                                      value: '<?= $totalPrice ?>'
+                                  }
+                              }]
+                          });
+                      },
+                      onApprove: function(data, actions) {
+                          return actions.order.capture().then(function(details) {
+                              alert('Transaction completed by ' + details.payer.name.given_name);
+                              window.location.href = 'process_payment.php';
+                          });
+                      }
+                  }).render('#paypal-button-container');
+                </script>
+            </div>
         </div>
     </div>
   </div>
@@ -413,13 +425,10 @@
         const durationVal = duration.value;
 
         if (!courtTypeVal || !datestartVal || !durationVal) {
-            slotsDiv.innerHTML = "<div id='available-court'>Please fill out <strong>Court Type, Date and Duration</strong> fields to check availability.</div>";
+            slotsDiv.innerHTML = "Please fill out <strong>Court Type, Date and Duration</strong> fields to check availability.";
             toggleNextButton(false);
             return;
         }
-
-        // Ensure date is in correct timezone format (UTC format for consistency)
-        const adjustedDateStart = new Date(datestartVal).toISOString();
 
         // AJAX call to fetch available courts
         const xhr = new XMLHttpRequest();
@@ -427,34 +436,34 @@
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                try {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.error) {
-                        slotsDiv.innerHTML = `<p>${response.error}</p>`;
-                        toggleNextButton(false);
-                    } else {
-                        let slotsHtml = '';
-                        response.slots.forEach(slot => {
-                            slotsHtml += `
-                                <div class="court-card">
-                                    <input type="radio" id="${slot.court}" name="preferredCourt" value="${slot.court}" required>
-                                    <span for="${slot.court}">Court ${slot.court} (${slot.status})</span>
-                                </div>`;
-                        });
-                        slotsDiv.innerHTML = slotsHtml;
-                        toggleNextButton(true); // Enable next button when courts are available
-                    }
-                } catch (e) {
-                    console.error('Error parsing JSON:', e);
-                    alert('An error occurred while checking availability. Please try again.');
-                    toggleNextButton(false);
-                }
-            }
+          if (xhr.readyState === 4) {
+              try {
+                  const response = JSON.parse(xhr.responseText);
+                  if (response.error) {
+                      slotsDiv.innerHTML = `<p>${response.error}</p>`;
+                      toggleNextButton(false);
+                  } else {
+                      let slotsHtml = '';
+                      response.slots.forEach(slot => {
+                          slotsHtml += `
+                              <div class="court-card">
+                                  <input type="radio" id="${slot.court}" name="preferredCourt" value="${slot.court}" required>
+                                  <span for="${slot.court}">Court ${slot.court} (${slot.status})</span>
+                              </div>`;
+                      });
+                      slotsDiv.innerHTML = slotsHtml;
+                      toggleNextButton(true); // Enable next button when courts are available
+                  }
+              } catch (e) {
+                  console.error('Error parsing JSON:', e);
+                  slotsDiv.innerHTML = "An error occurred while checking availability. Please try again.";
+                  toggleNextButton(false);
+              }
+          }
         };
 
         // Send data to server
-        xhr.send(`courtType=${courtTypeVal}&datestart=${adjustedDateStart}&duration=${durationVal}`);
+        xhr.send(`courtType=${courtTypeVal}&datestart=${datestartVal}&duration=${durationVal}`);
     }
 
     // Attach change event listeners to trigger availability check

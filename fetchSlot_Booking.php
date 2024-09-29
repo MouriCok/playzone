@@ -15,58 +15,68 @@ ini_set('error_log', 'fetchSlot_Booking_errors.log');
 try {
     if (isset($_POST['courtType']) && isset($_POST['datestart']) && isset($_POST['duration'])) {
         $courtType = $_POST['courtType'];
-        $datestart_str = $_POST['datestart']; // Expecting UTC format
+        $datestart_str = $_POST['datestart'];  // Booking start time from the form
+        $duration = (int)$_POST['duration'];
 
         if (empty($datestart_str)) {
             throw new Exception("Invalid date selected.");
         }
 
-        // Convert datestart from UTC to local time (Asia/Kuala_Lumpur)
-        $datestart = new DateTime($datestart_str, new DateTimeZone('UTC'));
-        $datestart->setTimezone(new DateTimeZone('Asia/Kuala_Lumpur'));
+        // Create DateTime object for the booking start time
+        $datestart = new DateTime($datestart_str);
 
-        $startTime = clone $datestart; // For use in comparison
-        $duration = (int)$_POST['duration'];
-        $endTime = clone $startTime;
+        // Clone to calculate end time
+        $endTime = clone $datestart;
         $endTime->modify("+$duration hours");
 
-        $day_of_week = $datestart->format('l'); // Get day of week
+        // Get the day of the week for premises hours lookup
+        $day_of_week = $datestart->format('l');
 
-        // Fetch premises open and close times for selected day
+        // Fetch open and close times for the selected day from the database
         $sql_hours = "SELECT open_time, close_time FROM premises_hours WHERE day_of_week = ?";
         $stmt_hours = $conn->prepare($sql_hours);
-
         if (!$stmt_hours) {
-            throw new Exception("Error preparing premises hours query.");
+            throw new Exception("Error preparing premises hours query: " . $conn->error);
         }
 
         $stmt_hours->bind_param("s", $day_of_week);
-        $stmt_hours->execute();
+        if (!$stmt_hours->execute()) {
+            throw new Exception("Error executing premises hours query: " . $stmt_hours->error);
+        }
+
         $result_hours = $stmt_hours->get_result();
         $premises_hours = $result_hours->fetch_assoc();
 
         if (!$premises_hours) {
-            echo json_encode(['error' => "Premises are closed on $day_of_week."]);
+            echo json_encode(['error' => "Premises are closed on <strong>$day_of_week</strong>. Please select another day."]);
             exit;
         }
 
-        // Convert open and close times to full DateTime objects for accurate comparison
-        $open_time = new DateTime($premises_hours['open_time'], new DateTimeZone('Asia/Kuala_Lumpur'));
-        $close_time = new DateTime($premises_hours['close_time'], new DateTimeZone('Asia/Kuala_Lumpur'));
+        // Convert open_time and close_time from TIME format into full DateTime objects
+        $open_time = new DateTime($datestart->format('Y-m-d') . ' ' . $premises_hours['open_time']);
+        $close_time = new DateTime($datestart->format('Y-m-d') . ' ' . $premises_hours['close_time']);
 
-        if ($startTime < $open_time || $endTime > $close_time) {
+        // Compare the booking start and end times against the premises' operating hours
+        if ($datestart < $open_time || $endTime > $close_time) {
             echo json_encode([
-                'error' => "Selected time is outside the premises' operating hours (" . $open_time->format('H:i') . " - " . $close_time->format('H:i') . ", $day_of_week)."
+                'error' => "Selected time is outside the premises' operating hours <strong>(" 
+                    . $open_time->format('H:i') . " - " 
+                    . $close_time->format('H:i') . ", $day_of_week)</strong>."
             ]);
             exit;
         }
+
+        // error_log("Booking start time: " . $datestart->format('Y-m-d H:i:s'));
+        // error_log("Booking end time: " . $endTime->format('Y-m-d H:i:s'));
+        // error_log("Premises open time: " . $open_time->format('Y-m-d H:i:s'));
+        // error_log("Premises close time: " . $close_time->format('Y-m-d H:i:s'));
 
         // Fetch total courts for the selected court type
         $sql_total = "SELECT court_id FROM courts WHERE courtType = ?";
         $stmt_total = $conn->prepare($sql_total);
 
         if (!$stmt_total) {
-            throw new Exception("Error preparing court query.");
+            throw new Exception("Error preparing court query => " . $conn->error);
         }
 
         $stmt_total->bind_param("s", $courtType);
@@ -82,10 +92,10 @@ try {
             $stmt_bookings = $conn->prepare($sql_bookings);
 
             if (!$stmt_bookings) {
-                throw new Exception("Error preparing bookings query.");
+                throw new Exception("Error preparing bookings query => " . $conn->error);
             }
 
-            $start_time_str = $startTime->format('Y-m-d H:i:s');
+            $start_time_str = $datestart->format('Y-m-d H:i:s');
             $end_time_str = $endTime->format('Y-m-d H:i:s');
             $stmt_bookings->bind_param("ssss", $courtType, $court_id, $start_time_str, $end_time_str);
             $stmt_bookings->execute();
@@ -102,7 +112,7 @@ try {
         }
 
         if (empty($availableCourts)) {
-            echo json_encode(['error' => "No available courts for the selected time and date."]);
+            echo json_encode(['error' => "No available courts for the selected time and date. Please select another time or date."]);
         } else {
             echo json_encode(['slots' => $availableCourts]);
         }

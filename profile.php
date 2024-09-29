@@ -683,13 +683,75 @@ if ($result) {
         form.submit();
       }
   </script>
-  <script>
-        $(document).ready(function() {
-      <?php if (!empty($notify)) { ?>
-        $('#notifyModal').modal('show');
-      <?php } ?>
-    });
-  </script>
   <script src="scripts.js"></script>
+  <?php if (!empty($statusMessage)): ?>
+    <style>
+        /* Style for the notification */
+        .notification-popup {
+            position: fixed;
+            bottom: -100px; /* Start out of view */
+            left: 20px; /* Position on the bottom left */
+            padding: 15px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 300px;
+            transition: bottom 0.5s ease; /* Smooth slide-in and slide-out */
+        }
+
+        .notification-popup.show {
+            bottom: 20px; /* Slide into view */
+        }
+
+        .notification-popup .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Create the notification div
+            const notification = document.createElement('div');
+            notification.className = 'notification-popup';
+
+            // Add notification text
+            notification.innerHTML = `<?= $statusMessage; ?> <button class="close-btn">&times;</button>`;
+
+            // Append notification to the body
+            document.body.appendChild(notification);
+
+            // Show the notification with a smooth slide-in effect
+            setTimeout(function () {
+                notification.classList.add('show');
+            }, 100); // Delay to allow transition
+
+            // Close the notification after 5 seconds (smooth slide-out)
+            setTimeout(function () {
+                notification.classList.remove('show');
+                setTimeout(function () {
+                    notification.remove();
+                }, 500); // Wait for the transition to finish before removing
+            }, 5000);
+
+            // Manual close button handling
+            const closeButton = notification.querySelector('.close-btn');
+            closeButton.addEventListener('click', function () {
+                notification.classList.remove('show');
+                setTimeout(function () {
+                    notification.remove();
+                }, 500); // Smooth close when X button is clicked
+            });
+        });
+    </script>
+  <?php endif; ?>
 </body>
 </html>

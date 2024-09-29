@@ -10,5 +10,5 @@ INSERT INTO `premises_hours` (`day_of_week`, `open_time`, `close_time`) VALUES
 ('Tuesday', '10:00:00', '22:00:00'),
 ('Wednesday', '10:00:00', '22:00:00'),
 ('Thursday', '10:00:00', '22:00:00'),
-('Friday', '14:00:00', '24:00:00'),
-('Saturday', '10:00:00', '24:00:00');
+('Friday', '14:00:00', '23:59:59'),
+('Saturday', '10:00:00', '23:59:59');
