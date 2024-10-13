@@ -320,7 +320,7 @@
                   </div>
                   <div class="form-group2">
                       <input type="text" name="totalPrice" id="totalPrice" value="<?= htmlspecialchars($totalPrice) ?>" readonly>
-                      <label for="totalPrice">Total Price</label>
+                      <label for="totalPrice">Total Price (RM)</label>
                   </div>
               </div>
           </div>
@@ -360,7 +360,7 @@
                 <p><strong>Preferred Court:</strong> <?= htmlspecialchars($preferredCourt) ?></p>
                 <p><strong>Date & Time:</strong> <?= htmlspecialchars($formattedStart) ?> - <?= htmlspecialchars($formattedEnd) ?></p>
                 <p><strong>Duration:</strong> <?= htmlspecialchars($duration) ?> hours</p>
-                <p><strong>Total Price:</strong> <?= htmlspecialchars($totalPrice) ?></p>
+                <p><strong>Total Price: RM</strong><?= htmlspecialchars($totalPrice) ?></p>
                 
                 <h3>Please confirm your booking and proceed to payment:</h3>
                 <div id="paypal-button-container"></div>
@@ -472,10 +472,21 @@
     duration.addEventListener('input', checkAvailability);
 
     // Clear form and reset availability
-    document.getElementById('clear-form').addEventListener('click', function() {
-        document.getElementById('booking-details-form').reset();
+    document.getElementById('clear-form').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        document.getElementById('cName').value = '';
+        document.getElementById('courtType').value = '';
+        document.getElementById('cEmail').value = '';
+        document.getElementById('datestart').value = '';
+        document.getElementById('cPhone').value = '';
+        document.getElementById('duration').value = '';
+        document.getElementById('people').value = '';
+        document.getElementById('totalPrice').value = '';
+
         slotsDiv.innerHTML = "Available court will be shown here";
         toggleNextButton(false);
+        dateInput.setAttribute('min', formattedDate);
     });
   </script>
   <script>
@@ -514,7 +525,7 @@
       }
 
       const totalPrice = pricePerHour * duration;
-      document.getElementById('totalPrice').value = totalPrice ? `RM${totalPrice.toFixed(2)}` : '';
+      document.getElementById('totalPrice').value = totalPrice ? `${totalPrice.toFixed(2)}` : '';
     }
   </script>
   <script src="scripts.js"></script>
