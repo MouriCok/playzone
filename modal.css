@@ -249,7 +249,7 @@ body.modal-open {
 
   .authButton-group {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
 }
 
@@ -328,7 +328,7 @@ body.modal-open {
     box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.199), inset -2px -2px 5px rgba(255, 255, 255, 0.199);
   }
   #logoutModalContent {
-    background-color: rgba(143, 235, 255, 0.4);
+    background-color: #8FEBFF;
     border: none;
     width: 300px;
     height: fit-content;
@@ -371,7 +371,7 @@ body.modal-open {
     font-family: 'Istok Web', sans-serif;
     text-transform: uppercase;
     text-align: center;
-    color: #fff;
+    color: #000;
     font-size: 12px;
     font-weight: 600;
   }
