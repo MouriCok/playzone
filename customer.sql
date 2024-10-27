@@ -11,6 +11,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `customer` (
   `cId` int(7) UNSIGNED NOT NULL,
+  `google_uid` VARCHAR(255) DEFAULT NULL,
   `cAvatar` blob,
   `cName` varchar(60) NOT NULL,
   `cUser` varchar(30) NOT NULL,
@@ -18,7 +19,10 @@ CREATE TABLE `customer` (
   `cPhone` varchar(30) NOT NULL,
   `cPass` varchar(255) NOT NULL,
   `reset_token` varchar(255),
-  `reset_expiry` DATETIME
+  `reset_expiry` DATETIME,
+  PRIMARY KEY (`cId`),
+  UNIQUE KEY `unique_email` (`cEmail`),
+  UNIQUE KEY `unique_google_uid` (`google_uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -39,16 +43,4 @@ INSERT INTO `customer` (`cId`, `cAvatar`, `cName`, `cUser`, `cEmail`, `cPhone`, 
 (11, NULL, 'Ijo Mushiro Bin Biro', 'ijohijau', 'ijoijohijo@gmail.com', '1114956232', 'Ijom276386', NOW() + INTERVAL 1 HOUR),
 (12, NULL, 'Muhammad Nur Zulfaqar', 'zul10', 'zulfa10@gmail.com', '1114956232', 'Zul12345', NOW() + INTERVAL 1 HOUR);
 
--- Indexes for dumped tables
-
--- Indexes for table `customer`
-
-ALTER TABLE `customer`
-  ADD PRIMARY KEY (`cId`);
-
--- AUTO_INCREMENT for dumped tables
-
--- AUTO_INCREMENT for table `menu`
-ALTER TABLE `customer`
-  MODIFY `cId` int(7) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;

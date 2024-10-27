@@ -244,6 +244,7 @@ mysqli_close($conn);
                         <?php
                             if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
                                 $avatar = !empty($_SESSION['cAvatar']) ? $_SESSION['cAvatar'] : 'default_avatar.png';
+                                $defaultAvatar = 'default_avatar.png';
 
                                 // If user is logged in, show username with a dropdown menu
                                 echo '
@@ -253,7 +254,7 @@ mysqli_close($conn);
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li class="d-m" style="display: flex; align-items: center;">
-                                            <img src="' . $avatar . '" alt="user" class="drop-circle" width="60" height="60">
+                                            <img src="' . $avatar . '" alt="$defaultAvatar" class="drop-circle" width="60" height="60" onerror="this.onerror=null; this.src=\'' . htmlspecialchars($defaultAvatar) . '\';">
                                             <div class="details">
                                                 <span class="username" style="font-size: 18px; font-weight: bold; display: block;">' . $_SESSION['cUser'] . '</span>
                                                 <span class="email" style="font-size: 12px; display: block;">' . $_SESSION['cEmail'] . '</span>

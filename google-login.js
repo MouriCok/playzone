@@ -17,14 +17,31 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Login using Google in login modal
 document.querySelector('#loginModal .oauthButton.google').addEventListener('click', (event) => {
   event.preventDefault();
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
-      sessionStorage.setItem('user', JSON.stringify(user)); // Save user details for profile.php
-      window.location.href = "profile.php";
+      
+      // Send user data to PHP via AJAX to set a server-side session
+      fetch("set_google_session.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid
+        })
+      })
+      .then(response => response.text())
+      .then((data) => {
+        console.log("Google session set:", data);
+        window.location.href = "profile.php";
+      })
+      .catch(error => console.error("Error setting Google session:", error));
     })
     .catch((error) => {
       console.error("Google login error:", error);

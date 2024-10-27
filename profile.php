@@ -3,46 +3,55 @@ session_start();
 require_once 'database.php';
 require_once 'move_old_bookings.php';
 
-// Check if the user is logged in, if not then redirect to home page
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+// Check for PHP login or Google session
+$isGoogleLoggedIn = false;
+$googleUserData = null;
+
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    if (isset($_SESSION['google_user'])) {
+        $isGoogleLoggedIn = true;
+        $googleUserData = $_SESSION['google_user'];
+        $cUser = $googleUserData['email']; // Use Google email as identifier
+    } elseif (isset($_SESSION['cUser'])) {
+        $cUser = $_SESSION['cUser'];
+    } else {
+        header("location: index.php");
+        exit;
+    }
+} else {
     header("location: index.php");
     exit;
 }
 
-// Check if cUser session variable is set
-if (!isset($_SESSION['cUser'])) {
-    die("No user session found. Please try again.");
-}
-
-$cUser = $_SESSION['cUser'];
-
-// Use prepared statements to avoid SQL injection
-$stmt = $conn->prepare("SELECT * FROM customer WHERE cUser = ?");
-$stmt->bind_param("s", $cUser);
+// Fetch user data from the database
+$stmt = $conn->prepare("SELECT * FROM customer WHERE cUser = ? OR cEmail = ?");
+$stmt->bind_param("ss", $cUser, $cUser);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result) {
     if ($result->num_rows > 0) {
-        // Fetch the user data
         $rows = $result->fetch_assoc();
-
-        // Set avatar session variable
-        $_SESSION['cAvatar'] = $rows['cAvatar'];
+        $_SESSION['cAvatar'] = $isGoogleLoggedIn && isset($googleUserData['photoURL'])
+        ? $googleUserData['photoURL']
+        : $rows['cAvatar'];
+        $_SESSION['cName'] = $rows['cName'];
+        $_SESSION['cUser'] = $rows['cUser'];
         $_SESSION['cEmail'] = $rows['cEmail'];
 
-        // Handle logout
         if (isset($_GET["logout"])) {
             unset($_SESSION['logged_in']);
+            unset($_SESSION['cName']);
             unset($_SESSION['cUser']);
             unset($_SESSION['cAvatar']);
             unset($_SESSION['cEmail']);
+            unset($_SESSION['google_user']); // Clear Google session
             session_destroy();
             header("Location: index.php");
             exit();
         }
     } else {
-        die("No User found for this Username: $cUser,\nPlease make sure that You have registered an account.");
+        die("No user found for this username or email: $cUser. Please make sure you are registered.");
     }
 } else {
     die("Error in SQL query: " . $conn->error);
@@ -94,7 +103,8 @@ if ($result) {
     }
     .d-flex {
         margin: 0 auto;
-        padding: 30px;
+        padding-top: 20px;
+        padding-bottom: 5px;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -152,33 +162,23 @@ if ($result) {
                 <li><a href="bookings.php" class="nav-btn">Booking</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                    <?php
-                        // Logout logic
-                        if (isset($_GET["logout"])) {
-                            unset($_SESSION['logged_in']);
-                            unset($_SESSION['cUser']);
-                            unset($_SESSION['cAvatar']);
-                            session_destroy();
-                            header("Location: index.php");
-                            exit();
-                        }
-                    ?>
-                    <ul class="nav navbar-nav navbar-right">
                         <?php
-                            if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
-                                $avatar = !empty($_SESSION['cAvatar']) ? $_SESSION['cAvatar'] : 'default_avatar.png';
+                            $avatar = isset($_SESSION['cAvatar']) ? $_SESSION['cAvatar'] : 'default_avatar.png';
+                            $displayName = isset($_SESSION['cName']) ? $_SESSION['cName'] : $cUser;
+                            $username = isset($_SESSION['cUser']) ? $_SESSION['cUser'] : '';
+                            $defaultAvatar = 'default_avatar.png';
 
-                                // If user is logged in, show username with a dropdown menu
+                            if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
                                 echo '
                                 <li class="dropdown">
                                     <a href="profile.php" class="dropdown-toggle">
-                                        <span class="glyphicon glyphicon-user"></span>&nbsp; ' . $_SESSION['cUser'] . ' <span class="caret"></span>
+                                        <span class="glyphicon glyphicon-user"></span>&nbsp; ' . $username . ' <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li class="d-m" style="display: flex; align-items: center;">
-                                            <img src="' . $avatar . '" alt="user" class="drop-circle" width="60" height="60">
+                                            <img src="' . htmlspecialchars($avatar) . '" alt="' . htmlspecialchars($defaultAvatar) . '" class="drop-circle" width="60" height="60" onerror="this.onerror=null; this.src=\'' . htmlspecialchars($defaultAvatar) . '\';">
                                             <div class="details">
-                                                <span class="username" style="font-size: 18px; font-weight: bold; display: block;">' . $_SESSION['cUser'] . '</span>
+                                                <span class="username" style="font-size: 18px; font-weight: bold; display: block;">' . $username . '</span>
                                                 <span class="email" style="font-size: 12px; display: block;">' . $_SESSION['cEmail'] . '</span>
                                             </div>
                                         </li>
@@ -212,8 +212,6 @@ if ($result) {
                                 echo '';
                             }
                         ?>
-                    </ul>
-                    
                 </ul>
             </div>
         </div>
@@ -230,60 +228,36 @@ if ($result) {
             <div class="d-flex flex-column">
               <div class="profile-pic-container">
               <?php
-                require_once 'database.php';
+                $avatarSrc = $_SESSION['cAvatar'] ?? 'default_avatar.png';
+                $defaultAvatar = 'default_avatar.png';
 
-                $cUser = $rows['cUser'];
-                $custQuery = "SELECT cId, cAvatar FROM customer WHERE cUser = '$cUser'";
-                $custResult = $conn->query($custQuery);
+                echo "<img src='$avatarSrc' alt='$defaultAvatar' class='rounded-circle profile-pic' id='profile-avatar' onerror=\"this.onerror=null; this.src='$defaultAvatar';\">";
 
-                if ($custResult) {
-                  if ($custResult->num_rows > 0) {
-                    while ($custRow = $custResult->fetch_assoc()) {
-                      if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']) {
-                        // If user is logged in, check if they have a custom avatar
-                        if ($custRow['cAvatar'] !== null) {
-                          // If user has a custom avatar, display it
-                          echo "<img src='" . $custRow['cAvatar'] . "' alt='user' class='rounded-circle profile-pic'>";
-                        } else {
-                          // If user has no custom avatar, display the default avatar
-                          echo "<img src='default_avatar.png' alt='default_avatar' class='rounded-circle profile-pic'>";
-                        }
-                      } else {
-                        // If user is not logged in, display the default avatar
-                        echo "<img src='default_avatar.png' alt='default_avatar' class='rounded-circle profile-pic'>";
-                      }
-                      echo '<div class="change-btn-overlay">
-                              <button type="button" class="change-btn" onclick="changeProfile(' . $custRow["cId"] . ')">
-                              <div class="change_icon">
-                                  <svg width="256px" height="256px" viewBox="0 0 512.00 512.00" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" 
-                                  xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)" stroke="#000000"><g id="SVGRepo_bgCarrier" 
-                                  stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> 
-                                  <style type="text/css"> .st0{fill:#F8F9FA;} .st1{fill:none;stroke:#F8F9FA;stroke-width:0.00512;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} 
-                                  </style> <g id="Layer_1"></g> <g id="Layer_2"> <g> <g> 
-                                  <path class="st0" d="M307.81,212.18c-3.24,0-6.07-2.17-6.91-5.3l-4.82-17.88c-0.84-3.12-3.68-5.3-6.91-5.3h-21.46h-25.44H220.8 
-                                  c-3.24,0-6.07,2.17-6.91,5.3l-4.82,17.88c-0.84,3.12-3.68,5.3-6.91,5.3H169.5c-3.96,0-7.16,3.21-7.16,7.16v101.78 c0,3.96,3.21,7.16,7.16,
-                                  7.16h170.95c3.96,0,7.16-3.21,7.16-7.16V219.35c0-3.96-3.21-7.16-7.16-7.16H307.81z M282.33,264.94 c-0.86,13.64-11.93,24.71-25.58,25.58c-16.54,
-                                  1.05-30.18-12.59-29.14-29.14c0.86-13.64,11.93-24.71,25.58-25.58 C269.74,234.76,283.38,248.4,282.33,264.94z"></path> </g> <g> <path class="st0" 
-                                  d="M82.95,272.41c3.82,0,7.53-1.53,10.23-4.23l21.23-21.23c4.74-4.74,6.4-11.92,3.73-18.06 c-2.73-6.29-8.88-8.95-18.84-7.57l-0.27,0.27c15.78-71.56,
-                                  79.7-125.27,155.94-125.27c60.72,0,115.41,33.72,142.73,87.99 c3.58,7.11,12.24,9.97,19.34,6.39c7.11-3.58,9.97-12.24,6.39-19.34c-15.47-30.73-39.05-56.66-68.22-75.01 
-                                  C325.23,77.47,290.57,67.5,254.98,67.5c-93,0-170.48,67.71-185.75,156.41c-5.38-4.77-13.59-5.18-19.13-0.44 c-6.3,5.39-6.75,14.88-1.13,20.84c0.23,0.24,
-                                  5.69,6.03,11.41,11.93c3.41,3.51,6.2,6.33,8.3,8.38c4.23,4.13,7.88,7.69,14.07,7.78 C82.81,272.41,82.88,272.41,82.95,272.41z"></path> </g> <g> 
-                                  <path class="st0" d="M464.28,247.82l-26.5-26.5c-2.75-2.75-6.57-4.3-10.44-4.23c-2.33,0.03-4.29,0.56-6.07,1.42 c-0.26,0.12-0.51,0.26-0.76,0.4c-0.04,
-                                  0.02-0.08,0.04-0.12,0.06c-0.59,0.33-1.16,0.68-1.69,1.08c-1.88,1.34-3.6,3.03-5.44,4.82 c-2.1,2.05-4.89,4.87-8.3,8.38c-5.72,5.9-11.18,11.68-11.41,
-                                  11.93c-5.46,5.79-5.19,14.91,0.6,20.36 c5.75,5.42,14.77,5.18,20.24-0.48c-4.72,83.85-74.42,150.62-159.43,150.62c-70.52,0-131.86-45.23-152.62-112.55 
-                                  c-2.35-7.6-10.41-11.86-18.01-9.52c-7.6,2.34-11.86,10.41-9.52,18.01c11.62,37.68,35.48,71.52,67.19,95.28 c32.8,24.59,71.86,37.58,112.96,37.58c100.11,
-                                  0,182.23-78.45,188.14-177.1l0.79,0.79c2.81,2.81,6.5,4.22,10.18,4.22 c3.69,0,7.37-1.41,10.18-4.22C469.91,262.57,469.91,253.45,464.28,247.82z">
-                                  </path> </g> </g> </g> </g></svg>
-                              </div>
-                              </button>
-                            </div>';
-                    }
-                  } else {
-                      echo "<tr><td colspan='3'>No database found in Customer Table.</td></tr>";
-                    }
-                } else {
-                    die("Error in User query: " . $conn->error);
-                  }
+                echo '<div class="change-btn-overlay">
+                  <button type="button" class="change-btn" onclick="changeProfile(' . $rows['cId'] . ')">
+                    <div class="change_icon">
+                      <svg width="256px" height="256px" viewBox="0 0 512.00 512.00" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" 
+                      xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)" stroke="#000000"><g id="SVGRepo_bgCarrier" 
+                      stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> 
+                      <style type="text/css"> .st0{fill:#F8F9FA;} .st1{fill:none;stroke:#F8F9FA;stroke-width:0.00512;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} 
+                      </style> <g id="Layer_1"></g> <g id="Layer_2"> <g> <g> 
+                      <path class="st0" d="M307.81,212.18c-3.24,0-6.07-2.17-6.91-5.3l-4.82-17.88c-0.84-3.12-3.68-5.3-6.91-5.3h-21.46h-25.44H220.8 
+                      c-3.24,0-6.07,2.17-6.91,5.3l-4.82,17.88c-0.84,3.12-3.68,5.3-6.91,5.3H169.5c-3.96,0-7.16,3.21-7.16,7.16v101.78 c0,3.96,3.21,7.16,7.16,
+                      7.16h170.95c3.96,0,7.16-3.21,7.16-7.16V219.35c0-3.96-3.21-7.16-7.16-7.16H307.81z M282.33,264.94 c-0.86,13.64-11.93,24.71-25.58,25.58c-16.54,
+                      1.05-30.18-12.59-29.14-29.14c0.86-13.64,11.93-24.71,25.58-25.58 C269.74,234.76,283.38,248.4,282.33,264.94z"></path> </g> <g> <path class="st0" 
+                      d="M82.95,272.41c3.82,0,7.53-1.53,10.23-4.23l21.23-21.23c4.74-4.74,6.4-11.92,3.73-18.06 c-2.73-6.29-8.88-8.95-18.84-7.57l-0.27,0.27c15.78-71.56,
+                      79.7-125.27,155.94-125.27c60.72,0,115.41,33.72,142.73,87.99 c3.58,7.11,12.24,9.97,19.34,6.39c7.11-3.58,9.97-12.24,6.39-19.34c-15.47-30.73-39.05-56.66-68.22-75.01 
+                      C325.23,77.47,290.57,67.5,254.98,67.5c-93,0-170.48,67.71-185.75,156.41c-5.38-4.77-13.59-5.18-19.13-0.44 c-6.3,5.39-6.75,14.88-1.13,20.84c0.23,0.24,
+                      5.69,6.03,11.41,11.93c3.41,3.51,6.2,6.33,8.3,8.38c4.23,4.13,7.88,7.69,14.07,7.78 C82.81,272.41,82.88,272.41,82.95,272.41z"></path> </g> <g> 
+                      <path class="st0" d="M464.28,247.82l-26.5-26.5c-2.75-2.75-6.57-4.3-10.44-4.23c-2.33,0.03-4.29,0.56-6.07,1.42 c-0.26,0.12-0.51,0.26-0.76,0.4c-0.04,
+                      0.02-0.08,0.04-0.12,0.06c-0.59,0.33-1.16,0.68-1.69,1.08c-1.88,1.34-3.6,3.03-5.44,4.82 c-2.1,2.05-4.89,4.87-8.3,8.38c-5.72,5.9-11.18,11.68-11.41,
+                      11.93c-5.46,5.79-5.19,14.91,0.6,20.36 c5.75,5.42,14.77,5.18,20.24-0.48c-4.72,83.85-74.42,150.62-159.43,150.62c-70.52,0-131.86-45.23-152.62-112.55 
+                      c-2.35-7.6-10.41-11.86-18.01-9.52c-7.6,2.34-11.86,10.41-9.52,18.01c11.62,37.68,35.48,71.52,67.19,95.28 c32.8,24.59,71.86,37.58,112.96,37.58c100.11,
+                      0,182.23-78.45,188.14-177.1l0.79,0.79c2.81,2.81,6.5,4.22,10.18,4.22 c3.69,0,7.37-1.41,10.18-4.22C469.91,262.57,469.91,253.45,464.28,247.82z">
+                      </path> </g> </g> </g> </g></svg>
+                    </div>
+                  </button>
+                </div>';
               ?>
             </div>
               <script>
@@ -339,25 +313,16 @@ if ($result) {
                 }
               </script>
               <div class="mt-3">
-                <?php
-                  require_once 'database.php';
-
-                  $cUser = $rows['cUser'];
-                  $custQuery = "SELECT cId, cName, cUser FROM customer WHERE cUser = '$cUser'";
-                  $custResult = $conn->query($custQuery);
-                  if ($custResult) {
-                    if ($custResult->num_rows > 0) {
-                      while ($custRow = $custResult->fetch_assoc()) {
-                        echo "<h5><strong>" . $custRow['cName'] . "</strong></h5>";
-                        echo "<h6>" . $custRow['cUser'] . "</h6>";
-                      }
-                    } else {
-                        echo "<tr><td colspan='3'>No database found.</td></tr>";
-                      }
-                  } else {
-                      die("Error in user query: " . $conn->error);
-                    }
-                ?>
+                <h5><strong>
+                  <?php 
+                    echo $_SESSION['cName'];
+                  ?>
+                </strong></h5>
+                <h6>
+                  <?php 
+                    echo $_SESSION['cUser'];
+                  ?>
+                </h6>
               </div>
             </div>
           </div>
@@ -373,8 +338,6 @@ if ($result) {
                 <table class="table table-striped">
                   <tbody>
                     <?php
-                      require_once 'database.php';
-
                       if (!$conn) {
                         die("Connection failed: " . mysqli_connect_error());
                       }
@@ -441,12 +404,6 @@ if ($result) {
                               </thead>
                               <tbody>
                                 <?php
-                                  require_once 'database.php';
-
-                                  if (!$conn) {
-                                    die("Connection failed: " . mysqli_connect_error());
-                                  }
-
                                   $cEmail = $_SESSION['cEmail'];
                                   $bookingQuery = "SELECT bID, courtType, preferredCourt, datestart, dateend, people, payment_status FROM bookings WHERE cEmail = '$cEmail'";
                                   $bookingResult = mysqli_query($conn, $bookingQuery);
@@ -468,7 +425,7 @@ if ($result) {
                                               echo "</tr>";
                                           }
                                       } else {
-                                          echo "<tr><td colspan='3'>No booked facilities found.</td></tr>";
+                                          echo "<tr><td colspan='7'>No booked facilities found.</td></tr>";
                                       }
                                   } else {
                                       die("Error in booking query: " . mysqli_error($conn));
