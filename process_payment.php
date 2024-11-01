@@ -5,7 +5,8 @@
     // Check if the required session variables are set
     if (isset($_SESSION['cName']) && isset($_SESSION['cEmail']) && isset($_SESSION['cPhone']) &&
         isset($_SESSION['datestart']) && isset($_SESSION['dateend']) && isset($_SESSION['courtType']) &&
-        isset($_SESSION['people']) && isset($_SESSION['totalPrice']) && isset($_SESSION['booking_id'])) {
+        isset($_SESSION['people']) && isset($_SESSION['totalPrice']) && isset($_SESSION['preferredCourt']) 
+        && isset($_SESSION['court_id']) && isset($_SESSION['booking_id'])) {
 
         $cName = $_SESSION['cName'];
         $cEmail = $_SESSION['cEmail'];
@@ -15,7 +16,8 @@
         $courtType = $_SESSION['courtType'];
         $people = $_SESSION['people'];
         $totalPrice = $_SESSION['totalPrice'];
-        $preferredCourt = $_SESSION['preferredCourt'] ?? null; // Optional field
+        $preferredCourt = $_SESSION['preferredCourt'];
+        $court_id = $_SESSION['court_id'];
         $booking_id = $_SESSION['booking_id']; // The existing booking ID to update
 
         // Payment processing logic (assuming payment success)

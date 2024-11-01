@@ -49,7 +49,8 @@
           $courtType = $_POST['courtType'];
           $people = $_POST['people'];
           $totalPrice = $_POST['totalPrice'];
-          $preferredCourt = $_POST['preferredCourt'] ?? '';  // Fix the undefined array key error
+          $preferredCourt = $_POST['preferredCourt'];
+          $court_id = $_POST['preferredCourt'];
 
           // Store booking details in session
           $_SESSION['datestart'] = $datestart;
@@ -59,6 +60,7 @@
           $_SESSION['people'] = $people;
           $_SESSION['totalPrice'] = $totalPrice;
           $_SESSION['preferredCourt'] = $preferredCourt;
+          $_SESSION['court_id'] = $court_id;
 
           // Get the total number of courts for the selected court type
           $court_sql = "SELECT total_courts FROM court_count WHERE courtType = ?";
@@ -84,10 +86,10 @@
 
               if ($booked_courts < $total_courts) {
                   // Court is available, proceed with the booking
-                  $insert_sql = "INSERT INTO bookings (cName, cEmail, cPhone, datestart, dateend, courtType, people, price, preferredCourt, payment_status, transaction_id) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NULL)";
+                  $insert_sql = "INSERT INTO bookings (cName, cEmail, cPhone, datestart, dateend, courtType, people, price, preferredCourt, court_id, payment_status, transaction_id) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NULL)";
                   $stmt = $conn->prepare($insert_sql);
-                  $stmt->bind_param("sssssssds", $cName, $cEmail, $cPhone, $datestart, $dateend, $courtType, $people, $totalPrice, $preferredCourt);
+                  $stmt->bind_param("sssssssdss", $cName, $cEmail, $cPhone, $datestart, $dateend, $courtType, $people, $totalPrice, $preferredCourt, $court_id);
 
                   if ($stmt->execute()) {
                       $_SESSION['booking_id'] = $stmt->insert_id;
@@ -123,6 +125,7 @@
   $courtType = $_SESSION['courtType'] ?? '';
   $people = $_SESSION['people'] ?? '';
   $preferredCourt = $_SESSION['preferredCourt'] ?? '';
+  $court_id = $_SESSION['court_id'] ?? '';
   $totalPrice = $_SESSION['totalPrice'] ?? '';
 
   mysqli_close($conn);

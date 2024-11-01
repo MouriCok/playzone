@@ -1,10 +1,10 @@
 <?php
 require_once 'database.php';
 
-function logMessage($message) {
-    $logFile = 'move_bookings_log.txt';
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " - $message" . PHP_EOL, FILE_APPEND);
-}
+// function logMessage($message) {
+//     $logFile = 'move_bookings_log.txt';
+//     file_put_contents($logFile, date('Y-m-d H:i:s') . " - $message" . PHP_EOL, FILE_APPEND);
+// }
 
 function moveExpiredBookings() {
     global $conn;
@@ -45,13 +45,12 @@ function checkAndMoveBookings() {
 
     // Log the action
     if ($movedCount > 0) {
-        logMessage("Expired bookings moved: $movedCount");
+        // logMessage("Expired bookings moved: $movedCount");
         return "Expired bookings moved to history."; // Return message to show notification
     } else {
-        logMessage("No expired bookings to move.");
+        // logMessage("No expired bookings to move.");
+        return ""; // No need to show notification if nothing happened
     }
-
-    return ""; // No need to show notification if nothing happened
 }
 
 // Call the function and capture the message

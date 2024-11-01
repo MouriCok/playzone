@@ -232,7 +232,7 @@ li, a {
 
 /* Start of Grid */
   .jumbo {
-    padding: 40px;
+    padding-top: 40px;
     /* background-color: rgba(7, 160, 195, 0.75); */
   }
   .container, .scroll-card {
@@ -281,18 +281,6 @@ li, a {
   }
   .horizontal-scroll::-webkit-scrollbar-track {
     background: transparent;
-  }
-  .box {
-    display: block;
-    margin: 0 auto;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease-in-out;
-    border-radius: 15px;
-  }
-  .box:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   }
 /* End of Grid */
   

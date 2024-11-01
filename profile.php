@@ -61,7 +61,7 @@ if ($result) {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Settings</title>
+  <title>Profile</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="PZ_icon-32x32.png" type="image/png">
@@ -172,13 +172,13 @@ if ($result) {
                                 echo '
                                 <li class="dropdown">
                                     <a href="profile.php" class="dropdown-toggle">
-                                        <span class="glyphicon glyphicon-user"></span>&nbsp; ' . $username . ' <span class="caret"></span>
+                                        <span class="glyphicon glyphicon-user"></span>&nbsp; ' . htmlspecialchars($username) . ' <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li class="d-m" style="display: flex; align-items: center;">
                                             <img src="' . htmlspecialchars($avatar) . '" alt="' . htmlspecialchars($defaultAvatar) . '" class="drop-circle" width="60" height="60" onerror="this.onerror=null; this.src=\'' . htmlspecialchars($defaultAvatar) . '\';">
                                             <div class="details">
-                                                <span class="username" style="font-size: 18px; font-weight: bold; display: block;">' . $username . '</span>
+                                                <span class="username" style="font-size: 18px; font-weight: bold; display: block;">' . htmlspecialchars($username) . '</span>
                                                 <span class="email" style="font-size: 12px; display: block;">' . $_SESSION['cEmail'] . '</span>
                                             </div>
                                         </li>
