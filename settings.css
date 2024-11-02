@@ -4,10 +4,11 @@ button {
     font-size: 12px;
     background: royalblue;
     color: white;
-    max-width: max-content;
-    height: 32px;
-    padding: 0.7em 1em;
-    padding-left: 0.9em;
+    text-align: center;
+    justify-content: center;
+    max-width: 65px;
+    max-height: 30px;
+    margin: 0px !important;
     display: flex;
     align-items: center;
     border: none;
@@ -57,7 +58,6 @@ button {
 
   /* Custom styles */
   .section {
-      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
   }
@@ -90,7 +90,8 @@ button {
   .table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
+      margin-top: 10px;
+      margin-bottom: 0px;
   }
   .table th, .table td {
       border: 1px solid #ddd;
@@ -100,10 +101,36 @@ button {
       background-color: #f2f2f2;
       text-align: left;
   }
+  .pagination {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    padding: 0px;
+    width: 100%;
+    max-height: fit-content;
+  }
+  .current {
+      font-weight: bold;
+      text-align: center;
+      padding: 0 10px;
+  }
+
+  td.label {
+    margin: 0 auto;
+  }
+  td.value {
+    padding-top: 10px !important;
+    padding-bottom: 10px;
+  }
+  td.value > img {
+    margin: 0px !important;
+    padding: 0px !important;
+  }
 
   .box {
-    max-width: 50%;
-    max-height: fit-content;
+    max-width: 100%;
+    max-height: 280px;
     padding: 10px;
     background-color: #fff;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
@@ -126,7 +153,7 @@ button {
     margin-bottom: 20px; /* Space between rows */
     }
     .flex-container .section {
-        width: 48%; /* Ensures each section occupies half the row */
+        width: 100%; /* Ensures each section occupies half the row */
     }
 
 
@@ -134,11 +161,15 @@ button {
     font-family: 'League Spartan', sans-serif;
     color: #1cb31a;
     font-size: 16px;
+    margin: 0px !important;
+    padding: 0px !important;
   }
   .unverified {
     font-family: 'League Spartan', sans-serif;
     color: #FF2E15;
     font-size: 16px;
+    margin: 0px !important;
+    padding: 0px !important;
   }
   .notice {
     font-family: 'League Spartan', sans-serif;
@@ -154,4 +185,23 @@ button {
     font-family: 'League Spartan', sans-serif;
     color: #000000;
     font-size: 16px;
+  }
+
+  .google-btn {
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    max-width: max-content;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .google-btn:hover {
+    background-color: #104dae;
+  }
+  .google-btn:active {
+    background-color: #052157;
+  }
+  .google-btn:focus {
+    outline: none;
   }
