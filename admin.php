@@ -54,7 +54,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="stylee.css">
-  <link rel="stylesheet" href="form.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="button.css">
 </head>
 <body>
   <header>
@@ -90,13 +91,6 @@
         </div>
         <button type="submit" name="submit" class="submitBtn btn btn-default btn-primary">Login</button>
       </form>
-
-      <div>
-        <br><a href="forgot.php">Forgot Password?</a>
-      </div>
-      <div>
-        Don't have an account? <a href="register.php">Sign Up</a>
-      </div>
     </div>
   </div>
 

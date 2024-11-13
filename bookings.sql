@@ -14,9 +14,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `bookings` (
   `bID` int(11) NOT NULL AUTO_INCREMENT,
-  `cName` varchar(60) NOT NULL,
-  `cEmail` varchar(60) NOT NULL,
-  `cPhone` varchar(30) NOT NULL,
+  `bName` varchar(60) NOT NULL,
+  `bEmail` varchar(60) NOT NULL,
+  `bPhone` varchar(30) NOT NULL,
   `datestart` datetime NOT NULL,
   `dateend` datetime NOT NULL,
   `courtType` varchar(60) NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE `bookings` (
 CREATE TABLE booking_history (
   `historyID` INT AUTO_INCREMENT PRIMARY KEY,
   `bID` INT NOT NULL,
-  `cEmail` VARCHAR(255) NOT NULL,
+  `bEmail` VARCHAR(255) NOT NULL,
   `courtType` VARCHAR(100),
   `preferredCourt` VARCHAR(100),
   `datestart` DATETIME,

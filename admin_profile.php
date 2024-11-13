@@ -93,7 +93,8 @@ if ($result) {
     }
     .d-flex {
         margin: 0 auto;
-        padding: 30px;
+        padding-top: 20px;
+        padding-bottom: 5px;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -140,6 +141,8 @@ if ($result) {
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
               </button>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
@@ -179,7 +182,7 @@ if ($result) {
 
                                 // If admin is logged in, show logout button
                                 echo '
-                                <button class="Btn" data-toggle="modal" data-target="#logoutModal">
+                                <button class="logoutBtn" data-toggle="modal" data-target="#logoutModal">
                                   <div class="sign">
                                     <svg viewBox="0 0 512 512">
                                       <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 
@@ -233,7 +236,7 @@ if ($result) {
                                 echo "<img src='default_avatar.png' alt='default_avatar' class='rounded-circle profile-pic'>";
                             }
                             echo '<div class="change-btn-overlay">
-                                    <button type="button" class="btn" onclick="changeProfile(' . $adminRow["aId"] . ')">
+                                    <button type="button" class="change-btn" onclick="changeProfile(' . $adminRow["aId"] . ')">
                                     <div class="change_icon">
                                         <svg width="256px" height="256px" viewBox="0 0 512.00 512.00" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" 
                                         xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)" stroke="#000000"><g id="SVGRepo_bgCarrier" 
@@ -255,7 +258,6 @@ if ($result) {
                                         0,182.23-78.45,188.14-177.1l0.79,0.79c2.81,2.81,6.5,4.22,10.18,4.22 c3.69,0,7.37-1.41,10.18-4.22C469.91,262.57,469.91,253.45,464.28,247.82z">
                                         </path> </g> </g> </g> </g></svg>
                                     </div>
-                                    <div class="change_text">Change</div>
                                     </button>
                                 </div>';
                             }
@@ -300,7 +302,7 @@ if ($result) {
 
                   // Use XMLHttpRequest to send the FormData to the server
                   var xhr = new XMLHttpRequest();
-                  xhr.open("POST", "change_avatar.php", true);
+                  xhr.open("POST", "admin_avatar.php", true);
 
                   // Define a callback function to handle the server's response
                   xhr.onreadystatechange = function () {
@@ -354,8 +356,6 @@ if ($result) {
                 <table class="table table-striped">
                   <tbody>
                     <?php
-                      $conn = mysqli_connect("localhost", "root", "", "sport_booking");
-
                       if (!$conn) {
                         die("Connection failed: " . mysqli_connect_error());
                       }
@@ -383,12 +383,6 @@ if ($result) {
                             echo "<th>Phone</th>";
                             echo "<td>" . $adminRow['aPhone'] . "</td>";
                             echo "</tr>";
-                            echo "<tr>";
-                            echo "<th>";
-                            echo "<button class='btn btn-primary btn-sm' onclick='editProfile(" . $adminRow['aId'] . ")'>Edit</button> ";
-                            echo "</th>";
-                            echo "<td></td>";
-                            echo "</tr>";                  
                           }
                         } else {
                             echo "<tr><td colspan='3'>No database found.</td></tr>";

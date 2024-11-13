@@ -157,7 +157,6 @@ if ($result) {
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <!-- <li><img src="PZ_tp.svg" width="40" height="40" alt="Logo"></li> -->
                 <li><a href="index.php" class="nav-btn">Home</a></li>
                 <li><a href="bookings.php" class="nav-btn">Booking</a></li>
               </ul>
