@@ -80,66 +80,74 @@ if ($result) {
       display: flex;
       flex-direction: column;
     }
+    .table > tbody > tr > td, .table > tbody > tr > th, 
+    .table > tfoot > tr > td, .table > tfoot > tr > th, 
+    .table > thead > tr > td, .table > thead > tr > th {
+      vertical-align: middle !important;
+      border: none;
+      padding: 5px;
+    }
+    .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, 
+    .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, 
+    .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+        border: 1px solid #ddd;
+        border-collapse: collapse;
+    }
+    .table-bordered > thead > tr > th {
+      background-color: #f2f2f2;
+      color: #000;
+    }
+    .table-bordered {
+      margin-bottom: 0;
+    }
+    .table-bordered > tbody > tr {
+      height: 43px;
+    }
+    .main-body {
+      height: 55rem;
+    }
+    .rowss {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 16px;
+    }
     .container {
       flex: 1;
       margin-top: 34px;
       margin-bottom: 34px;
     }
-    .main-body {
-        padding: 15px;
+    #profilePic {
+      width: 30%;
+      height: 20rem;
+      margin-right: 16px;
     }
-    h6 {
-      font-weight: bold;
+    #profile {
+      width: 70%;
+      height: 20rem;
     }
-    .profile-card {
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
-        background-color: #fff;
-        border: 0 solid rgba(0,0,0,.125);
-        border-radius: .45rem;
-        height: max-content;
+    #bookedFacilities {
+      height: 35rem;
     }
     .card-body {
-        height: 100%;
+        height: 20.5rem;
+    }
+    .table-box {
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+      background-color: #fff;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      transition: box-shadow 0.3s ease-in-out;
+      border-radius: 10px;
     }
     .d-flex {
         margin: 0 auto;
-        padding-top: 20px;
-        padding-bottom: 5px;
         display: flex;
         flex-direction: column;
         width: 100%;
         height: 100%;
         text-align: center;
         align-items: center;
-    }
-    .list-group {
-      margin-top: 15px;
-    }
-
-    .gutters-sm {
-        margin-right: -8px;
-        margin-left: -8px;
-    }
-
-    .gutters-sm>.col, .gutters-sm>[class*=col-] {
-        padding-right: 8px;
-        padding-left: 8px;
-    }
-    .mb-0 {
-      margin-top: 0px !important;
-    }
-
-    .bg-gray-300 {
-        background-color: #e2e8f0;
-    }
-    .h-100 {
-        height: 100%!important;
-    }
-    .shadow-none {
-        box-shadow: none!important;
-    }
-    .active {
-      color: darkblue !important;
     }
   </style>
 </head>
@@ -219,12 +227,10 @@ if ($result) {
 
 <div class="container">
   <div class="main-body">
-    <div class="row gutters-sm">
+    <div class="rowss">
       <!-- Profile Picture section -->
-      <div class="col-md-4">
-        <div class="profile-card">
-          <div class="card-body">
-            <div class="d-flex flex-column">
+          <div id="profilePic" class="card-body table-box">
+            <div class="d-flex">
               <div class="profile-pic-container">
               <?php
                 $avatarSrc = $_SESSION['cAvatar'] ?? 'default_avatar.png';
@@ -311,30 +317,20 @@ if ($result) {
                   xhr.send(formData);
                 }
               </script>
-              <div class="mt-3">
+              <div class="">
                 <h5><strong>
                   <?php 
                     echo $_SESSION['cName'];
                   ?>
                 </strong></h5>
-                <h6>
-                  <?php 
-                    echo $_SESSION['cUser'];
-                  ?>
-                </h6>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
       <!--Profile section-->
-      <div class="col-md-8">
-        <div class="profile-card col-sm-12">
-          <div class="h-100">
-            <div class="card-body">
+            <div id="profile" class="card-body table-box">
               <h5 class="card-title">Player Profile</h5>
-                <table class="table table-striped">
+                <table class="table">
                   <tbody>
                     <?php
                       if (!$conn) {
@@ -351,7 +347,19 @@ if ($result) {
                             echo "<tr>";
                             echo "<th>Full Name</th>";
                             echo "<td>" . $custRow['cName'] . "</td>";
-                            echo "<td><button class='btn fa fa-edit edit-btn' onclick='editFullName(" . $custRow['cId'] . ")'></button></td>";
+                            echo "<td><button class='editBtn' onclick='editFullName(" . $custRow['cId'] . ")'>
+                                    <svg height='1em' width='12' height='12' viewBox='0 0 512 512'>
+                                      <path
+                                        d='M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 
+                                        23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 
+                                        37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 
+                                        3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 
+                                        33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 
+                                        18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 
+                                        0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z'>
+                                      </path>
+                                    </svg>
+                                  </button></td>";
                             echo "</tr>";
                             echo "<tr>";
                             echo "<th>Username</th>";
@@ -361,12 +369,36 @@ if ($result) {
                             echo "<tr>";
                             echo "<th>Email</th>";
                             echo "<td>" . $custRow['cEmail'] . "</td>";
-                            echo "<td><button class='btn fa fa-edit edit-btn' onclick='editEmail(" . $custRow['cId'] . ")'></button></td>";
+                            echo "<td><button class='editBtn' onclick='editEmail(" . $custRow['cId'] . ")'>
+                                    <svg height='1em' width='12' height='12' viewBox='0 0 512 512'>
+                                      <path
+                                        d='M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 
+                                        23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 
+                                        37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 
+                                        3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 
+                                        33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 
+                                        18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 
+                                        0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z'>
+                                      </path>
+                                    </svg>
+                                  </button></td>";
                             echo "</tr>";
                             echo "<tr>";
                             echo "<th>Phone</th>";
                             echo "<td>" . $custRow['cPhone'] . "</td>";
-                            echo "<td><button class='btn fa fa-edit edit-btn' onclick='editPhone(" . $custRow['cId'] . ")'></button></td>";
+                            echo "<td><button class='editBtn' onclick='editPhone(" . $custRow['cId'] . ")'>
+                                    <svg height='1em' width='12' height='12' viewBox='0 0 512 512'>
+                                      <path
+                                        d='M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 
+                                        23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 
+                                        37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 
+                                        3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 
+                                        33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 
+                                        18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 
+                                        0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z'>
+                                      </path>
+                                    </svg>
+                                  </button></td>";
                             echo "</tr>";              
                           }
                         } else {
@@ -379,86 +411,101 @@ if ($result) {
                   </tbody>
                 </table>
             </div>
-          </div>
-        </div>
-      </div>
     </div>
     <!--Booked Facilities section-->
-    <div class="col-md-12">
-                      <div class="profile-card col-sm-12">
-                        <div class="h-100">
-                          <div class="card-body">
-                            <h5 class="card-title">Booked Facilities</h5>
-                            <table class="table table-striped">
-                              <thead>
-                                <tr>
-                                  <th>Booking ID</th>
-                                  <th>Category</th>
-                                  <th>Court Type</th>
-                                  <th>Timeslot</th>
-                                  <th>Participant</th>
-                                  <th>Status</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <?php
-                                  $cEmail = $_SESSION['cEmail'];
-                                  $bookingQuery = "SELECT bID, courtType, preferredCourt, datestart, dateend, people, payment_status FROM bookings WHERE cEmail = '$cEmail'";
-                                  $bookingResult = mysqli_query($conn, $bookingQuery);
+    <div id="bookedFacilities" class="card-body table-box">
+      <h5 class="card-title">Booked Facilities</h5>
+      <table id="bookedFacilitiesTable" class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Category</th>
+            <th>Court Type</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Participant</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="bookedFacilitiesBody">
+          <!-- Table rows will be dynamically updated via AJAX -->
+        </tbody>
+      </table>
+      <!-- Pagination Controls -->
+      <nav aria-label="Page navigation">
+        <ul class="pagination" id="paginationControls">
+            <!-- Pagination links will be dynamically updated via AJAX -->
+        </ul>
+      </nav>
+    </div>
+    <script>
+      // Function to load bookings for a specific page
+      function loadBookings(page = 1) {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", "fetchBookings.php?page=" + page, true);
 
-                                  if ($bookingResult) {
-                                      if (mysqli_num_rows($bookingResult) > 0) {
-                                          while ($bookingRow = mysqli_fetch_assoc($bookingResult)) {
-                                              echo "<tr>";
-                                              echo "<td>" . $bookingRow['bID'] . "</td>";
-                                              echo "<td>" . $bookingRow['courtType'] . "</td>";
-                                              echo "<td>" . $bookingRow['preferredCourt'] . "</td>";
-                                              echo "<td>" . $bookingRow['datestart'] . " - " . $bookingRow['dateend'] . "</td>";
-                                              echo "<td>" . $bookingRow['people'] . "</td>";
-                                              echo "<td>" . $bookingRow['payment_status'] . "</td>";
-                                              echo "<td>";
-                                              // echo "<button class='btn fa fa-edit edit-btn' onclick='updateBooking(" . $bookingRow['bID'] . ")'></button> ";
-                                              echo "<button class='btn fa fa-trash delete-btn' onclick='deleteBooking(" . $bookingRow['bID'] . ")'></button>";
-                                              echo "</td>";
-                                              echo "</tr>";
-                                          }
-                                      } else {
-                                          echo "<tr><td colspan='7'>No booked facilities found.</td></tr>";
-                                      }
-                                  } else {
-                                      die("Error in booking query: " . mysqli_error($conn));
-                                  }
+          xhr.onload = function () {
+              if (xhr.status === 200) {
+                  try {
+                      console.log("Response:", xhr.responseText); // Debugging: log raw response
+                      const response = JSON.parse(xhr.responseText);
 
-                                  mysqli_close($conn);
-                                ?>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <script>
-                      function deleteBooking(bID) {
-                      if (confirm("Are you sure you want to delete this booking? Your payment will not be refunded.")) {
-                        if (confirm("This action cannot be undone. Are you sure?")) {
-                          var form = document.createElement("form");
-                          form.method = "post";
-                          form.action = "delete_booking.php";
+                      // Update the table body and pagination controls
+                      document.getElementById("bookedFacilitiesBody").innerHTML = response.tableRows;
+                      document.getElementById("paginationControls").innerHTML = response.paginationLinks;
+                  } catch (e) {
+                      console.error("Error parsing JSON response:", e, xhr.responseText);
+                  }
+              } else {
+                  console.error("Failed to fetch bookings. Status:", xhr.status, xhr.statusText);
+              }
+          };
 
-                          var input = document.createElement("input");
-                          input.type = "hidden";
-                          input.name = "bID";
-                          input.value = bID;
+          xhr.onerror = function () {
+              console.error("AJAX request failed. Check network connection.");
+          };
 
-                          form.appendChild(input);
-                          document.body.appendChild(form);
+          xhr.send();
+      }
 
-                          form.submit();
-                        }
-                      }
-                    }
-                    </script>
+      // Initial load for page 1
+      document.addEventListener("DOMContentLoaded", function () {
+          loadBookings();
+      });
+
+      // Attach click events to pagination links (delegation)
+      document.getElementById("paginationControls").addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = e.target;
+
+          if (target.tagName === "A" && target.dataset.page) {
+              const page = parseInt(target.dataset.page, 10);
+              loadBookings(page);
+          }
+      });
+    </script>
+    <script>
+      function deleteBooking(bID) {
+      if (confirm("Are you sure you want to delete this booking? Your payment will not be refunded.")) {
+        if (confirm("This action cannot be undone. Are you sure?")) {
+          var form = document.createElement("form");
+          form.method = "post";
+          form.action = "delete_booking.php";
+
+          var input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "bID";
+          input.value = bID;
+
+          form.appendChild(input);
+          document.body.appendChild(form);
+
+          form.submit();
+        }
+      }
+    }
+    </script>
   </div>
 </div>
 

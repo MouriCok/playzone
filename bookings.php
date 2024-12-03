@@ -151,6 +151,16 @@
       width: 40% !important;
     }
 
+    div > #availability {
+      width: 51rem;
+      height: 100%;
+    }
+
+    #availability-head {
+      display: flex;
+      flex-direction: column;
+    }
+
     #available-slots {
       background-color: #07a0c3;
       padding: 10px;
@@ -217,16 +227,34 @@
       margin: 0 auto;
     }
     .step-header {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 18px;
       display: inline-block;
       padding: 10px 20px;
-      margin: 0 0 64px 16px;
+      margin: 0 0 32px 0px;
       border-radius: 5px;
       color: #fff;
       background-color: #626262;
     }
+    .step-finish {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 18px;
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 0 32px 0px;
+      border-radius: 5px;
+      color: #fff;
+      background-color: #28a745;
+    }
     .active-step {
       background-color: #102A7E; /* 28a745 */
       font-weight: bold;
+      color: #fff;
+    }
+    .step-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
     }
     .step { display: none; }
     .step.active { display: block; }
@@ -244,6 +272,176 @@
         cursor: pointer;
     }
 
+  /* Custom styles */
+  .section {
+      display: flex;
+      flex-direction: column;
+  }
+  .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      margin-bottom: 0px;
+  }
+  .table th, .table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+  }
+  .table th {
+      background-color: #f2f2f2;
+      text-align: left;
+  }
+  .table-box {
+    box-shadow: var(--hover-shadows);
+    --hover-shadows: 16px 16px 33px #07A0C3, -16px -16px 33px #8FEBFF;
+    width: 100%;
+    height: 48rem;
+    padding: 10px;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease-in-out;
+    border-radius: 10px;
+  }
+  .flex-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px; /* Adjust spacing between sections as desired */
+    }
+    .flex-container .section {
+        width: 100%; /* Ensures each section occupies half the row */
+    }
+
+  /* From Uiverse.io by satyamchaudharydev */ 
+  .loader {
+    display: inline-block;
+    --height-of-loader: 4px;
+    --loader-color: #0071e2;
+    width: 130px;
+    height: var(--height-of-loader);
+    border-radius: 30px;
+    background-color: rgba(255,255,255,0.75);
+    position: relative;
+  }
+
+  .loader::before {
+    content: "";
+    position: absolute;
+    background: var(--loader-color);
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    border-radius: 30px;
+    animation: moving 1s ease-in-out infinite;
+    ;
+  }
+
+  @keyframes moving {
+    50% {
+      width: 100%;
+    }
+
+    100% {
+      width: 0;
+      right: 0;
+      left: unset;
+    }
+  }
+
+  .loader-1 {
+    display: inline-block;
+    width: 130px;
+    height: 4px;
+    border-radius: 30px;
+    background-color: rgba(255,255,255,0.75);
+    position: relative;
+  }
+
+  .loader-2 {
+    display: inline-block;
+    width: 130px;
+    height: 4px;
+    border-radius: 30px;
+    background-color: #0071e2;
+    position: relative;
+  }
+
+  /* payment method */
+  .separator {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0px 10px 0px;
+  }
+  
+  .separator > div {
+    width: 100%;
+    height: 1px;
+    border-radius: 5px;
+    background-color: #000;
+  }
+
+  .payment-options {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  #paypal-section {
+      flex: 1;
+      text-align: left;
+      height: 4rem;
+      width: 100%;
+  }
+
+  #paypal-button-container {
+      margin-left: 0; /* Align to the left */
+  }
+
+  #tng-section {
+      flex: 1;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 16px;
+  }
+
+  #tng-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #012169; /* Touch 'n Go Blue */
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        font-weight: bolder;
+        font-style: italic;
+        padding: 10px 0px 8px 0px;
+        width: 100%;
+        height: max-content;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    #tng-button img {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+
+    #tng-button:hover {
+        background-color: #0a2c86; /* Darker Blue */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    #tng-button:active {
+        background-color: #001f4d; /* Even Darker Blue */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
   </style>
 </head>
 <body>
@@ -267,109 +465,207 @@
     </header>
 
     <div class="page-container">
-    <div id="booking-steps">
-    <div class="steps-heading">
-      <span class="fa fa-calendar step-header <?= $currentStep === 'bookingDetails' ? 'active-step' : '' ?>"> Booking Details</span>
-      <span class="fa fa-check-square-o step-header <?= $currentStep === 'confirmation' ? 'active-step' : '' ?>"> Confirmation</span>
-    </div>
-    <!-- Step 1: Booking Details -->
-      <div class="step <?= $currentStep === 'bookingDetails' ? 'active' : '' ?>" id="step-bookingDetails">
-      <div class="login-container">
-        <form method="POST" id="booking-details-form" class="form booking" action="bookings.php">
-          <div class="reserve">
-              <div class="column-1 book_c1">
-                  <div class="form-group">
-                      <input type="text" name="cName" id="cName" value="<?= htmlspecialchars($cName) ?>" required>
-                      <label for="cName">Full Name</label>
-                  </div>
-                  <div class="form-group2">
-                      <select name="courtType" id="courtType" required>
-                          <option value=""></option>
-                          <option value="Basketball" <?= $courtType === 'Basketball' ? 'selected' : '' ?>>Basketball</option>
-                          <option value="Badminton" <?= $courtType === 'Badminton' ? 'selected' : '' ?>>Badminton</option>
-                          <option value="Volleyball" <?= $courtType === 'Volleyball' ? 'selected' : '' ?>>Volleyball</option>
-                          <option value="Tennis" <?= $courtType === 'Tennis' ? 'selected' : '' ?>>Tennis</option>
-                          <option value="Futsal" <?= $courtType === 'Futsal' ? 'selected' : '' ?>>Futsal</option>
-                          <option value="Bowling" <?= $courtType === 'Bowling' ? 'selected' : '' ?>>Bowling</option>
-                          <option value="PSXbox" <?= $courtType === 'PSXbox' ? 'selected' : '' ?>>PS/Xbox</option>
-                      </select>
-                      <label for="courtType">Select Court Category</label>
-                  </div>
-              </div>
-              <div class="column-1 book_c2">
-                  <div class="form-group">
-                      <input type="email" name="cEmail" id="cEmail" value="<?= htmlspecialchars($cEmail) ?>" required>
-                      <label for="cEmail">Email</label>
-                  </div>
-                  <div class="form-group2">
-                      <input type="datetime-local" class="datetime" name="datestart" id="datestart" value="<?= htmlspecialchars($datestart) ?>" required>
-                      <label for="datestart">Date & Time</label>
-                  </div>
-              </div>
-              <div class="column-1 book_c3">
-                  <div class="form-group">
-                      <input type="tel" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
-                      <label for="cPhone">Phone</label>
-                  </div>
-                  <div class="form-group2">
-                      <input type="number" name="duration" id="duration" value="<?= htmlspecialchars($duration) ?>" required min="1" max="12">
-                      <label for="duration">Duration (hours)</label>
-                  </div>
-              </div>
-              <div class="column-1 book_c4">
-                  <div class="form-group">
-                      <input type="number" name="people" id="people" value="<?= htmlspecialchars($people) ?>" required min="1">
-                      <label for="people">Number of Participants</label>
-                  </div>
-                  <div class="form-group2">
-                      <input type="text" name="totalPrice" id="totalPrice" value="<?= htmlspecialchars($totalPrice) ?>" readonly>
-                      <label for="totalPrice">Total Price (RM)</label>
-                  </div>
-              </div>
-          </div>
-          <div class="reserve-details">
-            <span class="preferredCourt">Select your preferred Court Number</span>
-              <div class="details-group">
-                  <div id="available-court">Available court will be shown here</div>
-              </div>
-          </div>
-          <div class="reserve reserveBtn">
-              <button type="reset" class="clearBtn" id="clear-form">Clear</button>
-              <button type="submit" class="submitBtn" name="step" value="bookingDetails" id="next-step" disabled>Next</button>
-          </div>
-        </form>
-      </div>
-      </div>
-
-        <!-- Step 2: Confirmation -->
-        <?php
+      <?php
           // Convert datestart and dateend to DateTime objects
           $startDateTime = new DateTime($datestart);
           $endDateTime = new DateTime($dateend);
 
           // Format them as 'HH:MM (DD Month YYYY)'
-          $formattedStart = $startDateTime->format('H:i (d F Y)');
-          $formattedEnd = $endDateTime->format('H:i (d F Y)');
-        ?>
+          $formattedDate = $startDateTime->format('d F Y');
+          $formattedStart = $startDateTime->format('H:i');
+          $formattedEnd = $endDateTime->format('H:i');
+      ?>
+    <div id="booking-steps">
+    <div class="steps-heading">
+        <?php if ($currentStep === 'bookingDetails'): ?>
+            <span id="step-1" class="p6 step-header active-step">
+                <img src="Icons/reserve-icon.svg" width="24" height="24" alt="Booking Icon"> Booking Details
+            </span>
+            <div class="loader"></div>
+            <span id="step-2" class="p6 step-header">
+                <img src="Icons/payment.svg" width="24" height="24" alt="Payment Icon"> Payment
+            </span>
+            <div class="loader-1"></div>
+            <span id="step-3" class="p6 step-header">
+                <img src="Icons/receipt-icon.svg" width="24" height="24" alt="Receipt Icon"> Receipt
+            </span>
+        <?php elseif ($currentStep === 'confirmation'): ?>
+            <span id="step-1" class="p6 step-finish">
+                <img src="Icons/reserve-icon.svg" width="24" height="24" alt="Booking Icon"> Booking Details
+            </span>
+            <div class="loader-2"></div>
+            <span id="step-2" class="p6 step-header active-step">
+                <img src="Icons/payment.svg" width="24" height="24" alt="Payment Icon"> Payment
+            </span>
+            <div class="loader"></div>
+            <span id="step-3" class="p6 step-header">
+                <img src="Icons/receipt-icon.svg" width="24" height="24" alt="Receipt Icon"> Receipt
+            </span>
+        <?php elseif ($currentStep === 'receipt'): ?>
+            <span id="step-1" class="p6 step-finish">
+                <img src="Icons/reserve-icon.svg" width="24" height="24" alt="Booking Icon"> Booking Details
+            </span>
+            <div class="loader-2"></div>
+            <span id="step-2" class="p6 step-finish">
+                <img src="Icons/payment.svg" width="24" height="24" alt="Payment Icon"> Payment
+            </span>
+            <div class="loader-2"></div>
+            <span id="step-3" class="p6 step-header active-step">
+                <img src="Icons/receipt-icon.svg" width="24" height="24" alt="Receipt Icon"> Receipt
+            </span>
+        <?php endif; ?>
+    </div>
+    <div id="bookingContent" class="booking-section">
+        <!-- Step 1: Booking Details -->
+        <div class="step <?= $currentStep === 'bookingDetails' ? 'active' : '' ?>" id="step-bookingDetails">
+          <div class="flex-container">
+            <div class="login-container">
+              <section id="bookingForm" class="section">
+                <form method="POST" id="booking-details-form" class="form booking" action="bookings.php">
+                  <div class="reserve">
+                      <div class="column-1 book_c1">
+                          <div class="form-group">
+                              <input type="text" name="cName" id="cName" value="<?= htmlspecialchars($cName) ?>" required>
+                              <label for="cName">Full Name</label>
+                          </div>
+                          <div class="form-group">
+                              <input type="email" name="cEmail" id="cEmail" value="<?= htmlspecialchars($cEmail) ?>" required>
+                              <label for="cEmail">Email</label>
+                          </div>
+                          <div class="form-group">
+                              <input type="tel" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
+                              <label for="cPhone">Phone</label>
+                          </div>
+                          <div class="form-group2">
+                              <input type="number" name="people" id="people" value="<?= htmlspecialchars($people) ?>" required min="1">
+                              <label for="people">Number of Participants</label>
+                          </div>
+                      </div>
+                      <div class="column-1 book_c2">
+                          <div class="form-group">
+                              <select name="courtType" id="courtType" required>
+                                  <option value=""></option>
+                                  <option value="Basketball" <?= $courtType === 'Basketball' ? 'selected' : '' ?>>Basketball</option>
+                                  <option value="Badminton" <?= $courtType === 'Badminton' ? 'selected' : '' ?>>Badminton</option>
+                                  <option value="Volleyball" <?= $courtType === 'Volleyball' ? 'selected' : '' ?>>Volleyball</option>
+                                  <option value="Tennis" <?= $courtType === 'Tennis' ? 'selected' : '' ?>>Tennis</option>
+                                  <option value="Futsal" <?= $courtType === 'Futsal' ? 'selected' : '' ?>>Futsal</option>
+                                  <option value="Bowling" <?= $courtType === 'Bowling' ? 'selected' : '' ?>>Bowling</option>
+                                  <option value="PSXbox" <?= $courtType === 'PSXbox' ? 'selected' : '' ?>>PS/Xbox</option>
+                              </select>
+                              <label for="courtType">Court Type</label>
+                          </div>
+                          <div class="form-group">
+                              <input type="datetime-local" class="datetime" name="datestart" id="datestart" value="<?= htmlspecialchars($datestart) ?>" required>
+                              <label for="datestart">Date & Time</label>
+                          </div>
+                          <div class="form-group">
+                              <input type="number" name="duration" id="duration" value="<?= htmlspecialchars($duration) ?>" required min="1" max="12">
+                              <label for="duration">Duration (hours)</label>
+                          </div>
+                          <div class="form-group2">
+                              <input type="text" name="totalPrice" id="totalPrice" value="<?= htmlspecialchars($totalPrice) ?>" readonly>
+                              <label for="totalPrice">Total Price (RM)</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="reserve-details">
+                    <span class="preferredCourt">Select your preferred Court Number</span>
+                      <div class="details-group">
+                          <div id="available-court">Available court will be shown here</div>
+                      </div>
+                  </div>
+                  <div class="reserve reserveBtn">
+                      <button type="reset" class="clearBtn" id="clear-form">Clear</button>
+                      <button type="submit" class="submitBtn" name="step" value="bookingDetails" id="next-step" disabled>Next</button>
+                  </div>
+                </form>
+              </section>
+            </div>
 
+            <div id="availability" class="availability-table">
+              <section id="availabilityTable" class="section table-box">
+                <span class="p5">Check Availability</span>
+                <div id="availability-head">
+                  <span class="p7">Date: <span id="chosen-date" class="p8">Please choose a date</span></span>
+                  <span class="p7">Court Type: <span id="chosen-court-type" class="p8">Please choose a court type</span></span>
+                </div>
+
+                <table id="availability-table" class="table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Court Number</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="availability-body">
+                    <tr>
+                      <td colspan='3'>Choose a type & date to check availability</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+        <!-- Step 2: Confirmation -->
         <div class="step <?= $currentStep === 'confirmation' ? 'active' : '' ?>" id="step-confirmation">
+          <div class="step-container">
             <div class="payment-container">
-                <h3>Confirmation</h3>
-                <p><strong>Full Name:</strong> <?= htmlspecialchars($cName) ?></p>
-                <p><strong>Email:</strong> <?= htmlspecialchars($cEmail) ?></p>
-                <p><strong>Phone:</strong> <?= htmlspecialchars($cPhone) ?></p>
-                <p><strong>Participants:</strong> <?= htmlspecialchars($people) ?></p>
-                <p><strong>Court Type:</strong> <?= htmlspecialchars($courtType) ?></p>
-                <p><strong>Preferred Court:</strong> <?= htmlspecialchars($preferredCourt) ?></p>
-                <p><strong>Date & Time:</strong> <?= htmlspecialchars($formattedStart) ?> - <?= htmlspecialchars($formattedEnd) ?></p>
-                <p><strong>Duration:</strong> <?= htmlspecialchars($duration) ?> hours</p>
-                <p><strong>Total Price: RM</strong><?= htmlspecialchars($totalPrice) ?></p>
-                
-                <h3>Please confirm your booking and proceed to payment:</h3>
-                <div id="paypal-button-container"></div>
+                <span class="p7" style="margin-top: 16px;">CHECKOUT</span>
+                <div class="separator">
+                  <div></div>
+                </div>
+                <span class="p7">Name: <span class="p8"><?= htmlspecialchars($cName) ?></span></span>
+                <span class="p7">Email: <span class="p8"><?= htmlspecialchars($cEmail) ?></span></span>
+                <span class="p7">Phone: <span class="p8"><?= htmlspecialchars($cPhone) ?></span></span>
+                <span class="p7">Participants: <span class="p8"><?= htmlspecialchars($people) ?></span></span>
+                <div class="separator">
+                  <div></div>
+                </div>
+                <span class="p7">Court Type: <span class="p8"><?= htmlspecialchars($courtType) ?></span></span>
+                <span class="p7">Preferred Court: <span class="p8"><?= htmlspecialchars($preferredCourt) ?></span></span>
+                <div class="separator">
+                  <div></div>
+                </div>
+                <span class="p7">Date: <span class="p8"><?= htmlspecialchars($formattedDate) ?></span></span>
+                <span class="p7">Time: <span class="p8"><?= htmlspecialchars($formattedStart) ?> - <?= htmlspecialchars($formattedEnd) ?></span></span>
+                <span class="p7">Duration: <span class="p8"><?= htmlspecialchars($duration) ?> hours</span></span>
+                <span class="p7">Total Price: RM<span class="p8"><?= htmlspecialchars($totalPrice) ?></span></span>
+            </div>
+            <div class="method-container">
+            <div class="">
+                  <span class="p7">PAYMENT METHOD</span>
+                  <div class="payment-options">
+                    <!-- Touch 'n Go QR Code -->
+                    <div id="tng-section">
+                      <button type="button" id="tng-button" class="p6">
+                        <img src="Icons/tng-icon.png" alt="TNG Icon"> Touch 'n Go
+                      </button>
+                    </div>
+                    
+                    <!-- PayPal Button -->
+                    <div id="paypal-section">
+                      <div id="paypal-button-container"></div>
+                    </div>
+                  </div>
+                </div>
+
                 <script src="https://www.paypal.com/sdk/js?client-id=Adq9ccMWAeJEkGWPnUI_ZE_sDA1WB4POGfjjCfgoOJnGVvY9X143fMioow2H6bLsgr-dvXJNx4nLsLjX&currency=MYR"></script>
                 <script>
                   paypal.Buttons({
+                      style: {
+                          layout: 'vertical',
+                          color: 'gold',
+                          shape: 'rect',
+                          label: 'paypal',
+                          tagline: false,
+                          height: 40
+                      },
                       createOrder: function(data, actions) {
                           return actions.order.create({
                               purchase_units: [{
@@ -388,9 +684,11 @@
                   }).render('#paypal-button-container');
                 </script>
             </div>
+          </div>
         </div>
+        
+      </div>
     </div>
-  </div>
 
   <footer class="container-fluid text-center">
       <div class="collapse navbar-collapse" id="myNavbar">
@@ -403,6 +701,12 @@
     </footer>
 
   <script>
+    // Redirect when the button is clicked
+    document.getElementById('tng-button').addEventListener('click', function () {
+        window.location.href = 'https://payment.tngdigital.com.my/sc/bDLnVG4UG0';
+    });
+  </script>
+  <script>
     // Automatically set the min date and time for booking (prevent past dates)
     const dateInput = document.getElementById('datestart');
     const now = new Date();
@@ -414,11 +718,83 @@
     const duration = document.getElementById('duration');
     const nextStepButton = document.getElementById('next-step');
     const slotsDiv = document.getElementById('available-court');
+    const availabilityBody = document.getElementById('availability-body');
+    const chosenDateEl = document.getElementById('chosen-date');
+    const chosenCourtTypeEl = document.getElementById('chosen-court-type');
 
     // Helper to enable/disable the next button
     function toggleNextButton(state) {
         nextStepButton.disabled = !state;
         nextStepButton.style.backgroundColor = state ? '#82c87e' : 'gray';  // Change button color
+    }
+
+    function updateAvailabilityHead(courtTypeVal, datestartVal) {
+      const formattedDate = datestartVal 
+        ? new Date(datestartVal).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+          })
+        : 'Please choose a date';
+
+        chosenDateEl.textContent = formattedDate;
+        chosenCourtTypeEl.textContent = courtTypeVal || 'Please choose a court type';
+    }
+
+    function updateAvailabilityTable(data) {
+      if (data.bookings && data.bookings.length > 0) {
+          let tableHtml = '';
+          data.bookings.forEach(booking => {
+              tableHtml += `
+                  <tr>
+                      <td>${booking.time}</td>
+                      <td>Court ${booking.court}</td>
+                      <td>${booking.status}</td>
+                  </tr>`;
+          });
+          availabilityBody.innerHTML = tableHtml;
+      } else if (data.message) {
+          availabilityBody.innerHTML = `
+              <tr>
+                  <td colspan="3">${data.message}</td>
+              </tr>`;
+      }
+    }
+
+    function checkAvailabilityTable() {
+      const courtTypeVal = courtType.value;
+      const datestartVal = datestart.value;
+
+      updateAvailabilityHead(courtTypeVal, datestartVal);
+
+      if (!courtTypeVal || !datestartVal) {
+          availabilityBody.innerHTML = `
+              <tr>
+                  <td colspan="3">Please select a court type and date to check availability.</td>
+              </tr>`;
+          return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'fetchBookedCourts.php', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+              try {
+                  const response = JSON.parse(xhr.responseText);
+                  updateAvailabilityTable(response);
+              } catch (e) {
+                  console.error('Error parsing response:', e);
+                  availabilityBody.innerHTML = `
+                      <tr>
+                          <td colspan="3">An error occurred while fetching availability.</td>
+                      </tr>`;
+              }
+          }
+      };
+
+      xhr.send(`courtType=${courtTypeVal}&datestart=${datestartVal}`);
     }
 
     // Function to check court availability when any field changes
@@ -451,7 +827,7 @@
                           slotsHtml += `
                               <div class="court-card">
                                   <input type="radio" id="${slot.court}" name="preferredCourt" value="${slot.court}" required>
-                                  <span for="${slot.court}">Court ${slot.court} (${slot.status})</span>
+                                  <span for="${slot.court}">${slot.court}</span>
                               </div>`;
                       });
                       slotsDiv.innerHTML = slotsHtml;
@@ -473,6 +849,8 @@
     courtType.addEventListener('change', checkAvailability);
     datestart.addEventListener('change', checkAvailability);
     duration.addEventListener('input', checkAvailability);
+    courtType.addEventListener('change', checkAvailabilityTable);
+    datestart.addEventListener('change', checkAvailabilityTable);
 
     // Clear form and reset availability
     document.getElementById('clear-form').addEventListener('click', function(event) {

@@ -192,6 +192,10 @@ li, a {
   h5 {
     color: #07A0C3 !important;
     font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
   }
   .p0 {
     font-family: 'League Spartan', sans-serif;
@@ -219,6 +223,30 @@ li, a {
     color: #facf0e;
     text-shadow: 2px 2px 2px #DEA50F;
     font-size: 36px;
+  }
+  .p5 {
+    font-family: 'League Spartan', sans-serif;
+    color: #102A7E;
+    font-size: 28px;
+  }
+  .p6 {
+    font-family: 'League Spartan', sans-serif;
+    color: #000;
+    line-height: normal;
+    font-size: 16px;
+  }
+  .p7 {
+    font-family: 'League Spartan', sans-serif;
+    color: #000;
+    line-height: normal;
+    font-weight: normal;
+    font-size: 18px;
+  }
+  .p8 {
+    font-family: 'Istok Web', sans-serif;
+    color: #000;
+    line-height: normal;
+    font-size: 18px;
   }
   p {
     font-size: 18px;

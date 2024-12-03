@@ -1,26 +1,97 @@
-.edit-btn {
-  background-color: #8FEBFF;
-  max-width: fit-content;
-  max-height: fit-content;
-  border-radius: 5px;
-  transition: all 0.2s ease-in-out;
+/* From Uiverse.io by vinodjangid07 */ 
+.editBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  background-color: rgb(93, 93, 116);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.editBtn::before {
+  content: "";
+  width: 200%;
+  height: 200%;
+  background-color: #102A7E;
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.3s;
+  border-radius: 50%;
+  filter: blur(10px);
+}
+.editBtn:hover::before {
+  transform: scale(1);
+}
+.editBtn:hover {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
 }
 
-.edit-btn:hover {
-  background-color: #07a0c3;
-  transform: scale(0.9);
+.editBtn svg {
+  height: 17px;
+  fill: white;
+  z-index: 3;
+  transition: all 0.2s;
+  transform-origin: bottom;
+}
+.editBtn:hover svg {
+  transform: rotate(-15deg) translateX(5px);
+}
+.editBtn::after {
+  content: "";
+  width: 15px;
+  height: 1.5px;
+  position: absolute;
+  bottom: 8px;
+  left: -5px;
+  background-color: white;
+  border-radius: 2px;
+  z-index: 2;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+}
+.editBtn:hover::after {
+  transform: scaleX(1);
+  left: 0px;
+  transform-origin: right;
 }
 
-.delete-btn {
-  background-color: #ff6767;
-  max-width: fit-content;
-  max-height: fit-content;
-  border-radius: 5px;
-  transition: all 0.2s ease-in-out;
+/* From Uiverse.io by vinodjangid07 */ 
+.bin-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background-color: rgb(255, 95, 95);
+  cursor: pointer;
+  border: 3px solid rgb(255, 201, 201);
+  transition-duration: 0.3s;
 }
-
-.delete-btn:hover {
-  background-color: #b83f31;
+.bin-bottom {
+  width: 10px;
+}
+.bin-top {
+  width: 12px;
+  transform-origin: right;
+  transition-duration: 0.3s;
+}
+.bin-button:hover .bin-top {
+  transform: rotate(45deg);
+}
+.bin-button:hover {
+  background-color: rgb(255, 0, 0);
+}
+.bin-button:active {
   transform: scale(0.9);
 }
 
@@ -115,7 +186,7 @@
   position: relative;
   width: 140px;
   height: 140px;
-  margin: 0 auto;
+  margin: 5px 10px 10px 10px;
 }
 
 /* Style for the profile picture */

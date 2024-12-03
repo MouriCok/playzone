@@ -5,11 +5,10 @@
     border: none;
     border-radius: 10px;
     padding-bottom: 20px;
-    padding-left: 20px; 
-    padding-right: 20px;
+    padding-left: 16px;
     padding-top: 40px;
-    min-width: 917px;
-    height: fit-content;
+    width: 51rem;
+    height: 48rem;
     overflow: hidden;
     text-align: center;
     display: flex;
@@ -51,7 +50,8 @@
     top: 0%;
     padding-bottom: 16px;
     transform: translateY(-50%);
-    color: #82c87e;
+    color: #102A7E;
+    /* text-shadow: 1px 2px 3px rgba(0, 47, 255, 0.5); */
     font-size: 16px;
     pointer-events: none;
   }
@@ -75,8 +75,25 @@
     border-radius: 10px;
     padding-left: 20px; 
     padding-right: 20px;
-    width: max-content;
-    height: fit-content;
+    width: 45rem;
+    height: 37rem;
+    overflow: hidden;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .method-container {
+    box-shadow: var(--hover-shadows);
+    --hover-shadows: 16px 16px 33px #07A0C3, -16px -16px 33px #8FEBFF;
+    background-color: #F8F9FA;
+    border: none;
+    border-radius: 10px;
+    padding-top: 16px;
+    padding-left: 20px; 
+    padding-right: 20px;
+    width: 45rem;
+    height: 37rem;
     overflow: hidden;
     text-align: left;
     display: flex;
@@ -115,6 +132,7 @@
 
   .reserveBtn {
     margin-top: 16px;
+    margin-right: 16px;
   }
 
   .reserve-details {
@@ -127,8 +145,9 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    height: 44px;
+    height: 4.32rem;
     padding: 5px;
+    margin-right: 16px;
   }
 
   #available-court {
@@ -171,7 +190,7 @@
 
   .preferredCourt {
     padding-bottom: 16px;
-    color: #82c87e;
+    color: #102A7E;
     font-size: 16px;
     font-weight: bold;
     pointer-events: none;
