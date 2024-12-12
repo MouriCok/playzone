@@ -191,7 +191,6 @@ if ($result) {
                                         </li>
                                         <li class="dropdown-item"><a href="profile.php">Profile</a></li>
                                         <li class="dropdown-item"><a href="settings.php">Settings</a></li>
-                                        <li class="dropdown-item"><a href="contact.php">Contact</a></li>
                                     </ul>
                                 </li>';
                             } else {

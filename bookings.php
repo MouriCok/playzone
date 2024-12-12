@@ -2,6 +2,7 @@
   session_start();
   date_default_timezone_set('Asia/Kuala_Lumpur');
   require_once 'database.php';
+  require_once 'fpdf/fpdf.php';
 
   if (!$conn) {
       die("Connection failed: " . mysqli_connect_error());
@@ -36,7 +37,7 @@
   }
 
   // Manage form steps
-  $currentStep = 'bookingDetails'; // Default step
+  $currentStep = 'bookingDetails'; // Preserve session step
 
   // Step 1: Handle Booking Details Submission
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -89,7 +90,7 @@
                   $insert_sql = "INSERT INTO bookings (cName, cEmail, cPhone, datestart, dateend, courtType, people, price, preferredCourt, court_id, payment_status, transaction_id) 
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NULL)";
                   $stmt = $conn->prepare($insert_sql);
-                  $stmt->bind_param("sssssssdss", $cName, $cEmail, $cPhone, $datestart, $dateend, $courtType, $people, $totalPrice, $preferredCourt, $court_id);
+                  $stmt->bind_param("sssssssdss", $_SESSION['cName'], $_SESSION['cEmail'], $_SESSION['cPhone'], $datestart, $dateend, $courtType, $people, $totalPrice, $preferredCourt, $court_id);
 
                   if ($stmt->execute()) {
                       $_SESSION['booking_id'] = $stmt->insert_id;
@@ -153,7 +154,7 @@
 
     div > #availability {
       width: 51rem;
-      height: 100%;
+      height: 51rem;
     }
 
     #availability-head {
@@ -295,7 +296,7 @@
     box-shadow: var(--hover-shadows);
     --hover-shadows: 16px 16px 33px #07A0C3, -16px -16px 33px #8FEBFF;
     width: 100%;
-    height: 48rem;
+    height: 100%;
     padding: 10px;
     background-color: #fff;
     transition: box-shadow 0.3s ease-in-out;
@@ -305,10 +306,11 @@
     display: flex;
     justify-content: space-between;
     gap: 30px; /* Adjust spacing between sections as desired */
-    }
-    .flex-container .section {
-        width: 100%; /* Ensures each section occupies half the row */
-    }
+  }
+  #bookingForm {
+    padding-top: 16px;
+    padding-left: 16px;
+  }
 
   /* From Uiverse.io by satyamchaudharydev */ 
   .loader {
@@ -515,64 +517,65 @@
             </span>
         <?php endif; ?>
     </div>
+    <!-- Step 1: Booking Details -->
     <div id="bookingContent" class="booking-section">
-        <!-- Step 1: Booking Details -->
         <div class="step <?= $currentStep === 'bookingDetails' ? 'active' : '' ?>" id="step-bookingDetails">
           <div class="flex-container">
+
             <div class="login-container">
               <section id="bookingForm" class="section">
                 <form method="POST" id="booking-details-form" class="form booking" action="bookings.php">
                   <div class="reserve">
                       <div class="column-1 book_c1">
                           <div class="form-group">
-                              <input type="text" name="cName" id="cName" value="<?= htmlspecialchars($cName) ?>" required>
                               <label for="cName">Full Name</label>
+                              <input type="text" name="cName" id="cName" value="<?= htmlspecialchars($cName) ?>" required>
                           </div>
                           <div class="form-group">
-                              <input type="email" name="cEmail" id="cEmail" value="<?= htmlspecialchars($cEmail) ?>" required>
                               <label for="cEmail">Email</label>
+                              <input type="email" name="cEmail" id="cEmail" value="<?= htmlspecialchars($cEmail) ?>" required>
                           </div>
                           <div class="form-group">
-                              <input type="tel" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
                               <label for="cPhone">Phone</label>
+                              <input type="tel" name="cPhone" id="cPhone" value="<?= htmlspecialchars($cPhone) ?>" required>
                           </div>
                           <div class="form-group2">
-                              <input type="number" name="people" id="people" value="<?= htmlspecialchars($people) ?>" required min="1">
                               <label for="people">Number of Participants</label>
+                              <input type="number" name="people" id="people" value="<?= htmlspecialchars($people) ?>" required min="1">
                           </div>
                       </div>
                       <div class="column-1 book_c2">
                           <div class="form-group">
+                              <label for="courtType">Court Type</label>
                               <select name="courtType" id="courtType" required>
                                   <option value=""></option>
-                                  <option value="Basketball" <?= $courtType === 'Basketball' ? 'selected' : '' ?>>Basketball</option>
-                                  <option value="Badminton" <?= $courtType === 'Badminton' ? 'selected' : '' ?>>Badminton</option>
-                                  <option value="Volleyball" <?= $courtType === 'Volleyball' ? 'selected' : '' ?>>Volleyball</option>
-                                  <option value="Tennis" <?= $courtType === 'Tennis' ? 'selected' : '' ?>>Tennis</option>
-                                  <option value="Futsal" <?= $courtType === 'Futsal' ? 'selected' : '' ?>>Futsal</option>
-                                  <option value="Bowling" <?= $courtType === 'Bowling' ? 'selected' : '' ?>>Bowling</option>
-                                  <option value="PSXbox" <?= $courtType === 'PSXbox' ? 'selected' : '' ?>>PS/Xbox</option>
+                                  <option value="Basketball" <?= $courtType === 'Basketball' ? 'selected' : '' ?>>&nbsp;&nbsp;Basketball</option>
+                                  <option value="Badminton" <?= $courtType === 'Badminton' ? 'selected' : '' ?>>&nbsp;&nbsp;Badminton</option>
+                                  <option value="Volleyball" <?= $courtType === 'Volleyball' ? 'selected' : '' ?>>&nbsp;&nbsp;Volleyball</option>
+                                  <option value="Tennis" <?= $courtType === 'Tennis' ? 'selected' : '' ?>>&nbsp;&nbsp;Tennis</option>
+                                  <option value="Futsal" <?= $courtType === 'Futsal' ? 'selected' : '' ?>>&nbsp;&nbsp;Futsal</option>
+                                  <option value="Bowling" <?= $courtType === 'Bowling' ? 'selected' : '' ?>>&nbsp;&nbsp;Bowling</option>
+                                  <option value="PSXbox" <?= $courtType === 'PSXbox' ? 'selected' : '' ?>>&nbsp;&nbsp;PS/Xbox</option>
                               </select>
-                              <label for="courtType">Court Type</label>
                           </div>
                           <div class="form-group">
-                              <input type="datetime-local" class="datetime" name="datestart" id="datestart" value="<?= htmlspecialchars($datestart) ?>" required>
                               <label for="datestart">Date & Time</label>
+                              <input type="datetime-local" class="datetime" name="datestart" id="datestart" value="<?= htmlspecialchars($datestart) ?>" required>
                           </div>
                           <div class="form-group">
-                              <input type="number" name="duration" id="duration" value="<?= htmlspecialchars($duration) ?>" required min="1" max="12">
                               <label for="duration">Duration (hours)</label>
+                              <input type="number" name="duration" id="duration" value="<?= htmlspecialchars($duration) ?>" required min="1" max="12">
                           </div>
                           <div class="form-group2">
-                              <input type="text" name="totalPrice" id="totalPrice" value="<?= htmlspecialchars($totalPrice) ?>" readonly>
                               <label for="totalPrice">Total Price (RM)</label>
+                              <input type="text" name="totalPrice" id="totalPrice" value="<?= htmlspecialchars($totalPrice) ?>" readonly>
                           </div>
                       </div>
                   </div>
                   <div class="reserve-details">
                     <span class="preferredCourt">Select your preferred Court Number</span>
                       <div class="details-group">
-                          <div id="available-court">Available court will be shown here</div>
+                          <div id="available-court">Available options will be shown here</div>
                       </div>
                   </div>
                   <div class="reserve reserveBtn">
@@ -587,8 +590,8 @@
               <section id="availabilityTable" class="section table-box">
                 <span class="p5">Check Availability</span>
                 <div id="availability-head">
-                  <span class="p7">Date: <span id="chosen-date" class="p8">Please choose a date</span></span>
                   <span class="p7">Court Type: <span id="chosen-court-type" class="p8">Please choose a court type</span></span>
+                  <span class="p7">Date: <span id="chosen-date" class="p8">Please choose a date</span></span>
                 </div>
 
                 <table id="availability-table" class="table">
@@ -610,9 +613,9 @@
 
           </div>
         </div>
-      </div>
+    </div>
 
-        <!-- Step 2: Confirmation -->
+        <!-- Step 2: Payment -->
         <div class="step <?= $currentStep === 'confirmation' ? 'active' : '' ?>" id="step-confirmation">
           <div class="step-container">
             <div class="payment-container">
@@ -677,8 +680,19 @@
                       },
                       onApprove: function(data, actions) {
                           return actions.order.capture().then(function(details) {
-                              alert('Transaction completed by ' + details.payer.name.given_name);
-                              window.location.href = 'process_payment.php';
+                              console.log('Transaction completed by: ', details);
+
+                              const transactionId = details.id;
+                              const xhr = new XMLHttpRequest();
+                              xhr.open('POST', 'process_payment.php', true);
+                              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                              xhr.onreadystatechange = function () {
+                                  if (xhr.readyState === 4 && xhr.status === 200) {
+                                      // Redirect to the receipt
+                                      window.location.href = 'receipt.php?booking_id=' + encodeURIComponent(<?= $_SESSION['booking_id'] ?>);
+                                  }
+                              };
+                              xhr.send('transaction_id=' + encodeURIComponent(transactionId));
                           });
                       }
                   }).render('#paypal-button-container');
@@ -804,7 +818,7 @@
         const durationVal = duration.value;
 
         if (!courtTypeVal || !datestartVal || !durationVal) {
-            slotsDiv.innerHTML = "Please fill out <strong>Court Type, Date and Duration</strong> fields to check availability.";
+            slotsDiv.innerHTML = "Please fill out <strong>Court Type, Date and Duration</strong> fields.";
             toggleNextButton(false);
             return;
         }
@@ -835,7 +849,7 @@
                   }
               } catch (e) {
                   console.error('Error parsing JSON:', e);
-                  slotsDiv.innerHTML = "An error occurred while checking availability. Please try again.";
+                  slotsDiv.innerHTML = "An error occurred while displaying options. Please try again.";
                   toggleNextButton(false);
               }
           }
@@ -865,7 +879,7 @@
         document.getElementById('people').value = '';
         document.getElementById('totalPrice').value = '';
 
-        slotsDiv.innerHTML = "Available court will be shown here";
+        slotsDiv.innerHTML = "Available options will be shown here";
         toggleNextButton(false);
         dateInput.setAttribute('min', formattedDate);
     });
@@ -881,7 +895,7 @@
 
       switch(courtType) {
         case 'Basketball':
-          pricePerHour = 8;
+          pricePerHour = 0.01;
           break;
         case 'Badminton':
           pricePerHour = 6;

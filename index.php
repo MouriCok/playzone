@@ -234,8 +234,7 @@ mysqli_close($conn);
                       echo '<li><a href="index.php" class="nav-btn">PlayZone</a></li>
                         <li><a href="bookings.php" class="nav-btn">Booking</a></li>';
                     } else {
-                      echo '<li><a href="index.php" class="nav-btn">PlayZone</a></li>
-                      <li><a href="contact.php" class="nav-btn">Contact</a></li>';
+                      echo '<li><a href="index.php" class="nav-btn">PlayZone</a></li>';
                     }
                   ?>
                 </ul>
@@ -262,7 +261,6 @@ mysqli_close($conn);
                                         </li>
                                         <li class="dropdown-item"><a href="profile.php">Profile</a></li>
                                         <li class="dropdown-item"><a href="settings.php">Settings</a></li>
-                                        <li class="dropdown-item"><a href="contact.php">Contact</a></li>
                                     </ul>
                                 </li>';
                             } else {

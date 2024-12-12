@@ -84,10 +84,27 @@ while ($rowsDisplayed < $rowsPerPage) {
 
 // Generate pagination links
 $paginationLinks = '';
-if ($totalPages >= 0) {
+if ($totalPages <= 1) {
+    $totalPages = 1; // Treat no data or single page as 1 page
+
+    // Previous Button (Disabled)
+    $paginationLinks .= '<li class="page-item disabled">
+        <span class="page-link">&laquo;</span>
+    </li>';
+
+    // Page Number (Only 1)
+    $paginationLinks .= '<li class="page-item active">
+        <span class="page-link">1</span>
+    </li>';
+
+    // Next Button (Disabled)
+    $paginationLinks .= '<li class="page-item disabled">
+        <span class="page-link">&raquo;</span>
+    </li>';
+} else {
     // Previous Button
     $paginationLinks .= '<li class="page-item ' . ($page <= 1 ? 'disabled' : '') . '">
-        <a class="page-link" href="#" data-page="' . ($page - 1) . '">&laquo;</a>
+        <a class="page-link" href="#" ' . ($page > 1 ? 'data-page="' . ($page - 1) . '"' : '') . '>&laquo;</a>
     </li>';
 
     // Page Numbers
@@ -99,7 +116,7 @@ if ($totalPages >= 0) {
 
     // Next Button
     $paginationLinks .= '<li class="page-item ' . ($page >= $totalPages ? 'disabled' : '') . '">
-        <a class="page-link" href="#" data-page="' . ($page + 1) . '">&raquo;</a>
+        <a class="page-link" href="#" ' . ($page < $totalPages ? 'data-page="' . ($page + 1) . '"' : '') . '>&raquo;</a>
     </li>';
 }
 

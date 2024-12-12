@@ -227,7 +227,7 @@ li, a {
   .p5 {
     font-family: 'League Spartan', sans-serif;
     color: #102A7E;
-    font-size: 28px;
+    font-size: 24px;
   }
   .p6 {
     font-family: 'League Spartan', sans-serif;
@@ -240,13 +240,13 @@ li, a {
     color: #000;
     line-height: normal;
     font-weight: normal;
-    font-size: 18px;
+    font-size: 16px;
   }
   .p8 {
     font-family: 'Istok Web', sans-serif;
     color: #000;
     line-height: normal;
-    font-size: 18px;
+    font-size: 16px;
   }
   p {
     font-size: 18px;
