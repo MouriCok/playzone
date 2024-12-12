@@ -76,18 +76,17 @@ CREATE TABLE `bookings` (
   `price` DECIMAL(10, 2) NOT NULL,
   `preferredCourt` VARCHAR(10),
   `court_id` VARCHAR(10),
-  `payment_status` VARCHAR(20) NOT NULL DEFAULT 'Pending',
+  `payment_status` VARCHAR(20) NOT NULL,
   `transaction_id` VARCHAR(50) DEFAULT NULL,
-  PRIMARY KEY (`bID`),
-  FOREIGN KEY (`court_id`) REFERENCES `courts`(`court_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`bID`)
+);
 
 
 
 CREATE TABLE booking_history (
   `historyID` INT AUTO_INCREMENT PRIMARY KEY,
   `bID` INT NOT NULL,
-  `bEmail` VARCHAR(255) NOT NULL,
+  `cEmail` VARCHAR(255) NOT NULL,
   `courtType` VARCHAR(100),
   `preferredCourt` VARCHAR(100),
   `datestart` DATETIME,

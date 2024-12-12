@@ -11,25 +11,25 @@ CREATE TABLE `admin` (
   PRIMARY KEY (`aId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DELIMITER //
+-- DELIMITER //
 
-CREATE TRIGGER `before_admin_insert`
-BEFORE INSERT ON `admin`
-FOR EACH ROW
-BEGIN
-  DECLARE maxEmpId INT DEFAULT 0;
-  DECLARE newEmpId VARCHAR(60);
+-- CREATE TRIGGER `before_admin_insert`
+-- BEFORE INSERT ON `admin`
+-- FOR EACH ROW
+-- BEGIN
+--   DECLARE maxEmpId INT DEFAULT 0;
+--   DECLARE newEmpId VARCHAR(60);
 
-  SELECT COALESCE(MAX(CAST(SUBSTRING(empId, 4) AS UNSIGNED)), 0) INTO maxEmpId
-  FROM `admin`
-  WHERE empId REGEXP '^EMP[0-9]+$';
+--   SELECT COALESCE(MAX(CAST(SUBSTRING(empId, 4) AS UNSIGNED)), 0) INTO maxEmpId
+--   FROM `admin`
+--   WHERE empId REGEXP '^EMP[0-9]+$';
   
-  SET newEmpId = CONCAT('EMP', LPAD(maxEmpId + 1, 5, '0'));
+--   SET newEmpId = CONCAT('EMP', LPAD(maxEmpId + 1, 5, '0'));
   
-  SET NEW.empId = newEmpId;
-END //
+--   SET NEW.empId = newEmpId;
+-- END //
 
-DELIMITER ;
+-- DELIMITER ;
 
 INSERT INTO `admin` (`aPosition`, `aName`, `aUser`, `aEmail`, `aPhone`, `aPass`) VALUES
 ('Assistant Manager', 'Muhammad Bukhoury Bin Muslim', 'bukh05', 'mbukhoury.mb@gmail.com', '1114956232', '#Bukh1205');
